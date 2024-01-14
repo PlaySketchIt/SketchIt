@@ -5,7 +5,7 @@ function App() {
   return (
     <>
         <SketchArea
-          init_bg="white"
+          background="white"
 
           width={800}
           height={450}

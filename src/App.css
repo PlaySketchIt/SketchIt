@@ -12,6 +12,7 @@
   --color-option-border-color-selected: #fff;
 
   --command-option-bg-color-active: #fff;
+  --command-option-bg-color-disabled: #333;
 
   --color-custom-bg-color: #fff;
 
@@ -47,7 +48,7 @@
   background-color: var(--color-custom-bg-color);
 }
 
-.tray-option:hover {
+.tray-option:hover:not(:disabled) {
   border: 1px solid var(--tray-option-border-color-hover);
 }
 
@@ -61,6 +62,10 @@
 
 .command-tray-option:active {
   background-color: var(--command-option-bg-color-active);
+}
+
+.command-tray-option:disabled {
+  background-color: var(--command-option-bg-color-disabled);
 }
 
 .tray-label-container {

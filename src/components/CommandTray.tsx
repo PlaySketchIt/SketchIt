@@ -5,6 +5,9 @@ export interface CommandTrayProps {
     tool_box_size?: number;
 
     on_command_run: (command: SketchCommand) => void;
+
+    can_undo: boolean;
+    can_redo: boolean;
 }
 
 const CommandTray: React.FC<CommandTrayProps> = (props) => {
@@ -17,8 +20,8 @@ const CommandTray: React.FC<CommandTrayProps> = (props) => {
                 flexDirection: "row"
             }}
         >
-            <CommandTrayOption value="undo" size={tool_box_size} command_run={props.on_command_run} />
-            <CommandTrayOption value="redo" size={tool_box_size} command_run={props.on_command_run} />
+            <CommandTrayOption value="undo" size={tool_box_size} command_run={props.on_command_run} disabled={!props.can_undo} />
+            <CommandTrayOption value="redo" size={tool_box_size} command_run={props.on_command_run} disabled={!props.can_redo} />
             <CommandTrayOption value="clear" size={tool_box_size} command_run={props.on_command_run} />
         </div>
     );

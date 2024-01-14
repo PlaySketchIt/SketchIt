@@ -10,14 +10,16 @@ const command_icons = {
     "clear": clear_icon
 };
 
-export interface CommandTrayOptions {
+export interface CommandTrayOptionProps {
     value: SketchCommand;
     size?: number;
 
     command_run: (command: SketchCommand) => void;
+
+    disabled?: boolean;
 }
 
-const CommandTrayOption: React.FC<CommandTrayOptions> = (props) => {
+const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
     return (
         <button
             className="tray-option command-tray-option"
@@ -34,6 +36,8 @@ const CommandTrayOption: React.FC<CommandTrayOptions> = (props) => {
             }}
 
             onClick={() => props.command_run(props.value)}
+
+            disabled={props.disabled ?? false}
         >
         </button>
     );

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
-import SketchCanvas, { SketchCanvasProps, SketchTool } from "./SketchCanvas";
+import SketchCanvas, { SketchCanvasRef, SketchCanvasProps, SketchTool } from "./SketchCanvas";
 import ColorTray from "./ColorTray";
 import ToolTray from "./ToolTray";
 import CommandTray from "./CommandTray";
@@ -19,6 +19,11 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     const [alpha, setAlpha] = useState(1);
     const [current_tool, setCurrentTool] = useState<SketchTool>("pen");
 
+    const sketch_canvas_ref = useRef<SketchCanvasRef>(null);
+    
+    const [can_undo, setCanUndo] = useState(false);
+    const [can_redo, setCanRedo] = useState(false);
+
     const scroll_step = props.scroll_step ?? 1;
 
     const on_scroll_wheel = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -35,10 +40,25 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
         setPenRadius(new_radius);
     };
 
+    // effect: register undo and redo enable check handlers
+    useEffect(() => {
+        if (sketch_canvas_ref.current === null) return;
+
+        sketch_canvas_ref.current.set_on_redo_enabled_change((enabled) => {
+            setCanRedo(enabled);
+        });
+
+        sketch_canvas_ref.current.set_on_undo_enabled_change((enabled) => {
+            setCanUndo(enabled);
+        });
+    }, [sketch_canvas_ref]);
+
+
     return (
         <div className="sketch-area" onWheel={on_scroll_wheel}>
             <SketchCanvas
-                init_bg={props.init_bg}
+                ref={sketch_canvas_ref}
+                background={props.background}
 
                 fg_color={fg_color}
                 alpha={alpha}
@@ -84,7 +104,13 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
                 />
                 <CommandTray
                     tool_box_size={props.tool_box_size}
-                    on_command_run={(command) => { console.log(command); }} // TODO
+                    on_command_run={(cmd) => {
+                        if (sketch_canvas_ref.current === null) return;
+                        sketch_canvas_ref.current.handle_command(cmd);
+                    }}
+
+                    can_undo={can_undo}
+                    can_redo={can_redo}
                 />
             </div>
         </div>
