@@ -144,10 +144,6 @@ class SketchCanvas extends Component<SketchCanvasProps> {
                 onPointerOut={this.on_pen_up}
 
                 //onWheel={this.on_scroll}
-
-                style={{
-                    touchAction: "none"
-                }}
             />
         );
     }
