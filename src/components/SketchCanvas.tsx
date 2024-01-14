@@ -164,6 +164,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
             ctx.fillStyle = props.init_bg;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.lineCap = "round";
+            ctx.lineJoin = "round";
 
             // change to foreground color
             ctx.fillStyle = props.fg_color;
@@ -240,3 +241,5 @@ export default SketchCanvas;
 
 // TODO: fix weird alpha behaviour (e.g. overlapping over self if slow, visible line ending overlap etc)
 // may have to adjust drawing algo to only draw a line if moved enough, rather than on every move
+// http://literallycanvas.com/
+// https://github.com/literallycanvas/literallycanvas-core/tree/master/src
