@@ -74,7 +74,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         if (!pen_down) return;
 
         const canvas = canvasRef.current;
-        const ctx = canvas?.getContext("2d");
+        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
 
         if (canvas && ctx) {
             const rect = canvas.getBoundingClientRect();
@@ -100,10 +100,23 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
             const draw = () => {
                 ctx.beginPath();
 
-                const last_point = last_line.current[last_line.current.length - 1];
+                const previous_point = last_line.current[last_line.current.length - 1];
 
-                if (last_point) {
-                    ctx.moveTo(last_point.x, last_point.y);
+                if (previous_point) {
+                    // enforce minimum distance between points
+                    // this helps optimise performance, especially when networked
+                    // it also makes the pre-fixup transparency a little clearer
+                    const dist = Math.sqrt((x - previous_point.x) ** 2 + (y - previous_point.y) ** 2);
+
+                    // could use diameter to avoid any overlap, but it doesn't look as smooth
+                    // TODO: should this be configurable? e.g. props.radius_overlap
+                    if (dist < effective_radius) {
+                        // don't draw anything
+                        return;
+                    }
+
+                    // this line is merely a preview
+                    ctx.moveTo(previous_point.x, previous_point.y);
                     ctx.lineTo(x, y);
 
                     ctx.lineWidth = effective_radius * 2;
@@ -132,7 +145,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
 
         // save canvas state for undo/transparency fixup
         const canvas = canvasRef.current;
-        const ctx = canvas?.getContext("2d");
+        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
 
         if (canvas && ctx) {
             last_canvas_state.current = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -158,7 +171,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         // perform transparency fixup
         // revert canvas state and redraw last line as a single path
         const canvas = canvasRef.current;
-        const ctx = canvas?.getContext("2d");
+        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
 
         if (canvas && ctx) {
             if (last_canvas_state.current) {
@@ -194,7 +207,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
         if (ctx) {
             // initialise canvas
@@ -229,7 +242,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
         if (!ctx) return;
 
         ctx.fillStyle = props.fg_color;
@@ -243,7 +256,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
         if (!ctx) return;
 
         ctx.globalAlpha = props.alpha;
@@ -282,3 +295,5 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
 export default SketchCanvas;
 
 // TODO: make canvas capture and drawing methods generic to be reused
+// TODO: simplify structure (possibly extract methods)
+// TODO: make standard method for getContext that enforces willReadFrequently
