@@ -216,6 +216,9 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     const on_pointer_down = (e: React.PointerEvent<HTMLCanvasElement>) => {
         capture_undo_canvas_state();
 
+        redo_canvas_state.current = null;
+        on_redo_enabled_change.current(false);
+
         if (props.current_tool === "fill") {
             // TODO: flood fill algo
             return;
@@ -422,3 +425,4 @@ export default SketchCanvas;
 // TODO: simplify structure (possibly extract methods)
 // TODO: make standard method for getContext that enforces willReadFrequently
 // TODO: document methods!
+// TODO: more advanced undo/redo tree? gets complex quick!
