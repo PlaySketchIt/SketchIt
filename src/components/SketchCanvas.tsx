@@ -1,8 +1,12 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import DynamicCursor from "../DynamicCursor";
 
+
+// TODO: move definitions into separate file
+
 // using fake enum rather than real enum as exporting enum invalidates fast refresh
 export type SketchTool = "pen" | "fill";
+export type SketchCommand = "undo" | "redo" | "clear";
 
 export interface SketchCanvasProps {
     width?: number;

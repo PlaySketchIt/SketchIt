@@ -3,6 +3,7 @@ import { useState } from "react";
 import SketchCanvas, { SketchCanvasProps, SketchTool } from "./SketchCanvas";
 import ColorTray from "./ColorTray";
 import ToolTray from "./ToolTray";
+import CommandTray from "./CommandTray";
 
 export interface SketchAreaProps extends Omit<SketchCanvasProps, "alpha" | "fg_color" | "current_tool"> {
     scroll_step?: number;
@@ -80,6 +81,10 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
                     on_tool_change={setCurrentTool}
                     tool_box_size={props.tool_box_size}
                     on_radius_change={setPenRadius}
+                />
+                <CommandTray
+                    tool_box_size={props.tool_box_size}
+                    on_command_run={(command) => { console.log(command); }} // TODO
                 />
             </div>
         </div>

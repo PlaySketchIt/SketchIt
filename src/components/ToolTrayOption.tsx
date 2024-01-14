@@ -1,5 +1,6 @@
 import pen_icon from "../assets/pen.svg";
 import fill_icon from "../assets/fill.svg";
+
 import { SketchTool } from "./SketchCanvas";
 
 const tool_icons = {
@@ -34,6 +35,8 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
                 height: props.size ?? 20
             }}
 
+            // TODO: hover effect
+
             onClick={() => props.tool_change(props.value)}
         >
         </button>
@@ -42,4 +45,6 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
 
 export default ToolTrayOption;
 
-// TODO: unify with color tray option
+// TODO: unify with color and command tray option
+// TODO: hotkeys
+// TODO: hotkeys for opacity control
