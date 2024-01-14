@@ -223,3 +223,6 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
 };
 
 export default SketchCanvas;
+
+// TODO: fix weird alpha behaviour (e.g. overlapping over self if slow, visible line ending overlap etc)
+// may have to adjust drawing algo to only draw a line if moved enough, rather than on every move
