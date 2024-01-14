@@ -1,7 +1,9 @@
 :root {
+  --area-border-color: #222;
+
   --tray-bg-color: #333;
 
-  --tray-option-bg-color: #707070;
+  --tray-option-bg-color: #999;
   --tray-option-border-color: #111;
 
   --tray-option-border-color-hover: #ffffff;
@@ -23,7 +25,7 @@
 }
 
 .sketch-area {
-  border: 1px solid #9c9c9c;
+  border: 1px solid var(--area-border-color);
 }
 
 .sketch-trays {
