@@ -16,8 +16,6 @@ export interface SketchCanvasProps {
     pressure_sensitive?: boolean;
 }
 
-// TODO: unify props into pen color
-
 const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     const min_radius = props.min_radius ?? 1;
     const max_radius = props.max_radius ?? 10;
@@ -136,13 +134,26 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
 
         setInitialised(true);
 
-        // TODO: update fg color on color change
     }, [initialised, props.init_bg, props.fg_color, load_css_cursor]);
 
     useEffect(() => {
         // update css cursor if values change
         load_css_cursor();
     }, [load_css_cursor]);
+
+    useEffect(() => {
+        console.log("fg color changed");
+
+        // update canvas color if value changes
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        ctx.fillStyle = props.fg_color;
+        ctx.strokeStyle = props.fg_color;
+    }, [props.fg_color]);
 
 
     return (

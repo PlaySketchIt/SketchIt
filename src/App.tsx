@@ -17,6 +17,8 @@ function App() {
           scroll_step={0.5}
 
           pressure_sensitive={true}
+
+          color_box_size={20}
         />
     </>
   );

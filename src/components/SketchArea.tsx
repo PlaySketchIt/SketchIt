@@ -1,9 +1,11 @@
 import { useState } from "react";
 
 import SketchCanvas, { SketchCanvasProps } from "./SketchCanvas";
+import ColorTray from "./ColorTray";
 
 export interface SketchAreaProps extends Omit<SketchCanvasProps, "fg_color"> {
     scroll_step?: number;
+    color_box_size?: number;
 }
 
 const SketchArea: React.FC<SketchAreaProps> = (props) => {
@@ -11,7 +13,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     const max_radius = props.max_radius ?? 10;
 
     const [pen_radius, setPenRadius] = useState(props.pen_radius);
-    const [fg_color, setFgColor] = useState("black");
+    const [fg_color, setFgColor] = useState("#000000");
 
     const scroll_step = props.scroll_step ?? 1;
 
@@ -42,6 +44,11 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
                 pen_radius={pen_radius}
 
                 pressure_sensitive={props.pressure_sensitive}
+            />
+            <ColorTray
+                init_color={fg_color}
+                on_color_change={setFgColor}
+                box_size={props.color_box_size}
             />
         </div>
     );
