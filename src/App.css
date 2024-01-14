@@ -48,7 +48,7 @@
   background-color: var(--color-custom-bg-color);
 }
 
-.tray-option:hover:not(:disabled) {
+.tray-option:hover:not(:disabled):not(.tray-option-selected) {
   border: 1px solid var(--tray-option-border-color-hover);
 }
 
