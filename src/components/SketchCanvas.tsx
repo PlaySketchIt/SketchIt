@@ -61,7 +61,8 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     }, [props.fg_color, props.pen_radius, props.current_tool]);
 
 
-    const last_point = useRef<{ x: number, y: number } | null>(null);
+    const last_line = useRef<{ x: number, y: number, r: number }[]>([]);
+    const last_canvas_state = useRef<ImageData | null>(null);
 
     const on_pointer_move = (e: React.PointerEvent<HTMLCanvasElement>) => {
         if (!pen_down) return;
@@ -93,22 +94,12 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
             const draw = () => {
                 ctx.beginPath();
 
-                if (last_point.current) {
-                    // check if moved more than the diameter (to avoid overlap when transparent)
-                    const dx = x - last_point.current.x;
-                    const dy = y - last_point.current.y;
+                const last_point = last_line.current[last_line.current.length - 1];
 
-                    const delta = Math.sqrt(dx * dx + dy * dy);
-
-                    // TODO: this helps to a degree, but makes it look laggy when the radius is large
-                    if (delta < effective_radius * 2) {
-                        // not enough movement to draw without overlap
-                        return;
-                    }
-
-                    ctx.moveTo(last_point.current.x, last_point.current.y);
+                if (last_point) {
+                    ctx.moveTo(last_point.x, last_point.y);
                     ctx.lineTo(x, y);
-                    
+
                     ctx.lineWidth = effective_radius * 2;
                     ctx.stroke();
                 } else {
@@ -117,9 +108,9 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
                     ctx.fill();
                 }
 
-                last_point.current = { x, y };
+                last_line.current.push({ x, y, r: effective_radius });
             };
-    
+
             //requestAnimationFrame(draw);
             draw();
         }
@@ -132,6 +123,17 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         }
 
         // TODO: as additional tools added, migrate to switch statement
+
+        // save canvas state for undo/transparency fixup
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext("2d");
+
+        if (canvas && ctx) {
+            last_canvas_state.current = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        }
+
+        // prepare last line for transparency fixup
+        last_line.current = [];
 
         setPenDown(true);
 
@@ -147,8 +149,35 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         // simulate movement to draw last dot
         on_pointer_move(e);
 
-        // clear last point
-        last_point.current = null;
+        // perform transparency fixup
+        // revert canvas state and redraw last line as a single path
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext("2d");
+
+        if (canvas && ctx) {
+            if (last_canvas_state.current) {
+                ctx.putImageData(last_canvas_state.current, 0, 0);
+            }
+
+            if (last_line.current.length > 1) {
+                ctx.beginPath();
+
+                ctx.moveTo(last_line.current[0].x, last_line.current[0].y);
+
+                for (let i = 1; i < last_line.current.length; i++) {
+                    const point = last_line.current[i];
+                    ctx.lineTo(point.x, point.y);
+                }
+
+                ctx.lineWidth = last_line.current[0].r * 2;
+                ctx.stroke();
+            }
+        }
+
+        // recapture new state for undo
+        if (canvas && ctx) {
+            last_canvas_state.current = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        }
     };
 
     useEffect(() => {
@@ -239,7 +268,4 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
 
 export default SketchCanvas;
 
-// TODO: fix weird alpha behaviour (e.g. overlapping over self if slow, visible line ending overlap etc)
-// may have to adjust drawing algo to only draw a line if moved enough, rather than on every move
-// http://literallycanvas.com/
-// https://github.com/literallycanvas/literallycanvas-core/tree/master/src
+// TODO: make canvas capture and drawing methods generic to be reused
