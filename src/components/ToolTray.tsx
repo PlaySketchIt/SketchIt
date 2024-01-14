@@ -47,7 +47,7 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     marginLeft: tool_box_size / 10,
                 }}
             >
-                Radius:
+                Pen Radius:
 
                 <input
                     className="tool-tray-radius"
@@ -74,3 +74,5 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
 };
 
 export default ToolTray;
+
+// TODO: unite labelled slider input into a single component
