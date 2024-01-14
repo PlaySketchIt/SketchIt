@@ -29,7 +29,9 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const cursor = useRef(new DynamicCursor({
         max_radius: max_radius,
-        init_radius: props.pen_radius
+        init_radius: props.pen_radius, // TODO: option to resize based on calculated pressure
+        stroke: "rgba(0, 0, 0, 0.5)",
+        stroke_width: 1.5 // TODO: option to make size consistent with radius (also consider viewport)
     }));
 
     const [initialised, setInitialised] = useState(false);
@@ -180,6 +182,8 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         }
     };
 
+
+    // effect: run at mount time to initialise canvas and cursor
     useEffect(() => {
         if (initialised) return;
 
@@ -206,11 +210,14 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
 
     }, [initialised, props.init_bg, props.fg_color, load_css_cursor]);
 
+
+    // effect: run when color/radius/tool changes to update cursor
     useEffect(() => {
-        // update css cursor if values change
         load_css_cursor();
     }, [load_css_cursor]);
 
+
+    // effect: run when color changes to update canvas color
     useEffect(() => {
         console.log("fg color changed");
 
@@ -225,6 +232,8 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         ctx.strokeStyle = props.fg_color;
     }, [props.fg_color]);
 
+
+    // effect: run when alpha changes to update canvas global alpha
     useEffect(() => {
         // update canvas alpha if value changes
         const canvas = canvasRef.current;
