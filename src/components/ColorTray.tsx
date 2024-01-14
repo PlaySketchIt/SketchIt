@@ -97,7 +97,7 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
             </input>
 
             <label
-                className="color-tray-alpha-label-container"
+                className="color-tray-alpha-label-container tray-label-container"
                 style={{
                     display: "flex",
                     flexDirection: "column",

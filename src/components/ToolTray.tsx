@@ -38,7 +38,7 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
             <ToolTrayOption value="fill" size={tool_box_size} tool_change={on_tool_change} current_tool={current_tool} />
 
             <label
-                className="tool-tray-radius-label-container"
+                className="tool-tray-radius-label-container tray-label-container"
                 style={{
                     display: "flex",
                     flexDirection: "column",
