@@ -4,8 +4,10 @@ import ColorTrayOption from "./ColorTrayOption";
 
 export interface ColorTrayProps {
     init_color: string;
+    init_alpha?: number;
     tool_box_size?: number;
     on_color_change: (color: string) => void;
+    on_alpha_change: (alpha: number) => void;
 }
 
 const ColorTrayRow: React.FC<{ children?: React.ReactNode }> = (props) => {
@@ -27,10 +29,16 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
     const color_box_size = tool_box_size / 2;
 
     const [current_color, setCurrentColor] = useState(props.init_color);
+    const [current_alpha, setCurrentAlpha] = useState(props.init_alpha ?? 1);
 
     const on_color_change = (color: string) => {
         setCurrentColor(color);
         props.on_color_change(color);
+    };
+
+    const on_alpha_change = (alpha: number) => {
+        setCurrentAlpha(alpha);
+        props.on_alpha_change(alpha);
     };
 
     return (
@@ -79,7 +87,7 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                 style={{
                     width: tool_box_size,
                     height: tool_box_size,
-                    
+
                     border: "2px solid black",
                 }}
 
@@ -89,6 +97,39 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                 onChange={(e) => on_color_change(e.target.value)}
             >
             </input>
+
+            <label
+                className="color-tray-alpha-label-container"
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                    marginLeft: tool_box_size / 10,
+                }}
+            >
+                Alpha:
+
+                <input
+                    className="color-tray-alpha"
+
+                    style={{
+                        width: tool_box_size * 2,
+                        height: tool_box_size / 2,
+
+                        border: "2px solid black",
+                    }}
+
+                    type="range"
+
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={current_alpha}
+
+                    onChange={(e) => on_alpha_change(e.target.valueAsNumber)}
+                />
+            </label>
         </div>
     );
 };

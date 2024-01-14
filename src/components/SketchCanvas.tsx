@@ -14,6 +14,7 @@ export interface SketchCanvasProps {
 
     init_bg: string;
 
+    alpha: number;
     fg_color: string;
 
     current_tool: SketchTool;
@@ -180,6 +181,16 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         ctx.strokeStyle = props.fg_color;
     }, [props.fg_color]);
 
+    useEffect(() => {
+        // update canvas alpha if value changes
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        ctx.globalAlpha = props.alpha;
+    }, [props.alpha]);
 
     return (
         <canvas
