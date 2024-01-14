@@ -49,9 +49,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     }, [fg_color, pen_radius]);
 
 
-    const on_pen_down = () => {
-        setPenDown(true);
-    };
+    const last_point = useRef<{ x: number, y: number } | null>(null);
 
     const on_pen_move = (e: React.PointerEvent<HTMLCanvasElement>) => {
         if (!pen_down) return;
@@ -80,14 +78,42 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
                 effective_radius = clamp_radius(pen_radius * adjusted_pressure);
             }
 
-            ctx.beginPath();
-            ctx.arc(x, y, effective_radius, 0, 2 * Math.PI);
-            ctx.fill();
+            const draw = () => {
+                ctx.beginPath();
+
+                if (last_point.current) {
+                    ctx.moveTo(last_point.current.x, last_point.current.y);
+                    ctx.lineTo(x, y);
+                    
+                    ctx.lineWidth = effective_radius * 2;
+                    ctx.stroke();
+                } else {
+                    ctx.arc(x, y, effective_radius, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+            };
+    
+            //requestAnimationFrame(draw);
+            draw();
+            last_point.current = { x, y };
         }
     };
 
-    const on_pen_up = () => {
+    const on_pen_down = (e: React.PointerEvent<HTMLCanvasElement>) => {
+        setPenDown(true);
+
+        // simulate movement to draw first dot
+        on_pen_move(e);
+    };
+
+    const on_pen_up = (e: React.PointerEvent<HTMLCanvasElement>) => {
         setPenDown(false);
+
+        // simulate movement to draw last dot
+        on_pen_move(e);
+
+        // clear last point
+        last_point.current = null;
     };
 
     const on_scroll = (e: React.WheelEvent<HTMLCanvasElement>) => {
@@ -115,14 +141,18 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
             // initialise canvas
             ctx.fillStyle = props.init_bg;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.lineCap = "round";
 
             // change to foreground color
             ctx.fillStyle = fg_color;
+            ctx.strokeStyle = fg_color;
 
             load_css_cursor();
         }
 
         setInitialised(true);
+
+        // TODO: update fg color on color change
     }, [initialised, props.init_bg, fg_color, load_css_cursor]);
 
     useEffect(() => {
