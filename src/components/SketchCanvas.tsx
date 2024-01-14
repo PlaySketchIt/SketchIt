@@ -157,8 +157,17 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
             onPointerMove={on_pen_move}
             onPointerUp={on_pen_up}
 
+            onPointerEnter={
+                (e: React.PointerEvent<HTMLCanvasElement>) => {
+                    // if mouse is down when re-entering canvas, resume drawing
+                    // could also just have handlers globally on the window, but this is cleaner
+                    if (e.buttons > 0) {
+                        setPenDown(true);
+                    }
+                }
+            }
             onPointerOut={on_pen_up}
-            
+
             style={{
                 touchAction: "pinch-zoom"
             }}
