@@ -1,4 +1,4 @@
-import { Component, createRef } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import DynamicCursor from "../DynamicCursor";
 
 export interface SketchCanvasProps {
@@ -18,135 +18,140 @@ export interface SketchCanvasProps {
 
 // TODO: unify props into pen color
 
-class SketchCanvas extends Component<SketchCanvasProps> {
-    private min_radius = this.props.min_radius ?? 1;
-    private max_radius = this.props.max_radius ?? 10;
-    private init_radius = this.props.init_radius ?? 5;
+const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
+    const min_radius = props.min_radius ?? 1;
+    const max_radius = props.max_radius ?? 10;
+    const init_radius = props.init_radius ?? 5;
 
-    private canvas_ref = createRef<HTMLCanvasElement>();
-    private cursor = new DynamicCursor({
-        max_radius: this.max_radius,
-        init_radius: this.init_radius
-    });
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const cursor = useRef(new DynamicCursor({
+        max_radius: max_radius,
+        init_radius: init_radius
+    }));
 
-    state = {
-        fg_color: "red",
-        pen_radius: this.init_radius,
+    const [initialised, setInitialised] = useState(false);
+    const [fg_color, setFgColor] = useState("red");
+    const [pen_radius, setPenRadius] = useState(init_radius);
+    const [pen_down, setPenDown] = useState(false);
 
-        pen_down: false,
+
+    const clamp_radius = (radius: number) => {
+        return Math.min(Math.max(radius, min_radius), max_radius);
     };
 
+    const load_css_cursor = useCallback(() => {
+        cursor.current.set_fill(fg_color);
+        cursor.current.set_radius(pen_radius);
 
-    clamp_radius(radius: number) {
-        return Math.min(Math.max(radius, this.min_radius), this.max_radius);
-    }
-
-    
-    load_css_cursor() {
-        this.cursor.set_fill(this.state.fg_color);
-        this.cursor.set_radius(this.state.pen_radius);
-
-        this.canvas_ref.current!.style.cursor = this.cursor.as_css_cursor("crosshair");
-    }
+        if (canvasRef.current) {
+            canvasRef.current.style.cursor = cursor.current.as_css_cursor("crosshair");
+        }
+    }, [fg_color, pen_radius]);
 
 
-    componentDidMount() {
-        console.log("canvas mounted");
-
-        const canvas = this.canvas_ref.current!;
-        const ctx = canvas.getContext("2d")!;
-
-        // initialise canvas
-        ctx.fillStyle = this.props.init_bg;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // change to foreground color
-        ctx.fillStyle = this.state.fg_color;
-
-        this.load_css_cursor();
-
-        // has to register here so scrolling can be prevented
-        this.canvas_ref.current!.addEventListener("wheel", this.on_scroll, { passive: false });
-    }
-
-    componentDidUpdate() {
-        // update css cursor if values change
-        this.load_css_cursor();
-    }
-
-
-    on_pen_down = () => {
-        this.setState({ pen_down: true });
+    const on_pen_down = () => {
+        setPenDown(true);
     };
 
-    on_pen_move = (e: React.PointerEvent<HTMLCanvasElement>) => {
-        if (!this.state.pen_down) return;
+    const on_pen_move = (e: React.PointerEvent<HTMLCanvasElement>) => {
+        if (!pen_down) return;
 
-        const canvas = this.canvas_ref.current!;
-        const ctx = canvas.getContext("2d")!;
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext("2d");
 
-        const rect = canvas.getBoundingClientRect();
+        if (canvas && ctx) {
+            const rect = canvas.getBoundingClientRect();
 
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
 
-        let effective_radius = this.state.pen_radius;
+            let effective_radius = pen_radius;
 
-        if (this.props.pressure_sensitive && e.pointerType === "pen") {
-            let adjusted_pressure = e.pressure;
+            if (props.pressure_sensitive && e.pointerType === "pen") {
+                let adjusted_pressure = e.pressure;
 
-            if (e.pressure < 1) {
-                // some tablets tend to be a bit weak at the high zones, so add a little boost
-                adjusted_pressure = e.pressure += 0.1;
+                if (e.pressure < 1) {
+                    // some tablets tend to be a bit weak at the high zones, so add a little boost
+                    adjusted_pressure = e.pressure += 0.1;
+                }
+
+                // TODO: decide if base radius acts as multiplier (like now) or as a minimum that gets added to
+
+                effective_radius = clamp_radius(pen_radius * adjusted_pressure);
             }
 
-            // TODO: decide if base radius acts as multiplier (like now) or as a minimum that gets added to
-
-            effective_radius = this.clamp_radius(this.state.pen_radius * adjusted_pressure);
+            ctx.beginPath();
+            ctx.arc(x, y, effective_radius, 0, 2 * Math.PI);
+            ctx.fill();
         }
-
-        ctx.beginPath();
-        ctx.arc(x, y, effective_radius, 0, 2 * Math.PI);
-        ctx.fill();
     };
 
-    on_pen_up = () => {
-        this.setState({ pen_down: false });
+    const on_pen_up = () => {
+        setPenDown(false);
     };
 
-    //on_scroll = (e: React.WheelEvent<HTMLCanvasElement>) => {
-    on_scroll = (e: WheelEvent) => {
-        e.preventDefault();
+    const on_scroll = (e: React.WheelEvent<HTMLCanvasElement>) => {
+        e.stopPropagation();
 
         const delta = -e.deltaY;
-        const new_radius = this.state.pen_radius + delta / 100 * (this.props.scroll_step ?? 1);
+        const new_radius = pen_radius + delta / 100 * (props.scroll_step ?? 1);
 
-        if (new_radius < this.min_radius || new_radius > this.max_radius) return;
+        if (new_radius < min_radius || new_radius > max_radius) return;
         console.log(new_radius);
 
-        this.setState({ pen_radius: new_radius });
+        setPenRadius(new_radius);
     };
 
 
-    render() {
-        return (
-            <canvas
-                className="sketch-canvas"
-                ref={this.canvas_ref}
+    useEffect(() => {
+        if (initialised) return;
 
-                width={this.props.width}
-                height={this.props.height}
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
-                onPointerDown={this.on_pen_down}
-                onPointerMove={this.on_pen_move}
-                onPointerUp={this.on_pen_up}
+        const ctx = canvas.getContext("2d");
 
-                onPointerOut={this.on_pen_up}
+        if (ctx) {
+            // initialise canvas
+            ctx.fillStyle = props.init_bg;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                //onWheel={this.on_scroll}
-            />
-        );
-    }
-}
+            // change to foreground color
+            ctx.fillStyle = fg_color;
+
+            load_css_cursor();
+        }
+
+        setInitialised(true);
+    }, [initialised, props.init_bg, fg_color, load_css_cursor]);
+
+    useEffect(() => {
+        // update css cursor if values change
+        load_css_cursor();
+    }, [load_css_cursor]);
+
+
+    return (
+        <canvas
+            className="sketch-canvas"
+            ref={canvasRef}
+
+            width={props.width}
+            height={props.height}
+
+            onPointerDown={on_pen_down}
+            onPointerMove={on_pen_move}
+            onPointerUp={on_pen_up}
+
+            onPointerOut={on_pen_up}
+
+            onWheel={on_scroll}
+
+            style={{
+                touchAction: "pinch-zoom"
+            }}
+        />
+    );
+};
 
 export default SketchCanvas;
