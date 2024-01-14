@@ -7,13 +7,13 @@ export interface SketchCanvasProps {
 
     min_radius?: number;
     max_radius?: number;
-    init_radius?: number;
+    pen_radius: number;
 
     init_bg: string;
 
-    pressure_sensitive?: boolean; // TODO: user toggleable
+    fg_color: string;
 
-    scroll_step?: number;
+    pressure_sensitive?: boolean;
 }
 
 // TODO: unify props into pen color
@@ -21,17 +21,14 @@ export interface SketchCanvasProps {
 const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     const min_radius = props.min_radius ?? 1;
     const max_radius = props.max_radius ?? 10;
-    const init_radius = props.init_radius ?? 5;
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const cursor = useRef(new DynamicCursor({
         max_radius: max_radius,
-        init_radius: init_radius
+        init_radius: props.pen_radius
     }));
 
     const [initialised, setInitialised] = useState(false);
-    const [fg_color, setFgColor] = useState("red");
-    const [pen_radius, setPenRadius] = useState(init_radius);
     const [pen_down, setPenDown] = useState(false);
 
 
@@ -40,13 +37,13 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     };
 
     const load_css_cursor = useCallback(() => {
-        cursor.current.set_fill(fg_color);
-        cursor.current.set_radius(pen_radius);
+        cursor.current.set_fill(props.fg_color ?? "black");
+        cursor.current.set_radius(props.pen_radius);
 
         if (canvasRef.current) {
             canvasRef.current.style.cursor = cursor.current.as_css_cursor("crosshair");
         }
-    }, [fg_color, pen_radius]);
+    }, [props.fg_color, props.pen_radius]);
 
 
     const last_point = useRef<{ x: number, y: number } | null>(null);
@@ -63,7 +60,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
-            let effective_radius = pen_radius;
+            let effective_radius = props.pen_radius;
 
             if (props.pressure_sensitive && e.pointerType === "pen") {
                 let adjusted_pressure = e.pressure;
@@ -75,7 +72,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
 
                 // TODO: decide if base radius acts as multiplier (like now) or as a minimum that gets added to
 
-                effective_radius = clamp_radius(pen_radius * adjusted_pressure);
+                effective_radius = clamp_radius(props.pen_radius * adjusted_pressure);
             }
 
             const draw = () => {
@@ -116,19 +113,6 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         last_point.current = null;
     };
 
-    const on_scroll = (e: React.WheelEvent<HTMLCanvasElement>) => {
-        e.stopPropagation();
-
-        const delta = -e.deltaY;
-        const new_radius = pen_radius + delta / 100 * (props.scroll_step ?? 1);
-
-        if (new_radius < min_radius || new_radius > max_radius) return;
-        console.log(new_radius);
-
-        setPenRadius(new_radius);
-    };
-
-
     useEffect(() => {
         if (initialised) return;
 
@@ -144,8 +128,8 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
             ctx.lineCap = "round";
 
             // change to foreground color
-            ctx.fillStyle = fg_color;
-            ctx.strokeStyle = fg_color;
+            ctx.fillStyle = props.fg_color;
+            ctx.strokeStyle = props.fg_color;
 
             load_css_cursor();
         }
@@ -153,7 +137,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         setInitialised(true);
 
         // TODO: update fg color on color change
-    }, [initialised, props.init_bg, fg_color, load_css_cursor]);
+    }, [initialised, props.init_bg, props.fg_color, load_css_cursor]);
 
     useEffect(() => {
         // update css cursor if values change
@@ -174,9 +158,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
             onPointerUp={on_pen_up}
 
             onPointerOut={on_pen_up}
-
-            onWheel={on_scroll}
-
+            
             style={{
                 touchAction: "pinch-zoom"
             }}

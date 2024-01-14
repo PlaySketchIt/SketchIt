@@ -1,23 +1,23 @@
-import { useState } from "react";
-
 import "./App.css";
-import SketchCanvas from "./components/SketchCanvas";
+import SketchArea from "./components/SketchArea";
 
 function App() {
   return (
     <>
-      <SketchCanvas
-        init_bg="blue"
+        <SketchArea
+          init_bg="white"
 
-        width={800}
-        height={450}
+          width={800}
+          height={450}
 
-        min_radius={1.5}
-        max_radius={15}
-        scroll_step={0.5}
+          min_radius={1.5}
+          max_radius={15}
+          pen_radius={5}
 
-        pressure_sensitive={true}
-      />
+          scroll_step={0.5}
+
+          pressure_sensitive={true}
+        />
     </>
   );
 }
