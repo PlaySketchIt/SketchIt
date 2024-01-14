@@ -1,11 +1,8 @@
-import pen_icon from "../assets/pen.svg";
-import fill_icon from "../assets/fill.svg";
-
 import { SketchTool } from "./SketchCanvas";
 
 const tool_icons = {
-    "pen": pen_icon,
-    "fill": fill_icon
+    "pen": "/icons/pen.svg",
+    "fill": "/icons/fill.svg",
 };
 
 export interface ToolTrayOptionProps {

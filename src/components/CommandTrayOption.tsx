@@ -1,13 +1,9 @@
-import undo_icon from "../assets/undo.svg";
-import redo_icon from "../assets/redo.svg";
-import clear_icon from "../assets/clear.svg";
-
 import { SketchCommand } from "./SketchCanvas";
 
 const command_icons = {
-    "undo": undo_icon,
-    "redo": redo_icon,
-    "clear": clear_icon
+    "undo": "/icons/undo.svg",
+    "redo": "/icons/redo.svg",
+    "clear": "/icons/clear.svg",
 };
 
 export interface CommandTrayOptionProps {
@@ -26,7 +22,6 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
 
             style={{
                 backgroundImage: `url(${command_icons[props.value]})`,
-
                 backgroundSize: "75%",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
