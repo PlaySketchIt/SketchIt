@@ -18,10 +18,12 @@ function App() {
 
           pressure_sensitive={true}
 
-          color_box_size={20}
+          tool_box_size={40}
         />
     </>
   );
 }
 
 export default App;
+
+// TODO: i18n integration

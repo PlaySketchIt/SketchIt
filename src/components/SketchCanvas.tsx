@@ -1,6 +1,9 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import DynamicCursor from "../DynamicCursor";
 
+// using fake enum rather than real enum as exporting enum invalidates fast refresh
+export type SketchTool = "pen" | "eraser" | "fill";
+
 export interface SketchCanvasProps {
     width?: number;
     height?: number;
@@ -12,6 +15,8 @@ export interface SketchCanvasProps {
     init_bg: string;
 
     fg_color: string;
+
+    current_tool: SketchTool;
 
     pressure_sensitive?: boolean;
 }
@@ -35,18 +40,27 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     };
 
     const load_css_cursor = useCallback(() => {
+        if (props.current_tool === "fill") {
+            // TODO: custom fill cursor
+            if (canvasRef.current) {
+                canvasRef.current.style.cursor = "crosshair";
+            }
+
+            return;
+        }
+
         cursor.current.set_fill(props.fg_color ?? "black");
         cursor.current.set_radius(props.pen_radius);
 
         if (canvasRef.current) {
             canvasRef.current.style.cursor = cursor.current.as_css_cursor("crosshair");
         }
-    }, [props.fg_color, props.pen_radius]);
+    }, [props.fg_color, props.pen_radius, props.current_tool]);
 
 
     const last_point = useRef<{ x: number, y: number } | null>(null);
 
-    const on_pen_move = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const on_pointer_move = (e: React.PointerEvent<HTMLCanvasElement>) => {
         if (!pen_down) return;
 
         const canvas = canvasRef.current;
@@ -94,18 +108,27 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         }
     };
 
-    const on_pen_down = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const on_pointer_down = (e: React.PointerEvent<HTMLCanvasElement>) => {
+        if (props.current_tool === "fill") {
+            // TODO: flood fill algo
+            return;
+        }
+
+        // TODO: perhaps make eraser work by setting fg color to bg color?
+
         setPenDown(true);
 
         // simulate movement to draw first dot
-        on_pen_move(e);
+        on_pointer_move(e);
     };
 
-    const on_pen_up = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const on_pointer_up = (e: React.PointerEvent<HTMLCanvasElement>) => {
+        if (!pen_down) return;
+
         setPenDown(false);
 
         // simulate movement to draw last dot
-        on_pen_move(e);
+        on_pointer_move(e);
 
         // clear last point
         last_point.current = null;
@@ -164,9 +187,9 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
             width={props.width}
             height={props.height}
 
-            onPointerDown={on_pen_down}
-            onPointerMove={on_pen_move}
-            onPointerUp={on_pen_up}
+            onPointerDown={on_pointer_down}
+            onPointerMove={on_pointer_move}
+            onPointerUp={on_pointer_up}
 
             onPointerEnter={
                 (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -177,7 +200,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
                     }
                 }
             }
-            onPointerOut={on_pen_up}
+            onPointerOut={on_pointer_up}
 
             style={{
                 touchAction: "pinch-zoom"
