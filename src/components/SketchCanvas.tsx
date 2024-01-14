@@ -1,7 +1,7 @@
 import { Component, createRef } from "react";
 import DynamicCursor from "../DynamicCursor";
 
-export interface PressureSensitiveCanvasProps {
+export interface SketchCanvasProps {
     width?: number;
     height?: number;
 
@@ -11,26 +11,35 @@ export interface PressureSensitiveCanvasProps {
 
     init_bg: string;
 
-    pressure_sensitive?: boolean;
+    pressure_sensitive?: boolean; // TODO: user toggleable
 
     scroll_step?: number;
 }
 
 // TODO: unify props into pen color
 
-class SketchCanvas extends Component<PressureSensitiveCanvasProps> {
+class SketchCanvas extends Component<SketchCanvasProps> {
+    private min_radius = this.props.min_radius ?? 1;
+    private max_radius = this.props.max_radius ?? 10;
+    private init_radius = this.props.init_radius ?? 5;
+
     private canvas_ref = createRef<HTMLCanvasElement>();
     private cursor = new DynamicCursor({
-        max_radius: this.props.max_radius ?? 10,
-        init_radius: this.props.init_radius ?? 5,
+        max_radius: this.max_radius,
+        init_radius: this.init_radius
     });
 
     state = {
         fg_color: "red",
-        pen_radius: this.props.init_radius ?? 5,
+        pen_radius: this.init_radius,
 
         pen_down: false,
     };
+
+
+    clamp_radius(radius: number) {
+        return Math.min(Math.max(radius, this.min_radius), this.max_radius);
+    }
 
     
     load_css_cursor() {
@@ -66,11 +75,11 @@ class SketchCanvas extends Component<PressureSensitiveCanvasProps> {
     }
 
 
-    on_mouse_down = (_e) => {
+    on_pen_down = () => {
         this.setState({ pen_down: true });
-    }
+    };
 
-    on_mouse_move = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+    on_pen_move = (e: React.PointerEvent<HTMLCanvasElement>) => {
         if (!this.state.pen_down) return;
 
         const canvas = this.canvas_ref.current!;
@@ -81,19 +90,29 @@ class SketchCanvas extends Component<PressureSensitiveCanvasProps> {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
+        let effective_radius = this.state.pen_radius;
+
+        if (this.props.pressure_sensitive && e.pointerType === "pen") {
+            let adjusted_pressure = e.pressure;
+
+            if (e.pressure < 1) {
+                // some tablets tend to be a bit weak at the high zones, so add a little boost
+                adjusted_pressure = e.pressure += 0.1;
+            }
+
+            // TODO: decide if base radius acts as multiplier (like now) or as a minimum that gets added to
+
+            effective_radius = this.clamp_radius(this.state.pen_radius * adjusted_pressure);
+        }
+
         ctx.beginPath();
-        ctx.arc(x, y, this.state.pen_radius, 0, 2 * Math.PI);
+        ctx.arc(x, y, effective_radius, 0, 2 * Math.PI);
         ctx.fill();
-    }
+    };
 
-    on_mouse_up = (_e) => {
+    on_pen_up = () => {
         this.setState({ pen_down: false });
-    }
-
-
-    radius_in_range(radius: number) {
-        return radius >= (this.props.min_radius ?? 1) && radius <= (this.props.max_radius ?? 10);
-    }
+    };
 
     //on_scroll = (e: React.WheelEvent<HTMLCanvasElement>) => {
     on_scroll = (e: WheelEvent) => {
@@ -102,11 +121,11 @@ class SketchCanvas extends Component<PressureSensitiveCanvasProps> {
         const delta = -e.deltaY;
         const new_radius = this.state.pen_radius + delta / 100 * (this.props.scroll_step ?? 1);
 
-        if (!this.radius_in_range(new_radius)) return;
+        if (new_radius < this.min_radius || new_radius > this.max_radius) return;
         console.log(new_radius);
 
         this.setState({ pen_radius: new_radius });
-    }
+    };
 
 
     render() {
@@ -118,16 +137,20 @@ class SketchCanvas extends Component<PressureSensitiveCanvasProps> {
                 width={this.props.width}
                 height={this.props.height}
 
-                onMouseDown={this.on_mouse_down}
-                onMouseMove={this.on_mouse_move}
-                onMouseUp={this.on_mouse_up}
+                onPointerDown={this.on_pen_down}
+                onPointerMove={this.on_pen_move}
+                onPointerUp={this.on_pen_up}
+
+                onPointerOut={this.on_pen_up}
 
                 //onWheel={this.on_scroll}
+
+                style={{
+                    touchAction: "none"
+                }}
             />
         );
     }
 }
 
 export default SketchCanvas;
-
-// TODO: handle pressure
