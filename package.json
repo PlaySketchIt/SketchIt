@@ -10,9 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource-variable/open-sans": "^5.0.23",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "typeface-open-sans": "^1.1.13"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
