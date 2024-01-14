@@ -94,20 +94,34 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
                 ctx.beginPath();
 
                 if (last_point.current) {
+                    // check if moved more than the diameter (to avoid overlap when transparent)
+                    const dx = x - last_point.current.x;
+                    const dy = y - last_point.current.y;
+
+                    const delta = Math.sqrt(dx * dx + dy * dy);
+
+                    // TODO: this helps to a degree, but makes it look laggy when the radius is large
+                    if (delta < effective_radius * 2) {
+                        // not enough movement to draw without overlap
+                        return;
+                    }
+
                     ctx.moveTo(last_point.current.x, last_point.current.y);
                     ctx.lineTo(x, y);
                     
                     ctx.lineWidth = effective_radius * 2;
                     ctx.stroke();
                 } else {
+                    // this is just a dot with no movement
                     ctx.arc(x, y, effective_radius, 0, 2 * Math.PI);
                     ctx.fill();
                 }
+
+                last_point.current = { x, y };
             };
     
             //requestAnimationFrame(draw);
             draw();
-            last_point.current = { x, y };
         }
     };
 
