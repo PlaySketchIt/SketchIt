@@ -1,3 +1,7 @@
+:root {
+  --bg: repeating-linear-gradient(90deg, rgba(255,255,255, 0.1) 0px, rgba(255,255,255, 0.1) 1px,transparent 1px, transparent 96px),repeating-linear-gradient(0deg, rgba(255,255,255, 0.1) 0px, rgba(255,255,255, 0.1) 1px,transparent 1px, transparent 96px),repeating-linear-gradient(0deg, rgba(106,106,106, 0.14) 0px, rgba(106,106,106, 0.14) 1px,transparent 1px, transparent 12px),repeating-linear-gradient(90deg, rgba(106,106,106, 0.14) 0px, rgba(106,106,106, 0.14) 1px,transparent 1px, transparent 12px),linear-gradient(90deg, rgb(39,73,110),rgb(39,73,110));
+}
+
 body {
   margin: 0;
   display: flex;
@@ -5,4 +9,6 @@ body {
   place-content: center;
   min-width: 320px;
   min-height: 100vh;
+
+  background: var(--bg);
 }

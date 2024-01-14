@@ -25,7 +25,10 @@
 }
 
 .sketch-area {
-  border: 1px solid var(--area-border-color);
+  border: 3px solid var(--area-border-color);
+
+  display: flex;
+  flex-direction: column;
 }
 
 .sketch-trays {
