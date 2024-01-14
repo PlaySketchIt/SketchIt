@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { SketchCommand } from "./SketchCanvas";
 import CommandTrayOption from "./CommandTrayOption";
 

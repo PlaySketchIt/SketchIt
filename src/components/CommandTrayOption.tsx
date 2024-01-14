@@ -34,7 +34,7 @@ const CommandTrayOption: React.FC<CommandTrayOptions> = (props) => {
                 height: props.size ?? 20
             }}
 
-            // TODO: hover effect
+            // TODO: hover & click effect
 
             onClick={() => props.command_run(props.value)}
         >
