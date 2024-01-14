@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@fontsource-variable/open-sans": "^5.0.23",
+    "floodfill": "github:obfuscatedgenerated/floodfill.js",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

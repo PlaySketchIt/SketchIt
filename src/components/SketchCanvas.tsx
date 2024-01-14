@@ -1,6 +1,7 @@
 import { forwardRef, useRef, useEffect, useState, useCallback, useImperativeHandle } from "react";
 import DynamicCursor from "../DynamicCursor";
 
+import { fillContext } from "floodfill";
 
 // TODO: move definitions into separate file
 
@@ -145,7 +146,15 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     };
 
     // TODO: unite methods for capturing and restoring canvas state
-    // TODO: disable undo/redo buttons when there is nothing to undo/redo
+
+    const do_floodfill = (x: number, y: number) => {
+        const canvas = canvas_ref.current;
+        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
+
+        if (!canvas || !ctx) return;
+
+        fillContext(ctx, x, y, 255, 0, 0, canvas.width, canvas.height);
+    };
 
 
     const on_pointer_move = (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -220,7 +229,16 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         on_redo_enabled_change.current(false);
 
         if (props.current_tool === "fill") {
-            // TODO: flood fill algo
+            const canvas = canvas_ref.current;
+
+            if (!canvas) return;
+
+            const rect = canvas.getBoundingClientRect();
+
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            do_floodfill(x, y);
             return;
         }
 
