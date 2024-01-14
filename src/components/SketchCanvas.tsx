@@ -2,7 +2,7 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import DynamicCursor from "../DynamicCursor";
 
 // using fake enum rather than real enum as exporting enum invalidates fast refresh
-export type SketchTool = "pen" | "eraser" | "fill";
+export type SketchTool = "pen" | "fill";
 
 export interface SketchCanvasProps {
     width?: number;
@@ -48,6 +48,8 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
 
             return;
         }
+
+        // TODO: as additional tools added, migrate to switch statement
 
         cursor.current.set_fill(props.fg_color ?? "black");
         cursor.current.set_radius(props.pen_radius);
@@ -114,7 +116,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
             return;
         }
 
-        // TODO: perhaps make eraser work by setting fg color to bg color?
+        // TODO: as additional tools added, migrate to switch statement
 
         setPenDown(true);
 

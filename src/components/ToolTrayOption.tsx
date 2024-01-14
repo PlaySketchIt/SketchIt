@@ -1,11 +1,9 @@
 import pen_icon from "../assets/pen.svg";
-import eraser_icon from "../assets/eraser.svg";
 import fill_icon from "../assets/fill.svg";
 import { SketchTool } from "./SketchCanvas";
 
 const tool_icons = {
     "pen": pen_icon,
-    "eraser": eraser_icon,
     "fill": fill_icon
 };
 

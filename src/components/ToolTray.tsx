@@ -27,7 +27,6 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
             }}
         >
             <ToolTrayOption value="pen" size={tool_box_size} tool_change={on_tool_change} current_tool={current_tool} />
-            <ToolTrayOption value="eraser" size={tool_box_size} tool_change={on_tool_change} current_tool={current_tool} />
             <ToolTrayOption value="fill" size={tool_box_size} tool_change={on_tool_change} current_tool={current_tool} />
         </div>
     );
