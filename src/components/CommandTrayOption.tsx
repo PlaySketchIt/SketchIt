@@ -20,7 +20,8 @@ export interface CommandTrayOptions {
 const CommandTrayOption: React.FC<CommandTrayOptions> = (props) => {
     return (
         <button
-            className="command-tray-option"
+            className="tray-option command-tray-option"
+
             style={{
                 backgroundImage: `url(${command_icons[props.value]})`,
 
@@ -28,13 +29,9 @@ const CommandTrayOption: React.FC<CommandTrayOptions> = (props) => {
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
 
-                border: "1px solid black",
-
                 width: props.size ?? 20,
                 height: props.size ?? 20
             }}
-
-            // TODO: hover & click effect
 
             onClick={() => props.command_run(props.value)}
         >

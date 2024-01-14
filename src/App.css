@@ -1,3 +1,51 @@
+:root {
+  --tray-bg-color: #333;
+
+  --tray-option-bg-color: #707070;
+  --tray-option-border-color: #111;
+
+  --tray-option-border-color-hover: #ffffff;
+  --tray-option-bg-color-selected: #ffffff;
+
+  --color-option-border-color-selected: #fff;
+
+  --command-option-bg-color-active: #fff;
+
+  --color-custom-bg-color: #fff;
+}
+
 .sketch-area {
   border: 1px solid #9c9c9c;
+}
+
+.sketch-trays {
+  background-color: var(--tray-bg-color);
+
+  padding: 1vh 1vw;
+}
+
+.tray-option {
+  border: 1px solid var(--tray-option-border-color);
+  background-color: var(--tray-option-bg-color);
+}
+
+.color-tray-custom {
+  border: 2px solid var(--tray-option-border-color);
+  background-color: var(--color-custom-bg-color);
+}
+
+.tray-option:hover {
+  border: 1px solid var(--tray-option-border-color-hover);
+}
+
+.tray-option-selected {
+  background-color: var(--tray-option-bg-color-selected);
+}
+
+.color-tray-option-selected {
+  border: 2px dashed var(--color-option-border-color-selected);
+}
+
+.command-tray-option:active {
+  background-color: var(--command-option-bg-color-active);
 }

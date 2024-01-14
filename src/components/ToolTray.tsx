@@ -55,8 +55,6 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     style={{
                         width: tool_box_size * 2,
                         height: tool_box_size / 2,
-
-                        border: "2px solid black",
                     }}
 
                     type="range"

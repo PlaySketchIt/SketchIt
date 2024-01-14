@@ -18,24 +18,22 @@ export interface ToolTrayOptionProps {
 }
 
 const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
+    const classes = props.value === props.current_tool ? "tool-tray-option tool-tray-option-selected tray-option tray-option-selected" : "tool-tray-option tray-option";
+
     return (
         <button
-            className="tool-tray-option"
+            className={classes}
+
             style={{
                 backgroundImage: `url(${tool_icons[props.value]})`,
-                backgroundColor: props.current_tool  === props.value ? "#dddddd" : "#ffffff",
 
                 backgroundSize: "75%",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
 
-                border: "1px solid black",
-
                 width: props.size ?? 20,
                 height: props.size ?? 20
             }}
-
-            // TODO: hover effect
 
             onClick={() => props.tool_change(props.value)}
         >

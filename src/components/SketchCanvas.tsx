@@ -30,7 +30,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     const min_radius = props.min_radius ?? 1;
     const max_radius = props.max_radius ?? 10;
 
-    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const canvas_ref = useRef<HTMLCanvasElement>(null);
     const cursor = useRef(new DynamicCursor({
         max_radius: max_radius,
         init_radius: props.pen_radius, // TODO: option to resize based on calculated pressure
@@ -49,8 +49,8 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     const load_css_cursor = useCallback(() => {
         if (props.current_tool === "fill") {
             // TODO: custom fill cursor
-            if (canvasRef.current) {
-                canvasRef.current.style.cursor = "crosshair";
+            if (canvas_ref.current) {
+                canvas_ref.current.style.cursor = "crosshair";
             }
 
             return;
@@ -61,8 +61,8 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         cursor.current.set_fill(props.fg_color ?? "black");
         cursor.current.set_radius(props.pen_radius);
 
-        if (canvasRef.current) {
-            canvasRef.current.style.cursor = cursor.current.as_css_cursor("crosshair");
+        if (canvas_ref.current) {
+            canvas_ref.current.style.cursor = cursor.current.as_css_cursor("crosshair");
         }
     }, [props.fg_color, props.pen_radius, props.current_tool]);
 
@@ -73,7 +73,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     const on_pointer_move = (e: React.PointerEvent<HTMLCanvasElement>) => {
         if (!pen_down) return;
 
-        const canvas = canvasRef.current;
+        const canvas = canvas_ref.current;
         const ctx = canvas?.getContext("2d", { willReadFrequently: true });
 
         if (canvas && ctx) {
@@ -144,7 +144,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         // TODO: as additional tools added, migrate to switch statement
 
         // save canvas state for undo/transparency fixup
-        const canvas = canvasRef.current;
+        const canvas = canvas_ref.current;
         const ctx = canvas?.getContext("2d", { willReadFrequently: true });
 
         if (canvas && ctx) {
@@ -170,7 +170,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
 
         // perform transparency fixup
         // revert canvas state and redraw last line as a single path
-        const canvas = canvasRef.current;
+        const canvas = canvas_ref.current;
         const ctx = canvas?.getContext("2d", { willReadFrequently: true });
 
         if (canvas && ctx) {
@@ -204,7 +204,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     useEffect(() => {
         if (initialised) return;
 
-        const canvas = canvasRef.current;
+        const canvas = canvas_ref.current;
         if (!canvas) return;
 
         const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -239,7 +239,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
         console.log("fg color changed");
 
         // update canvas color if value changes
-        const canvas = canvasRef.current;
+        const canvas = canvas_ref.current;
         if (!canvas) return;
 
         const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -253,7 +253,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     // effect: run when alpha changes to update canvas global alpha
     useEffect(() => {
         // update canvas alpha if value changes
-        const canvas = canvasRef.current;
+        const canvas = canvas_ref.current;
         if (!canvas) return;
 
         const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -265,7 +265,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     return (
         <canvas
             className="sketch-canvas"
-            ref={canvasRef}
+            ref={canvas_ref}
 
             width={props.width}
             height={props.height}
