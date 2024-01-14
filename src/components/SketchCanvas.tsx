@@ -34,7 +34,7 @@ const SketchCanvas: React.FC<SketchCanvasProps> = (props) => {
     const cursor = useRef(new DynamicCursor({
         max_radius: max_radius,
         init_radius: props.pen_radius, // TODO: option to resize based on calculated pressure
-        stroke: "rgba(0, 0, 0, 0.5)",
+        stroke: "#00000080",
         stroke_width: 1.5 // TODO: option to make size consistent with radius (also consider viewport)
     }));
 
