@@ -1,7 +1,8 @@
 import { forwardRef, useRef, useEffect, useState, useCallback, useImperativeHandle } from "react";
 import DynamicCursor from "../DynamicCursor";
 
-import { fillContext } from "floodfill";
+import FloodFill from "q-floodfill";
+const FF_TOLERANCE = 25; // increasing means less gap between colors, but more likely to spill over partially transparent drawings
 
 // TODO: move definitions into separate file
 
@@ -153,7 +154,12 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
         if (!canvas || !ctx) return;
 
-        fillContext(ctx, x, y, 255, 0, 0, canvas.width, canvas.height);
+        x = Math.floor(x);
+        y = Math.floor(y);
+
+        const floodfill = new FloodFill(ctx.getImageData(0, 0, canvas.width, canvas.height));
+        floodfill.fill(props.fg_color, x, y, FF_TOLERANCE);
+        ctx.putImageData(floodfill.imageData, 0, 0);
     };
 
 
