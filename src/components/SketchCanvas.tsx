@@ -2,7 +2,8 @@ import { forwardRef, useRef, useEffect, useState, useCallback, useImperativeHand
 import DynamicCursor from "../DynamicCursor";
 
 import FloodFill from "q-floodfill";
-const FF_TOLERANCE = 25; // increasing means less gap between colors, but more likely to spill over partially transparent drawings
+const FF_TOLERANCE = 40; // increasing means less gap between colors, but more likely to spill over partially transparent drawings
+// TODO: user adjustable tolerance?
 
 // TODO: move definitions into separate file
 
@@ -157,8 +158,35 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         x = Math.floor(x);
         y = Math.floor(y);
 
-        const floodfill = new FloodFill(ctx.getImageData(0, 0, canvas.width, canvas.height));
-        floodfill.fill(props.fg_color, x, y, FF_TOLERANCE);
+        // add convert color to rgba
+        const fill_color = `rgba(${parseInt(props.fg_color.substr(1, 2), 16)}, ${parseInt(props.fg_color.substr(3, 2), 16)}, ${parseInt(props.fg_color.substr(5, 2), 16)}, ${props.alpha})`;
+        
+        const old_img_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        // clone image data to avoid modifying original
+        const img_data = new ImageData(
+            new Uint8ClampedArray(old_img_data.data),
+            old_img_data.width,
+            old_img_data.height
+        );
+
+        const floodfill = new FloodFill(img_data);
+        floodfill.fill(fill_color, x, y, FF_TOLERANCE);
+
+        // blend partially transparent fill with old image data
+        const data = floodfill.imageData.data;
+
+        for (let i = 3; i < data.length; i += 4) {
+            const alpha = data[i] / 255;
+
+            data[i - 3] = data[i - 3] * alpha + old_img_data.data[i - 3] * (1 - alpha);
+            data[i - 2] = data[i - 2] * alpha + old_img_data.data[i - 2] * (1 - alpha);
+            data[i - 1] = data[i - 1] * alpha + old_img_data.data[i - 1] * (1 - alpha);
+
+            // strip alpha channel
+            data[i] = 255;
+        }
+
         ctx.putImageData(floodfill.imageData, 0, 0);
     };
 
