@@ -24,6 +24,15 @@ const ColorTrayRow: React.FC<{ children?: React.ReactNode }> = (props) => {
     );
 };
 
+const calculate_luminance = (color: string) => {
+    // https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
+    const r = parseInt(color.substring(1, 3), 16) / 255;
+    const g = parseInt(color.substring(3, 5), 16) / 255;
+    const b = parseInt(color.substring(5, 7), 16) / 255;
+
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+
 const ColorTray: React.FC<ColorTrayProps> = (props) => {
     const tool_box_size = props.tool_box_size ?? 40;
     const color_box_size = tool_box_size / 2;
@@ -31,9 +40,7 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
     const [current_color, setCurrentColor] = useState(props.init_color);
     const [current_alpha, setCurrentAlpha] = useState(props.init_alpha ?? 1);
 
-    const current_brightness = parseInt(current_color.substring(1, 3), 16) + parseInt(current_color.substring(3, 5), 16) + parseInt(current_color.substring(5, 7), 16);
-    const picker_invert_value = current_brightness > 450 ? "0%" : "100%"; // TODO: configurable threshold + shadow amount. seem to have sweet spot around 450. lower = less likely to go white, higher = more likely to go white
-    // TODO: same inversion on color tray options? could easily do it by hard coding it since theres a finite amount of colors
+    const picker_invert_value = calculate_luminance(current_color) > 0.5 ? "0%" : "100%"; // TODO: configurable threshold + shadow amount.
 
     const on_color_change = (color: string) => {
         setCurrentColor(color);
@@ -107,6 +114,8 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                     value={current_color}
 
                     onChange={(e) => on_color_change(e.target.value)}
+
+                    aria-label="select custom color"
                 />
                 <img
                     className="color-tray-custom-overlay"

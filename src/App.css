@@ -10,6 +10,7 @@
   --tray-option-bg-color-selected: #ffffff;
 
   --color-option-border-color-selected: #fff;
+  --color-option-border-color-light-selected: #111;
 
   --command-option-bg-color-active: #fff;
   --command-option-bg-color-disabled: #333;
@@ -63,6 +64,10 @@
 
 .color-tray-option-selected {
   border: 2px dashed var(--color-option-border-color-selected);
+}
+
+.color-tray-option-selected.light-color {
+  border: 2px dashed var(--color-option-border-color-light-selected);
 }
 
 .command-tray-option:active {
