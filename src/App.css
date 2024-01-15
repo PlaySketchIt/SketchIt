@@ -36,6 +36,11 @@
   background-color: var(--tray-bg-color);
 
   padding: 1vh 1vw;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .tray-option {
@@ -73,6 +78,7 @@
   font-family: var(--tray-label-font-family);
   font-size: var(--tray-label-font-size);
   font-weight: var(--tray-label-font-weight);
+  user-select: none;
 }
 
 

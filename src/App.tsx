@@ -1,14 +1,17 @@
 import "./App.css";
 import SketchArea from "./components/SketchArea";
 
+const ASPECT_RATIO = 16 / 9;
+const WIDTH = 1000;
+
 function App() {
   return (
     <>
         <SketchArea
           background="white"
 
-          width={800}
-          height={450}
+          width={WIDTH}
+          height={WIDTH / ASPECT_RATIO}
 
           min_radius={1.5}
           max_radius={15}
