@@ -55,30 +55,32 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                     flexDirection: "column"
                 }}
             >
-                {/* TODO: more graceful way to do this */}
+                {/* TODO: more graceful way to do this. perhaps a simple dict that gets generated */}
                 <ColorTrayRow>
-                    {/* black, white, red, green, blue, yellow, cyan, magenta, dark green */}
-                    <ColorTrayOption value="#000000" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#ffffff" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#ff0000" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#00ff00" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#0000ff" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#ffff00" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#00ffff" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#ff00ff" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#006400" size={color_box_size} color_change={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="black" value="#000000" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="white" value="#ffffff" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="red" value="#ff2020" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="green" value="#10ff40" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="blue" value="#0096ff" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="orange" value="#ffa500" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="dark brown" value="#8b4513" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="lemon yellow" value="#fff44f" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="magenta" value="#ff00ff" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="dark green" value="#006400" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="dust" value="#e5aa70" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
                 </ColorTrayRow>
                 <ColorTrayRow>
-                    {/* gray, dark gray, cream, ochre, dark brown, orangy brown, olive, violet, light green */}
-                    <ColorTrayOption value="#888888" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#444444" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#F2D2BD" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#D27D2D" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#8b4513" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#a0522d" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#808000" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#ee82ee" size={color_box_size} color_change={on_color_change} current_color={current_color} />
-                    <ColorTrayOption value="#90ee90" size={color_box_size} color_change={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="dark gray" value="#444444" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="gray" value="#888888" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="salmon" value="#ff8c69" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="chartreuse" value="#7fff33" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="cyan" value="#00ffff" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="ochre" value="#d27d2d" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="coffee brown" value="#a0522d" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="mustard yellow" value="#f4c430" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="violet" value="#cf9fff" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="mint" value="#90ee90" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="cream" value="#f2d2bd" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
                 </ColorTrayRow>
             </div>
             <input
@@ -131,3 +133,5 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
 };
 
 export default ColorTray;
+
+// TODO: i18n

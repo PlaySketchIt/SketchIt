@@ -1,10 +1,12 @@
 export interface ColorTrayOptionProps {
+    name: string;
     value: string;
+
     size?: number;
 
     current_color: string;
 
-    color_change: (color: string) => void;
+    color_change_handler: (color: string) => void;
 }
 
 const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
@@ -14,6 +16,8 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
         <button
             className={classes}
 
+            aria-label={"select " + props.name + " color"}
+
             style={{
                 backgroundColor: props.value,
 
@@ -21,10 +25,12 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
                 height: props.size ?? 20
             }}
 
-            onClick={() => props.color_change(props.value)}
+            onClick={() => props.color_change_handler(props.value)}
         >
         </button>
     );
 };
 
 export default ColorTrayOption;
+
+// TODO: tooltip using names
