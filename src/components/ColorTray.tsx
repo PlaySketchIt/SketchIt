@@ -31,6 +31,9 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
     const [current_color, setCurrentColor] = useState(props.init_color);
     const [current_alpha, setCurrentAlpha] = useState(props.init_alpha ?? 1);
 
+    const current_brightness = parseInt(current_color.substring(1, 3), 16) + parseInt(current_color.substring(3, 5), 16) + parseInt(current_color.substring(5, 7), 16);
+    const picker_invert_value = current_brightness > 450 ? "0%" : "100%"; // TODO: configurable threshold + shadow amount. seem to have sweet spot around 450. lower = less likely to go white, higher = more likely to go white
+
     const on_color_change = (color: string) => {
         setCurrentColor(color);
         props.on_color_change(color);
@@ -65,7 +68,7 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                     <ColorTrayOption name="orange" value="#ffa500" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
                     <ColorTrayOption name="dark brown" value="#8b4513" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
                     <ColorTrayOption name="lemon yellow" value="#fff44f" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
-                    <ColorTrayOption name="magenta" value="#ff00ff" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
+                    <ColorTrayOption name="magenta" value="#f432ff" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
                     <ColorTrayOption name="dark green" value="#006400" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
                     <ColorTrayOption name="dust" value="#e5aa70" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
                 </ColorTrayRow>
@@ -83,20 +86,45 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                     <ColorTrayOption name="cream" value="#f2d2bd" size={color_box_size} color_change_handler={on_color_change} current_color={current_color} />
                 </ColorTrayRow>
             </div>
-            <input
-                className="color-tray-custom color-tray-option tray-option"
 
+            <div
+                className="color-tray-custom-container"
                 style={{
-                    width: tool_box_size,
-                    height: tool_box_size,
+                    position: "relative",
+                    marginLeft: tool_box_size / 10,
                 }}
-
-                type="color"
-                value={current_color}
-
-                onChange={(e) => on_color_change(e.target.value)}
             >
-            </input>
+                <input
+                    className="color-tray-custom color-tray-option tray-option"
+
+                    style={{
+                        width: tool_box_size,
+                        height: tool_box_size,
+                    }}
+
+                    type="color"
+                    value={current_color}
+
+                    onChange={(e) => on_color_change(e.target.value)}
+                />
+                <img
+                    className="color-tray-custom-overlay"
+                    style={{
+                        position: "absolute",
+
+                        width: tool_box_size / 2,
+                        height: tool_box_size / 2,
+
+                        top: tool_box_size / 4,
+                        left: tool_box_size / 4,
+
+                        filter: `invert(${picker_invert_value}) drop-shadow(0px 0px 1px #222)`,
+                    }}
+
+                    src="/icons/picker.svg"
+                />
+                {/* TODO: should we use nextjs Image here? svg direct import? */}
+            </div>
 
             <label
                 className="color-tray-alpha-label-container tray-label-container"
