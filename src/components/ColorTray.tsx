@@ -33,6 +33,7 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
 
     const current_brightness = parseInt(current_color.substring(1, 3), 16) + parseInt(current_color.substring(3, 5), 16) + parseInt(current_color.substring(5, 7), 16);
     const picker_invert_value = current_brightness > 450 ? "0%" : "100%"; // TODO: configurable threshold + shadow amount. seem to have sweet spot around 450. lower = less likely to go white, higher = more likely to go white
+    // TODO: same inversion on color tray options? could easily do it by hard coding it since theres a finite amount of colors
 
     const on_color_change = (color: string) => {
         setCurrentColor(color);
@@ -119,6 +120,8 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                         left: tool_box_size / 4,
 
                         filter: `invert(${picker_invert_value}) drop-shadow(0px 0px 1px #222)`,
+
+                        pointerEvents: "none",
                     }}
 
                     src="/icons/picker.svg"
