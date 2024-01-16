@@ -204,17 +204,6 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
                 draw_ctx.beginPath();
 
                 if (previous_point.current) {
-                    // enforce minimum distance between points
-                    // this helps optimise performance, especially when networked
-                    const dist = Math.sqrt((x - previous_point.current.x) ** 2 + (y - previous_point.current.y) ** 2);
-
-                    // could use diameter to avoid any overlap, but it doesn't look as smooth
-                    // TODO: should this be configurable? e.g. props.radius_overlap
-                    if (dist < effective_radius) {
-                        // don't draw anything
-                        return;
-                    }
-
                     draw_ctx.moveTo(previous_point.current.x, previous_point.current.y);
                     draw_ctx.lineTo(x, y);
 
