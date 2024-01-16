@@ -35,7 +35,6 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
         const new_radius = pen_radius + delta / 100 * scroll_step;
 
         if (new_radius < min_radius || new_radius > max_radius) return;
-        console.log(new_radius);
 
         setPenRadius(new_radius);
     };

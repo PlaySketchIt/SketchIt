@@ -374,8 +374,6 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
     // effect: run when color changes to update canvas color
     useEffect(() => {
-        console.log("fg color changed");
-
         // update canvas color if value changes
         const canvas = canvas_ref.current;
         if (!canvas) return;
@@ -403,7 +401,6 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     // expose methods to parent upon ref
     useImperativeHandle(ref, () => ({
         handle_command: (command: SketchCommand) => {
-            console.log(`received command: ${command}`);
             switch (command) {
                 case "undo":
                     if (!undo_canvas_state.current) return;
