@@ -2,14 +2,25 @@ import { Metadata, Viewport } from "next";
 
 import pen_icon from "../assets/icons/pen.svg";
 
-const BASE_URL = "https://localhost:3000"; // TODO: replace with domain when deployed
+if (!process.env.BASE_URL) {
+    throw new Error("BASE_URL environment variable (or .env.local entry) is required, e.g. BASE_URL=https://example.com");
+}
+
+let BASE_URL: URL;
+try {
+    BASE_URL = new URL(process.env.BASE_URL);
+} catch (e) {
+    throw new Error("BASE_URL environment variable (or .env.local entry) must be a valid URL, e.g. BASE_URL=https://example.com");
+}
+
+const BASE_PROTO_HOST = `${BASE_URL.protocol}//${BASE_URL.host}`;
 
 export const viewport: Viewport = {
     themeColor: "#27496e",
 };
 
 export const metadata: Metadata = {
-    metadataBase: new URL(BASE_URL),
+    metadataBase: BASE_URL,
 
     title: {
         template: "%s | Sketch It!", // TODO: use when required: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#title
@@ -42,7 +53,7 @@ export const metadata: Metadata = {
     openGraph: {
         locale: "en_GB",
         type: "website",
-        url: BASE_URL,
+        url: BASE_PROTO_HOST,
         siteName: "Sketch It!",
         images: [
             {
