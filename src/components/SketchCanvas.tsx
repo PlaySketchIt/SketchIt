@@ -388,7 +388,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
                     break;
                 case "clear":
                     capture_undo_canvas_state();
-                    clear_draw_canvas();
+                    clear_render_canvas();
 
                     redo_canvas_state.current = null;
                     on_redo_enabled_change.current(false);
@@ -402,7 +402,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             on_redo_enabled_change.current = callback;
         }
         // TODO: this cannot be the best way to do this. passing boolean directly doesn't update the parent though
-    }), [clear_draw_canvas]);
+    }), [clear_render_canvas]);
 
     return (
         <div
