@@ -15,7 +15,7 @@ module.exports = {
       "warn",
       { 
         allowConstantExport: true,
-        allowExportNames: ["metadata"],
+        allowExportNames: ["metadata", "viewport"],
       },
     ],
     "quotes": ["error", "double"],
