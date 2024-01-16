@@ -21,8 +21,6 @@ class CanvasUndoRedoArray {
 
 
     private fire_events() {
-        console.log(this.index, this.array);
-
         // fire change events only if they're different from the cache
 
         if (this.can_undo_cache !== this.can_undo) {
