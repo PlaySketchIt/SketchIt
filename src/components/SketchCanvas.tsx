@@ -43,7 +43,8 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         throw new Error("invalid foreground color (must be #rrggbb): " + props.fg_color);
     }
 
-    const min_radius = props.min_radius ?? 1; // TODO: why was this needed? probs clamp radius. see if still needed
+    // TODO: could check pen radius is within min/max radius. could be expensive though and not really necessary
+    //const min_radius = props.min_radius ?? 1;
     const max_radius = props.max_radius ?? 10;
 
     const render_canvas_ref = useRef<HTMLCanvasElement>(null);
