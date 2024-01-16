@@ -264,12 +264,12 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         on_pointer_move(e);
 
         // overlay draw canvas as required then clear it
-        push_draw_canvas_to_render();
+        composite_draw_canvas_on_render();
         clear_draw_canvas();
     };
 
 
-    const push_draw_canvas_to_render = () => {
+    const composite_draw_canvas_on_render = () => {
         const render_canvas = render_canvas_ref.current;
         const render_ctx = render_canvas?.getContext("2d", { willReadFrequently: true });
 
@@ -281,6 +281,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         //render_ctx.globalAlpha = props.alpha; // this is now set by an effect automatically
         render_ctx.drawImage(draw_canvas, 0, 0);
 
+        // TODO: should the method be changed to return new composite image data but not actually apply it? could then be reused for networking
         // TODO: should this method just call the clear method, or do we trust the caller to do it?
     };
 
