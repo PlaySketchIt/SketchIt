@@ -57,8 +57,8 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         // TODO: adjust transparency based on alpha
     }));
 
-    const [initialised, setInitialised] = useState(false);
-    const [pen_down, setPenDown] = useState(false);
+    const [initialised, setInitialised] = useState<boolean>(false);
+    const [pen_down, setPenDown] = useState<boolean>(false);
 
     const load_css_cursor = useCallback(() => {
         if (props.current_tool === "fill") {
@@ -417,7 +417,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
     return (
         <div
-            className="sketch-canvases"
+            className="sketch-canvas"
 
             style={{
                 position: "relative",
@@ -427,7 +427,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             }}
         >
             <canvas
-                className="sketch-render-canvas"
+                className="sketch-render-layer"
                 ref={render_canvas_ref}
 
                 width={props.width}
@@ -442,7 +442,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
                 }}
             />
             <canvas
-                className="sketch-draw-canvas"
+                className="sketch-draw-layer"
                 ref={draw_canvas_ref}
 
                 width={props.width}

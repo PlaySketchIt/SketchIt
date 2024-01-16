@@ -29,7 +29,7 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
     const min_tolerance = props.min_tolerance ?? 0;
     const max_tolerance = props.max_tolerance ?? 254;
 
-    const [current_tool, setCurrentTool] = useState(props.init_tool);
+    const [current_tool, setCurrentTool] = useState<SketchTool>(props.init_tool);
 
     const on_tool_change = (tool: SketchTool) => {
         setCurrentTool(tool);

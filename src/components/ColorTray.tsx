@@ -45,8 +45,8 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
     const tool_box_size = props.tool_box_size ?? 40;
     const color_box_size = tool_box_size / 2;
 
-    const [current_color, setCurrentColor] = useState(props.init_color);
-    const [current_alpha, setCurrentAlpha] = useState(props.init_alpha ?? 1);
+    const [current_color, setCurrentColor] = useState<HexColor>(props.init_color);
+    const [current_alpha, setCurrentAlpha] = useState<number>(props.init_alpha ?? 1);
 
     const picker_invert_value = calculate_luminance(current_color) > 0.5 ? "0%" : "100%"; // TODO: configurable threshold + shadow amount.
 

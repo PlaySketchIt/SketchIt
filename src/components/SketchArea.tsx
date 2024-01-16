@@ -17,18 +17,18 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     const min_radius = props.min_radius ?? 1;
     const max_radius = props.max_radius ?? 10;
 
-    const [pen_radius, setPenRadius] = useState(props.pen_radius);
-    const [fg_color, setFgColor] = useState("#000000" as HexColor);
-    const [alpha, setAlpha] = useState(1);
+    const [pen_radius, setPenRadius] = useState<number>(props.pen_radius);
+    const [fg_color, setFgColor] = useState<HexColor>("#000000"); // TODO: possibly have configurable default color
+    const [alpha, setAlpha] = useState<number>(1);
 
-    const [fill_tolerance, setFillTolerance] = useState(props.fill_tolerance);
+    const [fill_tolerance, setFillTolerance] = useState<number>(props.fill_tolerance);
 
     const [current_tool, setCurrentTool] = useState<SketchTool>("pen");
 
     const sketch_canvas_ref = useRef<SketchCanvasRef>(null);
     
-    const [can_undo, setCanUndo] = useState(false);
-    const [can_redo, setCanRedo] = useState(false);
+    const [can_undo, setCanUndo] = useState<boolean>(false);
+    const [can_redo, setCanRedo] = useState<boolean>(false);
 
     const scroll_step = props.scroll_step ?? 1;
 
