@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 export type HexColor = `#${string}`;
 // TODO: put in common file
 
@@ -24,10 +26,12 @@ const calculate_luminance = (color: HexColor) => {
 // TODO: unite with method in ColorTrayCustom.tsx, cant export from either so must be in a separate file
 
 const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
-    // check value is in hex format without alpha
-    if (!props.value.match(/^#[0-9a-fA-F]{6}$/)) {
-        throw new Error("invalid color value (must be #rrggbb): " + props.value);
-    }
+    // effect: check value is in hex format without alpha
+    useEffect(() => {
+        if (!props.value.match(/^#[0-9a-fA-F]{6}$/)) {
+            throw new Error("invalid color value (must be #rrggbb): " + props.value);
+        }
+    }, [props.value]);
 
     const is_light_color = calculate_luminance(props.value) > 0.5;
     // TODO: sync with threshold in ColorTray.tsx

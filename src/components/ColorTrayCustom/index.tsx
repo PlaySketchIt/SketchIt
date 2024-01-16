@@ -23,6 +23,7 @@ const calculate_luminance = (color: HexColor) => {
 };
 
 const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
+    // TODO: should color be validated? or do we just trust the parent component?
     const picker_invert_value = calculate_luminance(props.current_color) > 0.5 ? "0%" : "100%"; // TODO: configurable threshold + shadow amount.
 
     return (

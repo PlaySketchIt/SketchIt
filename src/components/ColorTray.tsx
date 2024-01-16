@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import ColorTrayOption, { HexColor } from "./ColorTrayOption";
 import ColorTrayCustom from "./ColorTrayCustom";
@@ -28,10 +28,12 @@ const ColorTrayRow: React.FC<{ children?: React.ReactNode }> = (props) => {
 
 
 const ColorTray: React.FC<ColorTrayProps> = (props) => {
-    // check value is in hex format without alpha
-    if (!props.init_color.match(/^#[0-9a-fA-F]{6}$/)) {
-        throw new Error("invalid color value (must be #rrggbb): " + props.init_color);
-    }
+    // effect: check value is in hex format without alpha
+    useEffect(() => {
+        if (!props.init_color.match(/^#[0-9a-fA-F]{6}$/)) {
+            throw new Error("invalid color value (must be #rrggbb): " + props.init_color);
+        }
+    }, [props.init_color]);
 
     const tool_box_size = props.tool_box_size ?? 40;
     const color_box_size = tool_box_size / 2;

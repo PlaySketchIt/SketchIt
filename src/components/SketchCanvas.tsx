@@ -38,10 +38,12 @@ export interface SketchCanvasRef {
 }
 
 const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref) => {
-    // check colors are in correct hex format
-    if (!props.fg_color.match(/^#[0-9a-fA-F]{6}$/)) {
-        throw new Error("invalid foreground color (must be #rrggbb): " + props.fg_color);
-    }
+    // effect: check color is in correct hex format
+    useEffect(() => {
+        if (!props.fg_color.match(/^#[0-9a-fA-F]{6}$/)) {
+            throw new Error("invalid foreground color (must be #rrggbb): " + props.fg_color);
+        }
+    }, [props.fg_color]);
 
     // TODO: could check pen radius is within min/max radius. could be expensive though and not really necessary
     //const min_radius = props.min_radius ?? 1;
@@ -410,7 +412,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
             style={{
                 position: "relative",
-                
+
                 width: props.width,
                 height: props.height
             }}
