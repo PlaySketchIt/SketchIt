@@ -353,7 +353,6 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         if (ctx) {
             // initialise canvas
             clear_canvas();
-            capture_undo_canvas_state();
 
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
@@ -476,4 +475,4 @@ export default SketchCanvas;
 // TODO: simplify structure (possibly extract methods)
 // TODO: make standard method for getContext that enforces willReadFrequently
 // TODO: document methods!
-// TODO: more advanced undo/redo tree? gets complex quick!
+// TODO: more advanced undo/redo tree? gets complex quick! at least have some form of stack. means will have to rework how canvas state is captured
