@@ -467,6 +467,8 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             style={{
                 touchAction: "pinch-zoom"
             }}
+
+            aria-label="drawing canvas"
         />
     );
 });
