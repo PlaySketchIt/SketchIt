@@ -24,7 +24,7 @@ function App() {
 
           scroll_step={0.5}
 
-          pressure_sensitive={true}
+          pressure_modifier={5} // TODO: could be user defined. perhaps by a nice curve editor?
 
           tool_box_size={40}
         />

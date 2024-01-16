@@ -77,7 +77,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
 
                 fill_tolerance={fill_tolerance}
 
-                pressure_sensitive={props.pressure_sensitive}
+                pressure_modifier={props.pressure_modifier}
             />
             <div
                 className="sketch-trays"

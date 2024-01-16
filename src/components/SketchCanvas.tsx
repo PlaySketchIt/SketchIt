@@ -26,7 +26,7 @@ export interface SketchCanvasProps {
 
     current_tool: SketchTool;
 
-    pressure_sensitive?: boolean;
+    pressure_modifier: number; // multiplied by pressure (0-1) then added to pen radius, e.g. a modifier of 2 adds 2 radius to the pen at full pressure. no longer clamped to maximum radius.
 }
 
 export interface SketchCanvasRef {
@@ -49,11 +49,6 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
     const [initialised, setInitialised] = useState(false);
     const [pen_down, setPenDown] = useState(false);
-
-
-    const clamp_radius = (radius: number) => {
-        return Math.min(Math.max(radius, min_radius), max_radius);
-    };
 
     const load_css_cursor = useCallback(() => {
         if (props.current_tool === "fill") {
@@ -205,7 +200,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
             let effective_radius = props.pen_radius;
 
-            if (props.pressure_sensitive && e.pointerType === "pen") {
+            if (props.pressure_modifier !== 0 && e.pointerType === "pen") {
                 let adjusted_pressure = e.pressure;
 
                 if (e.pressure < 1) {
@@ -213,9 +208,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
                     adjusted_pressure = e.pressure += 0.1;
                 }
 
-                // TODO: decide if base radius acts as multiplier (like now) or as a minimum that gets added to
-
-                effective_radius = clamp_radius(props.pen_radius * adjusted_pressure);
+                effective_radius = props.pen_radius + (props.pressure_modifier * adjusted_pressure);
             }
 
             const draw = () => {
@@ -474,5 +467,5 @@ export default SketchCanvas;
 // TODO: make canvas capture and drawing methods generic to be reused
 // TODO: simplify structure (possibly extract methods)
 // TODO: make standard method for getContext that enforces willReadFrequently
-// TODO: document methods!
+// TODO: document methods and props!
 // TODO: more advanced undo/redo tree? gets complex quick! at least have some form of stack. means will have to rework how canvas state is captured
