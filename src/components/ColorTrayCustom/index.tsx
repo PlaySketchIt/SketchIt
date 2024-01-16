@@ -64,6 +64,8 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
                 aria-hidden="true"
                 alt=""
 
+                draggable={false}
+
                 src={picker_icon}
                 priority={true}
             />
@@ -72,3 +74,5 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
 };
 
 export default ColorTrayCustom;
+
+// TODO: convert other components to directories and replace inline styles with modules

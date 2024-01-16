@@ -50,6 +50,8 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
                 aria-hidden="true"
                 alt=""
 
+                draggable={false}
+
                 src={tool_icons[props.value]}
             />
         </button>

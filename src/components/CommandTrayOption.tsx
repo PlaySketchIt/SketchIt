@@ -52,6 +52,8 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
                 aria-hidden="true"
                 alt=""
 
+                draggable={false}
+
                 src={command_icons[props.value]}
             />
         </button>
