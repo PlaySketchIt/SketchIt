@@ -21,7 +21,7 @@ const calculate_luminance = (color: HexColor) => {
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };
 
-// unite with method in ColorTray.tsx, cant export from either so must be in a separate file
+// TODO: unite with method in ColorTrayCustom.tsx, cant export from either so must be in a separate file
 
 const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
     // check value is in hex format without alpha

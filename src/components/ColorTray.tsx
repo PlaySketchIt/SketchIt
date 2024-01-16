@@ -1,9 +1,8 @@
 import { useState } from "react";
-import Image from "next/image";
 
 import ColorTrayOption, { HexColor } from "./ColorTrayOption";
+import ColorTrayCustom from "./ColorTrayCustom";
 
-import picker_icon from "../assets/icons/picker.svg";
 
 export interface ColorTrayProps {
     init_color: HexColor;
@@ -27,14 +26,6 @@ const ColorTrayRow: React.FC<{ children?: React.ReactNode }> = (props) => {
     );
 };
 
-const calculate_luminance = (color: HexColor) => {
-    // https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
-    const r = parseInt(color.substring(1, 3), 16) / 255;
-    const g = parseInt(color.substring(3, 5), 16) / 255;
-    const b = parseInt(color.substring(5, 7), 16) / 255;
-
-    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-};
 
 const ColorTray: React.FC<ColorTrayProps> = (props) => {
     // check value is in hex format without alpha
@@ -47,8 +38,6 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
 
     const [current_color, setCurrentColor] = useState<HexColor>(props.init_color);
     const [current_alpha, setCurrentAlpha] = useState<number>(props.init_alpha ?? 1);
-
-    const picker_invert_value = calculate_luminance(current_color) > 0.5 ? "0%" : "100%"; // TODO: configurable threshold + shadow amount.
 
     const on_color_change = (color: HexColor) => {
         setCurrentColor(color);
@@ -103,52 +92,7 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                 </ColorTrayRow>
             </div>
 
-            <div
-                className="color-tray-custom-container"
-                style={{
-                    position: "relative",
-                    marginLeft: tool_box_size / 10,
-                }}
-            >
-                <input
-                    className="color-tray-custom color-tray-option tray-option"
-
-                    style={{
-                        width: tool_box_size,
-                        height: tool_box_size,
-                    }}
-
-                    type="color"
-                    value={current_color}
-
-                    // assumption made
-                    onChange={(e) => on_color_change(e.target.value as HexColor)}
-
-                    aria-label="select custom color"
-                />
-                <Image
-                    className="color-tray-custom-overlay"
-                    style={{
-                        position: "absolute",
-
-                        width: tool_box_size / 2,
-                        height: tool_box_size / 2,
-
-                        top: tool_box_size / 4,
-                        left: tool_box_size / 4,
-
-                        filter: `invert(${picker_invert_value}) drop-shadow(0px 0px 1px #222)`,
-
-                        pointerEvents: "none",
-                    }}
-
-                    aria-hidden="true"
-                    alt=""
-
-                    src={picker_icon}
-                    priority={true}
-                />
-            </div>
+            <ColorTrayCustom current_color={current_color} tool_box_size={tool_box_size} on_color_change={on_color_change} />
 
             <label
                 className="color-tray-alpha-label-container tray-label-container"
