@@ -2,8 +2,6 @@ import { forwardRef, useRef, useEffect, useState, useCallback, useImperativeHand
 import DynamicCursor from "../DynamicCursor";
 
 import FloodFill from "q-floodfill";
-const FF_TOLERANCE = 40; // increasing means less gap between colors, but more likely to spill over partially transparent drawings
-// TODO: user adjustable tolerance?
 
 // TODO: move definitions into separate file
 
@@ -18,6 +16,8 @@ export interface SketchCanvasProps {
     min_radius?: number;
     max_radius?: number;
     pen_radius: number;
+
+    fill_tolerance: number;
 
     background: string;
 
@@ -171,7 +171,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         );
 
         const floodfill = new FloodFill(img_data);
-        floodfill.fill(fill_color, x, y, FF_TOLERANCE);
+        floodfill.fill(fill_color, x, y, props.fill_tolerance);
 
         // blend partially transparent fill with old image data
         const data = floodfill.imageData.data;

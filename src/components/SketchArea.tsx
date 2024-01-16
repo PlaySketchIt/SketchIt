@@ -7,6 +7,7 @@ import CommandTray from "./CommandTray";
 
 export interface SketchAreaProps extends Omit<SketchCanvasProps, "alpha" | "fg_color" | "current_tool"> {
     scroll_step?: number;
+    tolerance_step?: number; // TODO: decide whether scroll should affect tolerance if fill selected. change props to reflect that
     tool_box_size?: number;
 }
 
@@ -17,6 +18,9 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     const [pen_radius, setPenRadius] = useState(props.pen_radius);
     const [fg_color, setFgColor] = useState("#000000");
     const [alpha, setAlpha] = useState(1);
+
+    const [fill_tolerance, setFillTolerance] = useState(props.fill_tolerance);
+
     const [current_tool, setCurrentTool] = useState<SketchTool>("pen");
 
     const sketch_canvas_ref = useRef<SketchCanvasRef>(null);
@@ -71,6 +75,8 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
                 max_radius={max_radius}
                 pen_radius={pen_radius}
 
+                fill_tolerance={fill_tolerance}
+
                 pressure_sensitive={props.pressure_sensitive}
             />
             <div
@@ -83,23 +89,27 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
                 }}
             >
                 <ColorTray
+                    tool_box_size={props.tool_box_size}
                     init_color={fg_color}
                     init_alpha={alpha}
                     on_color_change={setFgColor}
                     on_alpha_change={setAlpha}
-                    tool_box_size={props.tool_box_size}
                 />
                 <ToolTray
                     init_tool={current_tool}
+                    tool_box_size={props.tool_box_size}
 
                     min_radius={min_radius}
                     max_radius={max_radius}
                     pen_radius={pen_radius}
                     radius_step={props.scroll_step ?? 1}
 
+                    fill_tolerance={fill_tolerance}
+                    tolerance_step={props.tolerance_step ?? 1}
+
                     on_tool_change={setCurrentTool}
-                    tool_box_size={props.tool_box_size}
                     on_radius_change={setPenRadius}
+                    on_tolerance_change={setFillTolerance}
                 />
                 <CommandTray
                     tool_box_size={props.tool_box_size}

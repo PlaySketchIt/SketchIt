@@ -20,6 +20,8 @@ function App() {
           max_radius={15}
           pen_radius={5}
 
+          fill_tolerance={40}
+
           scroll_step={0.5}
 
           pressure_sensitive={true}

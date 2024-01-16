@@ -11,14 +11,23 @@ export interface ToolTrayProps {
     pen_radius: number;
     radius_step: number;
 
+    min_tolerance?: number;
+    max_tolerance?: number;
+    fill_tolerance: number;
+    tolerance_step: number;
+
     tool_box_size?: number;
 
     on_tool_change: (tool: SketchTool) => void;
     on_radius_change: (radius: number) => void;
+    on_tolerance_change: (tolerance: number) => void;
 }
 
 const ToolTray: React.FC<ToolTrayProps> = (props) => {
     const tool_box_size = props.tool_box_size ?? 40;
+
+    const min_tolerance = props.min_tolerance ?? 0;
+    const max_tolerance = props.max_tolerance ?? 254;
 
     const [current_tool, setCurrentTool] = useState(props.init_tool);
 
@@ -40,11 +49,15 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
             <label
                 className="tool-tray-radius-label-container tray-label-container"
                 style={{
-                    display: "flex",
+                    display: current_tool === "pen" ? "flex" : "none",
+
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "flex-start",
                     marginLeft: tool_box_size / 10,
+
+                    width: tool_box_size * 2.5, // consistent with so no shift when changing tool
+                    // TODO: check calculation works at different viewport sizes
                 }}
             >
                 Pen Radius:
@@ -67,6 +80,41 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     onChange={(e) => props.on_radius_change(e.target.valueAsNumber)}
                 />
             </label>
+
+            <label
+                className="tool-tray-tolerance-label-container tray-label-container"
+                style={{
+                    display: current_tool === "fill" ? "flex" : "none",
+
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                    marginLeft: tool_box_size / 10,
+
+                    width: tool_box_size * 2.5, // consistent with so no shift when changing tool
+                    // TODO: check calculation works at different viewport sizes
+                }}
+            >
+                Fill Tolerance:
+
+                <input
+                    className="tool-tray-tolerance"
+
+                    style={{
+                        width: tool_box_size * 2,
+                        height: tool_box_size / 2,
+                    }}
+
+                    type="range"
+
+                    min={min_tolerance}
+                    max={max_tolerance}
+                    step={props.tolerance_step}
+                    value={props.fill_tolerance}
+
+                    onChange={(e) => props.on_tolerance_change(e.target.valueAsNumber)}
+                />
+            </label>
         </div>
     );
 };
@@ -74,3 +122,5 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
 export default ToolTray;
 
 // TODO: unite labelled slider input into a single component
+// TODO: clearer input switch mechanism
+// TODO: double click to reset slider value (do same for alpha). need to save default values somewhere as prop will be overwritten.
