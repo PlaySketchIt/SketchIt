@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { SketchCommand } from "./SketchCanvas";
 
 import undo_icon from "../assets/icons/undo.svg";
@@ -25,13 +27,14 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
             className="tray-option command-tray-option"
 
             style={{
-                backgroundImage: `url(${command_icons[props.value]})`,
-                backgroundSize: "75%",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
-
                 width: props.size ?? 20,
-                height: props.size ?? 20
+                height: props.size ?? 20,
+
+                padding: 0,
+
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
             }}
 
             onClick={() => props.command_run(props.value)}
@@ -40,6 +43,17 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
 
             disabled={props.disabled ?? false}
         >
+            <Image
+                className="tray-option-icon command-tray-option-icon"
+
+                width={(props.size ?? 20) * 0.75}
+                height={(props.size ?? 20) * 0.75}
+
+                aria-hidden="true"
+                alt=""
+
+                src={command_icons[props.value]}
+            />
         </button>
     );
 };

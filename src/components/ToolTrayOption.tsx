@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { SketchTool } from "./SketchCanvas";
 
 import pen_icon from "../assets/icons/pen.svg";
@@ -25,20 +27,31 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
             className={classes}
 
             style={{
-                backgroundImage: `url(${tool_icons[props.value]})`,
-
-                backgroundSize: "75%",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
-
                 width: props.size ?? 20,
-                height: props.size ?? 20
+                height: props.size ?? 20,
+
+                padding: 0,
+
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
             }}
 
             aria-label={"select " + props.value + " tool"}
 
             onClick={() => props.tool_change(props.value)}
         >
+            <Image
+                className="tray-option-icon tool-tray-option-icon"
+
+                width={(props.size ?? 20) * 0.75}
+                height={(props.size ?? 20) * 0.75}
+
+                aria-hidden="true"
+                alt=""
+
+                src={tool_icons[props.value]}
+            />
         </button>
     );
 };
