@@ -1,9 +1,13 @@
 import { SketchCommand } from "./SketchCanvas";
 
+import undo_icon from "../assets/icons/undo.svg";
+import redo_icon from "../assets/icons/redo.svg";
+import clear_icon from "../assets/icons/clear.svg";
+
 const command_icons = {
-    "undo": "/icons/undo.svg",
-    "redo": "/icons/redo.svg",
-    "clear": "/icons/clear.svg",
+    "undo": undo_icon.src,
+    "redo": redo_icon.src,
+    "clear": clear_icon.src
 };
 
 export interface CommandTrayOptionProps {

@@ -1,6 +1,9 @@
 import { useState } from "react";
+import Image from "next/image";
 
 import ColorTrayOption from "./ColorTrayOption";
+
+import picker_icon from "../assets/icons/picker.svg";
 
 export interface ColorTrayProps {
     init_color: string;
@@ -117,7 +120,7 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
 
                     aria-label="select custom color"
                 />
-                <img
+                <Image
                     className="color-tray-custom-overlay"
                     style={{
                         position: "absolute",
@@ -134,10 +137,11 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                     }}
 
                     aria-hidden="true"
+                    alt=""
 
-                    src="/icons/picker.svg"
+                    src={picker_icon}
+                    priority={true}
                 />
-                {/* TODO: should we use nextjs Image here? svg direct import? */}
             </div>
 
             <label
