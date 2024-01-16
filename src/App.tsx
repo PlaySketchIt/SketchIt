@@ -11,7 +11,7 @@ function App() {
   return (
     <>
         <SketchArea
-          background="white"
+          background="#fff"
 
           width={WIDTH}
           height={WIDTH / ASPECT_RATIO}

@@ -1,15 +1,15 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import ColorTrayOption from "./ColorTrayOption";
+import ColorTrayOption, { HexColor } from "./ColorTrayOption";
 
 import picker_icon from "../assets/icons/picker.svg";
 
 export interface ColorTrayProps {
-    init_color: string;
+    init_color: HexColor;
     init_alpha?: number;
     tool_box_size?: number;
-    on_color_change: (color: string) => void;
+    on_color_change: (color: HexColor) => void;
     on_alpha_change: (alpha: number) => void;
 }
 
@@ -27,7 +27,7 @@ const ColorTrayRow: React.FC<{ children?: React.ReactNode }> = (props) => {
     );
 };
 
-const calculate_luminance = (color: string) => {
+const calculate_luminance = (color: HexColor) => {
     // https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
     const r = parseInt(color.substring(1, 3), 16) / 255;
     const g = parseInt(color.substring(3, 5), 16) / 255;
@@ -37,6 +37,11 @@ const calculate_luminance = (color: string) => {
 };
 
 const ColorTray: React.FC<ColorTrayProps> = (props) => {
+    // check value is in hex format without alpha
+    if (!props.init_color.match(/^#[0-9a-fA-F]{6}$/)) {
+        throw new Error("invalid color value (must be #rrggbb): " + props.init_color);
+    }
+
     const tool_box_size = props.tool_box_size ?? 40;
     const color_box_size = tool_box_size / 2;
 
@@ -45,7 +50,7 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
 
     const picker_invert_value = calculate_luminance(current_color) > 0.5 ? "0%" : "100%"; // TODO: configurable threshold + shadow amount.
 
-    const on_color_change = (color: string) => {
+    const on_color_change = (color: HexColor) => {
         setCurrentColor(color);
         props.on_color_change(color);
     };
@@ -116,7 +121,8 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                     type="color"
                     value={current_color}
 
-                    onChange={(e) => on_color_change(e.target.value)}
+                    // assumption made
+                    onChange={(e) => on_color_change(e.target.value as HexColor)}
 
                     aria-label="select custom color"
                 />

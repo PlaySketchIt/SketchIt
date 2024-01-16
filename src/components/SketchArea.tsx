@@ -5,6 +5,8 @@ import ColorTray from "./ColorTray";
 import ToolTray from "./ToolTray";
 import CommandTray from "./CommandTray";
 
+import type { HexColor } from "./ColorTrayOption";
+
 export interface SketchAreaProps extends Omit<SketchCanvasProps, "alpha" | "fg_color" | "current_tool"> {
     scroll_step?: number;
     tolerance_step?: number; // TODO: decide whether scroll should affect tolerance if fill selected. change props to reflect that
@@ -16,7 +18,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     const max_radius = props.max_radius ?? 10;
 
     const [pen_radius, setPenRadius] = useState(props.pen_radius);
-    const [fg_color, setFgColor] = useState("#000000");
+    const [fg_color, setFgColor] = useState("#000000" as HexColor);
     const [alpha, setAlpha] = useState(1);
 
     const [fill_tolerance, setFillTolerance] = useState(props.fill_tolerance);

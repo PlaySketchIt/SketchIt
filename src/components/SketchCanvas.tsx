@@ -1,6 +1,8 @@
 import { forwardRef, useRef, useEffect, useState, useCallback, useImperativeHandle } from "react";
 import DynamicCursor from "../DynamicCursor";
 
+import type { HexColor } from "./ColorTrayOption";
+
 import FloodFill from "q-floodfill";
 
 // TODO: move definitions into separate file
@@ -22,7 +24,7 @@ export interface SketchCanvasProps {
     background: string;
 
     alpha: number;
-    fg_color: string;
+    fg_color: HexColor;
 
     current_tool: SketchTool;
 
@@ -36,7 +38,12 @@ export interface SketchCanvasRef {
 }
 
 const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref) => {
-    const min_radius = props.min_radius ?? 1;
+    // check colors are in correct hex format
+    if (!props.fg_color.match(/^#[0-9a-fA-F]{6}$/)) {
+        throw new Error("invalid foreground color (must be #rrggbb): " + props.fg_color);
+    }
+
+    const min_radius = props.min_radius ?? 1; // TODO: why was this needed? probs clamp radius. see if still needed
     const max_radius = props.max_radius ?? 10;
 
     const render_canvas_ref = useRef<HTMLCanvasElement>(null);
@@ -46,6 +53,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         init_radius: props.pen_radius, // TODO: option to resize based on calculated pressure
         stroke: "#00000080",
         stroke_width: 1.5 // TODO: option to make size consistent with radius (also consider viewport)
+        // TODO: adjust transparency based on alpha
     }));
 
     const [initialised, setInitialised] = useState(false);
@@ -131,6 +139,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         y = Math.floor(y);
 
         // add convert color to rgba
+        // TODO: better way of parsing color
         const fill_color = `rgba(${parseInt(props.fg_color.substr(1, 2), 16)}, ${parseInt(props.fg_color.substr(3, 2), 16)}, ${parseInt(props.fg_color.substr(5, 2), 16)}, ${props.alpha})`;
 
         const old_img_data = render_ctx.getImageData(0, 0, render_canvas.width, render_canvas.height);
@@ -474,3 +483,4 @@ export default SketchCanvas;
 // TODO: make standard method for getContext that enforces willReadFrequently
 // TODO: document methods and props!
 // TODO: more advanced undo/redo tree? gets complex quick! at least have some form of stack. means will have to rework how canvas state is captured
+// TODO: make pressure sensitivity rate change in respect to existing radius to a degree. the modifier doesn't feel right on larger pens
