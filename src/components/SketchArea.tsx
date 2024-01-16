@@ -80,6 +80,8 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
                 fill_tolerance={fill_tolerance}
 
                 pressure_modifier={props.pressure_modifier}
+
+                undo_steps={props.undo_steps}
             />
             <div
                 className="sketch-trays"

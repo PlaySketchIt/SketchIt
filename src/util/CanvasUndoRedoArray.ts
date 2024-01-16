@@ -12,6 +12,10 @@ class CanvasUndoRedoArray {
     private can_redo_cache: boolean | null = null;
 
     constructor(max?: number) {
+        if (max && max < 1) {
+            throw new Error("CanvasUndoRedoArray: max undo steps must be undefined or >= 1");
+        }
+
         this.array = [];
         this.index = -1;
         this.max = max;
@@ -38,8 +42,8 @@ class CanvasUndoRedoArray {
     public capture(item: ImageData) {
         // the caller will push the canvas state BEFORE the change
 
-        // if hit max, remove the first item to lose a layer of undo (shift array left)
-        if (this.max && this.array.length >= this.max) {
+        // if exceeded max undo steps, remove the first item to lose a layer of undo (shift array left)
+        if (this.max && this.array.length > this.max) {
             this.array.shift();
             this.index--;
         }
@@ -147,3 +151,6 @@ class CanvasUndoRedoArray {
 // TODO: document
 
 export default CanvasUndoRedoArray;
+
+// TODO: could store uint8clampedarray instead of imagedata and just use proportions of output canvas size to calculate width/height
+// TODO: more efficient method than storing whole snapshots? e.g. store only the changes made since the last snapshot

@@ -31,7 +31,7 @@ export interface SketchCanvasProps {
 
     pressure_modifier: number; // multiplied by pressure (0-1) then added to pen radius, e.g. a modifier of 2 adds 2 radius to the pen at full pressure. no longer clamped to maximum radius.
 
-    undo_redo_arr_size?: number;
+    undo_steps?: number;
 }
 
 export interface SketchCanvasRef {
@@ -55,7 +55,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     const render_canvas_ref = useRef<HTMLCanvasElement>(null);
     const draw_canvas_ref = useRef<HTMLCanvasElement>(null);
 
-    const undo_redo_array = useRef(new CanvasUndoRedoArray(props.undo_redo_arr_size));
+    const undo_redo_array = useRef(new CanvasUndoRedoArray(props.undo_steps));
 
     const cursor = useRef(new DynamicCursor({
         max_radius: max_radius,
