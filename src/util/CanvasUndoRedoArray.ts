@@ -1,4 +1,4 @@
-export default class CanvasUndoRedoArray {
+class CanvasUndoRedoArray {
     private array: ImageData[];
     private index: number;
     private max: number | undefined;
@@ -147,3 +147,5 @@ export default class CanvasUndoRedoArray {
 }
 
 // TODO: document
+
+export default CanvasUndoRedoArray;
