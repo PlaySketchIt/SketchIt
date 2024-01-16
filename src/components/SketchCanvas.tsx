@@ -426,3 +426,4 @@ export default SketchCanvas;
 // TODO: document methods and props!
 // TODO: more advanced undo/redo tree like in ms word? it'll get complex quickly though. i think the linear array is fine for now
 // TODO: make pressure sensitivity rate change in respect to existing radius to a degree. the modifier doesn't feel right on larger pens
+// TODO: eraser tool that respects alpha?
