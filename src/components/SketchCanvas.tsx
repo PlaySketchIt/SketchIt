@@ -39,7 +39,8 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     const min_radius = props.min_radius ?? 1;
     const max_radius = props.max_radius ?? 10;
 
-    const canvas_ref = useRef<HTMLCanvasElement>(null);
+    const render_canvas_ref = useRef<HTMLCanvasElement>(null);
+    const draw_canvas_ref = useRef<HTMLCanvasElement>(null);
     const cursor = useRef(new DynamicCursor({
         max_radius: max_radius,
         init_radius: props.pen_radius, // TODO: option to resize based on calculated pressure
@@ -53,8 +54,8 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     const load_css_cursor = useCallback(() => {
         if (props.current_tool === "fill") {
             // TODO: custom fill cursor
-            if (canvas_ref.current) {
-                canvas_ref.current.style.cursor = "crosshair";
+            if (draw_canvas_ref.current) {
+                draw_canvas_ref.current.style.cursor = "crosshair";
             }
 
             return;
@@ -65,14 +66,10 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         cursor.current.set_fill(props.fg_color ?? "black");
         cursor.current.set_radius(props.pen_radius);
 
-        if (canvas_ref.current) {
-            canvas_ref.current.style.cursor = cursor.current.as_css_cursor("crosshair");
+        if (draw_canvas_ref.current) {
+            draw_canvas_ref.current.style.cursor = cursor.current.as_css_cursor("crosshair");
         }
     }, [props.fg_color, props.pen_radius, props.current_tool]);
-
-
-    const fixup_line = useRef<{ x: number, y: number, r: number }[]>([]);
-    const fixup_canvas_state = useRef<ImageData | null>(null);
 
     const undo_canvas_state = useRef<ImageData | null>(null);
     const redo_canvas_state = useRef<ImageData | null>(null);
@@ -80,64 +77,44 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     const on_undo_enabled_change = useRef<(can_undo: boolean) => void>(() => { });
     const on_redo_enabled_change = useRef<(can_redo: boolean) => void>(() => { });
 
-    const capture_fixup_canvas_state = () => {
-        const canvas = canvas_ref.current;
-        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
-
-        if (canvas && ctx) {
-            fixup_canvas_state.current = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        }
-    };
-
-    const restore_fixup_canvas_state = () => {
-        const canvas = canvas_ref.current;
-        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
-
-        if (canvas && ctx) {
-            if (fixup_canvas_state.current) {
-                ctx.putImageData(fixup_canvas_state.current, 0, 0);
-            }
-        }
-    };
-
     const capture_undo_canvas_state = () => {
-        const canvas = canvas_ref.current;
-        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
+        const render_canvas = render_canvas_ref.current;
+        const render_ctx = render_canvas?.getContext("2d", { willReadFrequently: true });
 
-        if (canvas && ctx) {
-            undo_canvas_state.current = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        if (render_canvas && render_ctx) {
+            undo_canvas_state.current = render_ctx.getImageData(0, 0, render_canvas.width, render_canvas.height);
             on_undo_enabled_change.current(true);
         }
     };
 
     const restore_undo_canvas_state = () => {
-        const canvas = canvas_ref.current;
-        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
+        const render_canvas = render_canvas_ref.current;
+        const render_ctx = render_canvas?.getContext("2d", { willReadFrequently: true });
 
-        if (canvas && ctx) {
+        if (render_canvas && render_ctx) {
             if (undo_canvas_state.current) {
-                ctx.putImageData(undo_canvas_state.current, 0, 0);
+                render_ctx.putImageData(undo_canvas_state.current, 0, 0);
             }
         }
     };
 
     const capture_redo_canvas_state = () => {
-        const canvas = canvas_ref.current;
-        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
+        const render_canvas = render_canvas_ref.current;
+        const render_ctx = render_canvas?.getContext("2d", { willReadFrequently: true });
 
-        if (canvas && ctx) {
-            redo_canvas_state.current = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        if (render_canvas && render_ctx) {
+            redo_canvas_state.current = render_ctx.getImageData(0, 0, render_canvas.width, render_canvas.height);
             on_redo_enabled_change.current(true);
         }
     };
 
     const restore_redo_canvas_state = () => {
-        const canvas = canvas_ref.current;
-        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
+        const render_canvas = render_canvas_ref.current;
+        const render_ctx = render_canvas?.getContext("2d", { willReadFrequently: true });
 
-        if (canvas && ctx) {
+        if (render_canvas && render_ctx) {
             if (redo_canvas_state.current) {
-                ctx.putImageData(redo_canvas_state.current, 0, 0);
+                render_ctx.putImageData(redo_canvas_state.current, 0, 0);
             }
         }
     };
@@ -145,18 +122,18 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     // TODO: unite methods for capturing and restoring canvas state
 
     const do_floodfill = (x: number, y: number) => {
-        const canvas = canvas_ref.current;
-        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
+        const render_canvas = render_canvas_ref.current;
+        const render_ctx = render_canvas?.getContext("2d", { willReadFrequently: true });
 
-        if (!canvas || !ctx) return;
+        if (!render_canvas || !render_ctx) return;
 
         x = Math.floor(x);
         y = Math.floor(y);
 
         // add convert color to rgba
         const fill_color = `rgba(${parseInt(props.fg_color.substr(1, 2), 16)}, ${parseInt(props.fg_color.substr(3, 2), 16)}, ${parseInt(props.fg_color.substr(5, 2), 16)}, ${props.alpha})`;
-        
-        const old_img_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        const old_img_data = render_ctx.getImageData(0, 0, render_canvas.width, render_canvas.height);
 
         // clone image data to avoid modifying original
         const img_data = new ImageData(
@@ -182,18 +159,20 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             data[i] = 255;
         }
 
-        ctx.putImageData(floodfill.imageData, 0, 0);
+        render_ctx.putImageData(floodfill.imageData, 0, 0);
     };
 
+
+    const previous_point = useRef<{ x: number, y: number } | null>(null);
 
     const on_pointer_move = (e: React.PointerEvent<HTMLCanvasElement>) => {
         if (!pen_down) return;
 
-        const canvas = canvas_ref.current;
-        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
+        const draw_canvas = draw_canvas_ref.current;
+        const draw_ctx = draw_canvas?.getContext("2d", { willReadFrequently: true });
 
-        if (canvas && ctx) {
-            const rect = canvas.getBoundingClientRect();
+        if (draw_canvas && draw_ctx) {
+            const rect = draw_canvas.getBoundingClientRect();
 
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -212,15 +191,12 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             }
 
             const draw = () => {
-                ctx.beginPath();
+                draw_ctx.beginPath();
 
-                const previous_point = fixup_line.current[fixup_line.current.length - 1];
-
-                if (previous_point) {
+                if (previous_point.current) {
                     // enforce minimum distance between points
                     // this helps optimise performance, especially when networked
-                    // it also makes the pre-fixup transparency a little clearer
-                    const dist = Math.sqrt((x - previous_point.x) ** 2 + (y - previous_point.y) ** 2);
+                    const dist = Math.sqrt((x - previous_point.current.x) ** 2 + (y - previous_point.current.y) ** 2);
 
                     // could use diameter to avoid any overlap, but it doesn't look as smooth
                     // TODO: should this be configurable? e.g. props.radius_overlap
@@ -229,19 +205,18 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
                         return;
                     }
 
-                    // this line is merely a preview
-                    ctx.moveTo(previous_point.x, previous_point.y);
-                    ctx.lineTo(x, y);
+                    draw_ctx.moveTo(previous_point.current.x, previous_point.current.y);
+                    draw_ctx.lineTo(x, y);
 
-                    ctx.lineWidth = effective_radius * 2;
-                    ctx.stroke();
+                    draw_ctx.lineWidth = effective_radius * 2;
+                    draw_ctx.stroke();
                 } else {
                     // this is just a dot with no movement
-                    ctx.arc(x, y, effective_radius, 0, 2 * Math.PI);
-                    ctx.fill();
+                    draw_ctx.arc(x, y, effective_radius, 0, 2 * Math.PI);
+                    draw_ctx.fill();
                 }
 
-                fixup_line.current.push({ x, y, r: effective_radius });
+                previous_point.current = { x: x, y: y };
             };
 
             //requestAnimationFrame(draw);
@@ -256,7 +231,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         on_redo_enabled_change.current(false);
 
         if (props.current_tool === "fill") {
-            const canvas = canvas_ref.current;
+            const canvas = draw_canvas_ref.current;
 
             if (!canvas) return;
 
@@ -271,11 +246,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
         // TODO: as additional tools added, migrate to switch statement
 
-        // save canvas state for transparency fixup
-        capture_fixup_canvas_state();
-
-        // prepare last line for transparency fixup
-        fixup_line.current = [];
+        previous_point.current = null;
 
         setPenDown(true);
 
@@ -291,71 +262,74 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         // simulate movement to draw last dot
         on_pointer_move(e);
 
-        // perform transparency fixup
-        // revert canvas state and redraw last line as a single path
-        const canvas = canvas_ref.current;
-        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
-
-        if (canvas && ctx) {
-            restore_fixup_canvas_state();
-
-            if (fixup_line.current.length > 1) {
-                ctx.beginPath();
-
-                ctx.moveTo(fixup_line.current[0].x, fixup_line.current[0].y);
-
-                for (let i = 1; i < fixup_line.current.length; i++) {
-                    const point = fixup_line.current[i];
-                    ctx.lineTo(point.x, point.y);
-                }
-
-                ctx.lineWidth = fixup_line.current[0].r * 2;
-                ctx.stroke();
-            }
-        }
+        // overlay draw canvas as required then clear it
+        push_draw_canvas_to_render();
+        clear_draw_canvas();
     };
 
 
-    const clear_canvas = useCallback(() => {
-        const canvas = canvas_ref.current;
-        const ctx = canvas?.getContext("2d", { willReadFrequently: true });
+    const push_draw_canvas_to_render = () => {
+        const render_canvas = render_canvas_ref.current;
+        const render_ctx = render_canvas?.getContext("2d", { willReadFrequently: true });
 
-        if (!canvas || !ctx) return;
+        const draw_canvas = draw_canvas_ref.current;
 
-        ctx.globalAlpha = 1;
-        ctx.fillStyle = props.background;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if (!render_canvas || !render_ctx || !draw_canvas) return;
+        // TODO: don't silently fail
 
-        // change to foreground color
-        ctx.fillStyle = props.fg_color;
-        ctx.strokeStyle = props.fg_color;
+        //render_ctx.globalAlpha = props.alpha; // this is now set by an effect automatically
+        render_ctx.drawImage(draw_canvas, 0, 0);
 
-        ctx.globalAlpha = props.alpha;
-    }, [props.background, props.fg_color, props.alpha]);
+        // TODO: should this method just call the clear method, or do we trust the caller to do it?
+    };
+
+
+    const clear_render_canvas = useCallback(() => {
+        const render_canvas = render_canvas_ref.current;
+        const render_ctx = render_canvas?.getContext("2d", { willReadFrequently: true });
+
+        if (!render_canvas || !render_ctx) return;
+
+        render_ctx.fillStyle = props.background;
+        render_ctx.fillRect(0, 0, render_canvas.width, render_canvas.height);
+    }, [props.background]);
+
+    const clear_draw_canvas = useCallback(() => {
+        const draw_canvas = draw_canvas_ref.current;
+        const draw_ctx = draw_canvas?.getContext("2d", { willReadFrequently: true });
+
+        if (!draw_canvas || !draw_ctx) return;
+
+        draw_ctx.clearRect(0, 0, draw_canvas.width, draw_canvas.height);
+    }, []);
 
 
     // effect: run at mount time to initialise canvas and cursor
     useEffect(() => {
         if (initialised) return;
 
-        const canvas = canvas_ref.current;
-        if (!canvas) return;
+        const draw_canvas = draw_canvas_ref.current;
+        if (!draw_canvas) return;
 
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        const draw_ctx = draw_canvas.getContext("2d", { willReadFrequently: true });
 
-        if (ctx) {
-            // initialise canvas
-            clear_canvas();
+        if (draw_ctx) {
+            // initialise canvases
+            clear_draw_canvas();
+            clear_render_canvas();
 
-            ctx.lineCap = "round";
-            ctx.lineJoin = "round";
+            draw_ctx.lineCap = "round";
+            draw_ctx.lineJoin = "round";
+
+            draw_ctx.strokeStyle = props.fg_color;
+            draw_ctx.fillStyle = props.fg_color;
 
             load_css_cursor();
         }
 
         setInitialised(true);
 
-    }, [initialised, load_css_cursor, clear_canvas]);
+    }, [initialised, load_css_cursor, clear_draw_canvas, clear_render_canvas, props.fg_color]);
 
 
     // effect: run when color/radius/tool changes to update cursor
@@ -367,27 +341,28 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     // effect: run when color changes to update canvas color
     useEffect(() => {
         // update canvas color if value changes
-        const canvas = canvas_ref.current;
-        if (!canvas) return;
+        const draw_canvas = draw_canvas_ref.current;
+        if (!draw_canvas) return;
 
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
-        if (!ctx) return;
+        const draw_ctx = draw_canvas.getContext("2d", { willReadFrequently: true });
+        if (!draw_ctx) return;
 
-        ctx.fillStyle = props.fg_color;
-        ctx.strokeStyle = props.fg_color;
+        draw_ctx.fillStyle = props.fg_color;
+        draw_ctx.strokeStyle = props.fg_color;
     }, [props.fg_color]);
 
 
-    // effect: run when alpha changes to update canvas global alpha
+    // effect: change render globalAlpha as well as draw canvas css transparency when alpha changes
     useEffect(() => {
-        // update canvas alpha if value changes
-        const canvas = canvas_ref.current;
-        if (!canvas) return;
+        const render_canvas = render_canvas_ref.current;
+        const render_ctx = render_canvas?.getContext("2d", { willReadFrequently: true });
 
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
-        if (!ctx) return;
+        const draw_canvas = draw_canvas_ref.current;
 
-        ctx.globalAlpha = props.alpha;
+        if (!render_canvas || !render_ctx || !draw_canvas) return;
+
+        render_ctx.globalAlpha = props.alpha;
+        draw_canvas.style.opacity = props.alpha.toString();
     }, [props.alpha]);
 
     // expose methods to parent upon ref
@@ -414,7 +389,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
                     break;
                 case "clear":
                     capture_undo_canvas_state();
-                    clear_canvas();
+                    clear_draw_canvas();
 
                     redo_canvas_state.current = null;
                     on_redo_enabled_change.current(false);
@@ -428,37 +403,67 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             on_redo_enabled_change.current = callback;
         }
         // TODO: this cannot be the best way to do this. passing boolean directly doesn't update the parent though
-    }), [clear_canvas]);
+    }), [clear_draw_canvas]);
 
     return (
-        <canvas
-            className="sketch-canvas"
-            ref={canvas_ref}
-
-            width={props.width}
-            height={props.height}
-
-            onPointerDown={on_pointer_down}
-            onPointerMove={on_pointer_move}
-            onPointerUp={on_pointer_up}
-
-            onPointerEnter={
-                (e: React.PointerEvent<HTMLCanvasElement>) => {
-                    // if mouse is down when re-entering canvas, resume drawing
-                    // could also just have handlers globally on the window, but this is cleaner
-                    if (e.buttons > 0) {
-                        setPenDown(true);
-                    }
-                }
-            }
-            onPointerOut={on_pointer_up}
+        <div
+            className="sketch-canvases"
 
             style={{
-                touchAction: "pinch-zoom"
+                position: "relative",
+                
+                width: props.width,
+                height: props.height
             }}
+        >
+            <canvas
+                className="sketch-render-canvas"
+                ref={render_canvas_ref}
 
-            aria-label="drawing canvas"
-        />
+                width={props.width}
+                height={props.height}
+
+                aria-hidden="true"
+
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0
+                }}
+            />
+            <canvas
+                className="sketch-draw-canvas"
+                ref={draw_canvas_ref}
+
+                width={props.width}
+                height={props.height}
+
+                onPointerDown={on_pointer_down}
+                onPointerMove={on_pointer_move}
+                onPointerUp={on_pointer_up}
+
+                onPointerEnter={
+                    (e: React.PointerEvent<HTMLCanvasElement>) => {
+                        // if mouse is down when re-entering canvas, resume drawing
+                        // could also just have handlers globally on the window, but this is cleaner
+                        if (e.buttons > 0) {
+                            setPenDown(true);
+                        }
+                    }
+                }
+                onPointerOut={on_pointer_up}
+
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+
+                    touchAction: "pinch-zoom"
+                }}
+
+                aria-label="drawing canvas"
+            />
+        </div>
     );
 });
 
