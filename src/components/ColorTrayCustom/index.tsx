@@ -1,8 +1,10 @@
 
 import Image from "next/image";
-import picker_icon from "../assets/icons/picker.svg";
 
-import { HexColor } from "./ColorTrayOption";
+import styles from "./ColorTrayCustom.module.css";
+import picker_icon from "../../assets/icons/picker.svg";
+
+import { HexColor } from "../ColorTrayOption";
 
 export interface ColorTrayCustomProps {
     current_color: HexColor;
@@ -25,14 +27,13 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
 
     return (
         <div
-            className="color-tray-custom-container"
+            className={styles.container + " color-tray-custom-container"}
             style={{
-                position: "relative",
                 marginLeft: props.tool_box_size / 10,
             }}
         >
             <input
-                className="color-tray-custom color-tray-option tray-option"
+                className={styles.input + " color-tray-custom-input color-tray-option tray-option"}
 
                 style={{
                     width: props.tool_box_size,
@@ -48,10 +49,8 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
                 aria-label="select custom color"
             />
             <Image
-                className="color-tray-custom-overlay"
+                className={styles.overlay + " color-tray-custom-overlay"}
                 style={{
-                    position: "absolute",
-
                     width: props.tool_box_size / 2,
                     height: props.tool_box_size / 2,
 
@@ -59,8 +58,6 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
                     left: props.tool_box_size / 4,
 
                     filter: `invert(${picker_invert_value}) drop-shadow(0px 0px 1px #222)`,
-
-                    pointerEvents: "none",
                 }}
 
                 aria-hidden="true"

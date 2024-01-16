@@ -1,0 +1,32 @@
+.container {
+    position: relative;
+
+    /* margin set dynamically */
+}
+
+
+.input {
+    /* browser consistent borders: https://rebeccamdeprey.com/blog/styling-the-html-color-input */
+    inline-size: 30px;
+    block-size: 30px;
+    border-width: 1px;
+    border-style: solid;
+    
+    background-color: #fff;
+
+    padding: 0; /* no area around displayed swatch */
+
+    /* width and height set dynamically */
+}
+
+.input::-webkit-color-swatch-wrapper {
+    padding: 0; /* no area around displayed swatch */
+}
+
+
+.overlay {
+    position: absolute;
+    pointer-events: none;
+
+    /* top, left, width and height set dynamically */
+}
