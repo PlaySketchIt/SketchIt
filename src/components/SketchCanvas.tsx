@@ -4,6 +4,7 @@ import DynamicCursor from "../DynamicCursor";
 import type { HexColor } from "./ColorTrayOption";
 
 import FloodFill from "q-floodfill";
+import CanvasUndoRedoArray from "../CanvasUndoRedoArray";
 
 // TODO: move definitions into separate file
 
@@ -29,6 +30,8 @@ export interface SketchCanvasProps {
     current_tool: SketchTool;
 
     pressure_modifier: number; // multiplied by pressure (0-1) then added to pen radius, e.g. a modifier of 2 adds 2 radius to the pen at full pressure. no longer clamped to maximum radius.
+
+    undo_redo_arr_size?: number;
 }
 
 export interface SketchCanvasRef {
@@ -51,6 +54,9 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
     const render_canvas_ref = useRef<HTMLCanvasElement>(null);
     const draw_canvas_ref = useRef<HTMLCanvasElement>(null);
+
+    const undo_redo_array = useRef(new CanvasUndoRedoArray(props.undo_redo_arr_size));
+
     const cursor = useRef(new DynamicCursor({
         max_radius: max_radius,
         init_radius: props.pen_radius, // TODO: option to resize based on calculated pressure
@@ -59,7 +65,6 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         // TODO: adjust transparency based on alpha
     }));
 
-    const [initialised, setInitialised] = useState<boolean>(false);
     const [pen_down, setPenDown] = useState<boolean>(false);
 
     const load_css_cursor = useCallback(() => {
@@ -81,54 +86,6 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             draw_canvas_ref.current.style.cursor = cursor.current.as_css_cursor("crosshair");
         }
     }, [props.fg_color, props.pen_radius, props.current_tool]);
-
-    const undo_canvas_state = useRef<ImageData | null>(null);
-    const redo_canvas_state = useRef<ImageData | null>(null);
-
-    const on_undo_enabled_change = useRef<(can_undo: boolean) => void>(() => { });
-    const on_redo_enabled_change = useRef<(can_redo: boolean) => void>(() => { });
-
-    const capture_undo_canvas_state = () => {
-        const render_canvas = render_canvas_ref.current;
-        const render_ctx = render_canvas?.getContext("2d", { willReadFrequently: true });
-
-        if (render_canvas && render_ctx) {
-            undo_canvas_state.current = render_ctx.getImageData(0, 0, render_canvas.width, render_canvas.height);
-            on_undo_enabled_change.current(true);
-        }
-    };
-
-    const restore_undo_canvas_state = () => {
-        const render_canvas = render_canvas_ref.current;
-        const render_ctx = render_canvas?.getContext("2d", { willReadFrequently: true });
-
-        if (render_canvas && render_ctx) {
-            if (undo_canvas_state.current) {
-                render_ctx.putImageData(undo_canvas_state.current, 0, 0);
-            }
-        }
-    };
-
-    const capture_redo_canvas_state = () => {
-        const render_canvas = render_canvas_ref.current;
-        const render_ctx = render_canvas?.getContext("2d", { willReadFrequently: true });
-
-        if (render_canvas && render_ctx) {
-            redo_canvas_state.current = render_ctx.getImageData(0, 0, render_canvas.width, render_canvas.height);
-            on_redo_enabled_change.current(true);
-        }
-    };
-
-    const restore_redo_canvas_state = () => {
-        const render_canvas = render_canvas_ref.current;
-        const render_ctx = render_canvas?.getContext("2d", { willReadFrequently: true });
-
-        if (render_canvas && render_ctx) {
-            if (redo_canvas_state.current) {
-                render_ctx.putImageData(redo_canvas_state.current, 0, 0);
-            }
-        }
-    };
 
     // TODO: unite methods for capturing and restoring canvas state
 
@@ -226,11 +183,6 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     };
 
     const on_pointer_down = (e: React.PointerEvent<HTMLCanvasElement>) => {
-        capture_undo_canvas_state();
-
-        redo_canvas_state.current = null;
-        on_redo_enabled_change.current(false);
-
         if (props.current_tool === "fill") {
             const canvas = draw_canvas_ref.current;
 
@@ -242,6 +194,9 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             const y = e.clientY - rect.top;
 
             do_floodfill(x, y);
+
+            // have to do capture here as the on_pointer_up event doesn't fire if using fill tool
+            undo_redo_array.current.capture_from_canvas(render_canvas_ref.current!);
             return;
         }
 
@@ -266,6 +221,9 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         // overlay draw canvas as required then clear it
         composite_draw_canvas_on_render();
         clear_draw_canvas();
+
+        // capture render canvas state for undo/redo
+        undo_redo_array.current.capture_from_canvas(render_canvas_ref.current!);
     };
 
 
@@ -306,9 +264,10 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     }, []);
 
 
-    // effect: run at mount time to initialise canvas and cursor
+    // effect: run ONCE at mount time to initialise canvas and cursor
+    const initialised = useRef<boolean>(false);
     useEffect(() => {
-        if (initialised) return;
+        if (initialised.current) return;
 
         const draw_canvas = draw_canvas_ref.current;
         if (!draw_canvas) return;
@@ -320,6 +279,8 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             clear_draw_canvas();
             clear_render_canvas();
 
+            undo_redo_array.current.capture_from_canvas(render_canvas_ref.current!);
+
             draw_ctx.lineCap = "round";
             draw_ctx.lineJoin = "round";
 
@@ -329,8 +290,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             load_css_cursor();
         }
 
-        setInitialised(true);
-
+        initialised.current = true;
     }, [initialised, load_css_cursor, clear_draw_canvas, clear_render_canvas, props.fg_color]);
 
 
@@ -372,37 +332,26 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         handle_command: (command: SketchCommand) => {
             switch (command) {
                 case "undo":
-                    if (!undo_canvas_state.current) return;
+                    if (!undo_redo_array.current.can_undo) return;
 
-                    capture_redo_canvas_state();
-                    restore_undo_canvas_state();
-
-                    undo_canvas_state.current = null;
-                    on_undo_enabled_change.current(false);
+                    undo_redo_array.current.undo_onto_canvas(render_canvas_ref.current!);
                     break;
                 case "redo":
-                    if (!redo_canvas_state.current) return;
+                    if (!undo_redo_array.current.can_redo) return;
 
-                    capture_undo_canvas_state();
-                    restore_redo_canvas_state();
-
-                    redo_canvas_state.current = null;
-                    on_redo_enabled_change.current(false);
+                    undo_redo_array.current.redo_onto_canvas(render_canvas_ref.current!);
                     break;
                 case "clear":
-                    capture_undo_canvas_state();
                     clear_render_canvas();
-
-                    redo_canvas_state.current = null;
-                    on_redo_enabled_change.current(false);
+                    undo_redo_array.current.capture_from_canvas(render_canvas_ref.current!);
                     break;
             }
         },
         set_on_undo_enabled_change: (callback: (can_undo: boolean) => void) => {
-            on_undo_enabled_change.current = callback;
+            undo_redo_array.current.on_can_undo_change = callback;
         },
         set_on_redo_enabled_change: (callback: (can_redo: boolean) => void) => {
-            on_redo_enabled_change.current = callback;
+            undo_redo_array.current.on_can_redo_change = callback;
         }
         // TODO: this cannot be the best way to do this. passing boolean directly doesn't update the parent though
     }), [clear_render_canvas]);
@@ -475,5 +424,5 @@ export default SketchCanvas;
 // TODO: simplify structure (possibly extract methods)
 // TODO: make standard method for getContext that enforces willReadFrequently
 // TODO: document methods and props!
-// TODO: more advanced undo/redo tree? gets complex quick! at least have some form of stack. means will have to rework how canvas state is captured
+// TODO: more advanced undo/redo tree like in ms word? it'll get complex quickly though. i think the linear array is fine for now
 // TODO: make pressure sensitivity rate change in respect to existing radius to a degree. the modifier doesn't feel right on larger pens
