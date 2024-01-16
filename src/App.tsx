@@ -37,3 +37,12 @@ function App() {
 export default App;
 
 // TODO: i18n integration
+
+// monetisation ideas:
+// - ad frames (blegh)
+// - donation panel (maybe)
+// - premium plan (depends how i do it)
+// - merch shop (maybe)
+// - artist pay to promote their commissions on the sidebar (could be great, but needs demand and a good system in place)
+// - sponsorship from drawing tablet companies (could work once popular enough) or some form of amazon affiliate link (not sure how successful this would be)
+// - dont monetise and just open source it (not ideal but im open to it, but i wouldnt host it myself)

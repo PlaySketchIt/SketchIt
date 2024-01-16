@@ -427,3 +427,9 @@ export default SketchCanvas;
 // TODO: more advanced undo/redo tree like in ms word? it'll get complex quickly though. i think the linear array is fine for now
 // TODO: make pressure sensitivity rate change in respect to existing radius to a degree. the modifier doesn't feel right on larger pens
 // TODO: eraser tool that respects alpha?
+// TODO: shape tools
+// TODO: custom hook: useHexColorCheck. validates color when updated, and casts it to assert it is a valid hex color.
+
+// networking idea: use transparency of draw canvas in order to calculate differences, then only send that. differential updates.
+// fill will probably send whole frame unless we do the same fill on the client side, but might cause desync issues if some people's computers can do fills faster than others
+// ^^ might not be the end of the world but worth considering. i think syncing precise brush movements and replicating is bad though. just send updates every so often.
