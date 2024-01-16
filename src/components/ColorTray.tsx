@@ -133,6 +133,8 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                         pointerEvents: "none",
                     }}
 
+                    aria-hidden="true"
+
                     src="/icons/picker.svg"
                 />
                 {/* TODO: should we use nextjs Image here? svg direct import? */}

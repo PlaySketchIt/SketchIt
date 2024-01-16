@@ -32,6 +32,8 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
                 height: props.size ?? 20
             }}
 
+            aria-label={"select " + props.value + " tool"}
+
             onClick={() => props.tool_change(props.value)}
         >
         </button>

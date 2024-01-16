@@ -32,6 +32,8 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
 
             onClick={() => props.command_run(props.value)}
 
+            aria-label={"run " + props.value + " command"}
+
             disabled={props.disabled ?? false}
         >
         </button>
