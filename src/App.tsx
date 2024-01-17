@@ -18,7 +18,7 @@ function App() {
 
           min_radius={1.5}
           max_radius={15}
-          pen_radius={5}
+          brush_radius={5}
 
           fill_tolerance={40}
 

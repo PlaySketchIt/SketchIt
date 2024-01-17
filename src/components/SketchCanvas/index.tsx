@@ -10,7 +10,7 @@ import CanvasUndoRedoArray from "./CanvasUndoRedoArray";
 // TODO: move definitions into separate file
 
 // using fake enum rather than real enum as exporting enum invalidates fast refresh
-export type SketchTool = "pen" | "fill";
+export type SketchTool = "brush" | "fill";
 export type SketchCommand = "undo" | "redo" | "clear";
 
 export interface SketchCanvasProps {
@@ -19,7 +19,7 @@ export interface SketchCanvasProps {
 
     min_radius?: number;
     max_radius?: number;
-    pen_radius: number;
+    brush_radius: number;
 
     fill_tolerance: number;
 
@@ -30,7 +30,7 @@ export interface SketchCanvasProps {
 
     current_tool: SketchTool;
 
-    pressure_modifier: number; // multiplied by pressure (0-1) then added to pen radius, e.g. a modifier of 2 adds 2 radius to the pen at full pressure. no longer clamped to maximum radius.
+    pressure_modifier: number; // multiplied by pressure (0-1) then added to brush radius, e.g. a modifier of 2 adds 2 radius to the brush at full pressure. no longer clamped to maximum radius.
 
     undo_steps?: number;
 }
@@ -49,7 +49,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         }
     }, [props.fg_color]);
 
-    // TODO: could check pen radius is within min/max radius. could be expensive though and not really necessary
+    // TODO: could check brush radius is within min/max radius. could be exbrushsive though and not really necessary
     //const min_radius = props.min_radius ?? 1;
     const max_radius = props.max_radius ?? 10;
 
@@ -60,14 +60,14 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
     const cursor = useRef(new DynamicCursor({
         max_radius: max_radius,
-        init_radius: props.pen_radius, // TODO: option to resize based on calculated pressure
+        init_radius: props.brush_radius, // TODO: option to resize based on calculated pressure
         inner_stroke: "#ffffffaa",
         inner_stroke_width: 1,
         outer_stroke: "#00000080",
         outer_stroke_width: 1.5 // TODO: option to make size consistent with radius (also consider viewport)
     }));
 
-    const [pen_down, setPenDown] = useState<boolean>(false);
+    const [brush_down, setBrushDown] = useState<boolean>(false);
 
     const load_css_cursor = useCallback(() => {
         if (props.current_tool === "fill") {
@@ -83,12 +83,12 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
         cursor.current.set_fill(props.fg_color);
         cursor.current.set_fill_alpha(props.alpha);
-        cursor.current.set_radius(props.pen_radius);
+        cursor.current.set_radius(props.brush_radius);
 
         if (draw_canvas_ref.current) {
             draw_canvas_ref.current.style.cursor = cursor.current.as_css_cursor("crosshair");
         }
-    }, [props.fg_color, props.alpha, props.pen_radius, props.current_tool]);
+    }, [props.fg_color, props.alpha, props.brush_radius, props.current_tool]);
 
     const do_floodfill = (x: number, y: number) => {
         const render_canvas = render_canvas_ref.current;
@@ -136,7 +136,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     const previous_point = useRef<{ x: number, y: number } | null>(null);
 
     const on_pointer_move = (e: React.PointerEvent<HTMLCanvasElement>) => {
-        if (!pen_down) return;
+        if (!brush_down) return;
 
         const draw_canvas = draw_canvas_ref.current;
         const draw_ctx = draw_canvas?.getContext("2d", { willReadFrequently: true });
@@ -147,7 +147,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
-            let effective_radius = props.pen_radius;
+            let effective_radius = props.brush_radius;
 
             if (props.pressure_modifier !== 0 && e.pointerType === "pen") {
                 let adjusted_pressure = e.pressure;
@@ -157,7 +157,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
                     adjusted_pressure = e.pressure += 0.1;
                 }
 
-                effective_radius = props.pen_radius + (props.pressure_modifier * adjusted_pressure);
+                effective_radius = props.brush_radius + (props.pressure_modifier * adjusted_pressure);
             }
 
             const draw = () => {
@@ -205,16 +205,16 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
         previous_point.current = null;
 
-        setPenDown(true);
+        setBrushDown(true);
 
         // simulate movement to draw first dot
         on_pointer_move(e);
     };
 
     const on_pointer_up = (e: React.PointerEvent<HTMLCanvasElement>) => {
-        if (!pen_down) return;
+        if (!brush_down) return;
 
-        setPenDown(false);
+        setBrushDown(false);
 
         // simulate movement to draw last dot
         on_pointer_move(e);
@@ -403,7 +403,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
                         // if mouse is down when re-entering canvas, resume drawing
                         // could also just have handlers globally on the window, but this is cleaner
                         if (e.buttons > 0) {
-                            setPenDown(true);
+                            setBrushDown(true);
                         }
                     }
                 }
@@ -430,7 +430,7 @@ export default SketchCanvas;
 // TODO: make standard method for getContext that enforces willReadFrequently
 // TODO: document methods and props!
 // TODO: more advanced undo/redo tree like in ms word? it'll get complex quickly though. i think the linear array is fine for now
-// TODO: make pressure sensitivity rate change in respect to existing radius to a degree. the modifier doesn't feel right on larger pens
+// TODO: make pressure sensitivity rate change in respect to existing radius to a degree. the modifier doesn't feel right on larger brushes
 // TODO: eraser tool that respects alpha?
 // TODO: shape tools
 // TODO: custom hook: useHexColorCheck. validates color when updated, and casts it to assert it is a valid hex color.

@@ -3,11 +3,11 @@ import Image from "next/image";
 import { SketchTool } from "./SketchCanvas";
 import useKeyHandler from "../hooks/useKeyHandler";
 
-import pen_icon from "../assets/icons/pen.svg";
+import brush_icon from "../assets/icons/brush.svg";
 import fill_icon from "../assets/icons/fill.svg";
 
 const tool_icons = {
-    "pen": pen_icon.src,
+    "brush": brush_icon.src,
     "fill": fill_icon.src
 };
 

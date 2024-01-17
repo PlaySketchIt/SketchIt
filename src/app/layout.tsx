@@ -1,6 +1,6 @@
 import { Metadata, Viewport } from "next";
 
-import pen_icon from "../assets/icons/pen.svg";
+import brush_icon from "../assets/icons/brush.svg";
 
 if (!process.env.BASE_URL) {
     throw new Error("BASE_URL environment variable (or .env.local entry) is required, e.g. BASE_URL=https://example.com");
@@ -42,11 +42,11 @@ export const metadata: Metadata = {
 
     icons: {
         icon: [
-            { url: pen_icon.src },
+            { url: brush_icon.src },
         ],
-        shortcut: [pen_icon.src],
+        shortcut: [brush_icon.src],
         apple: [
-            { url: pen_icon.src },
+            { url: brush_icon.src },
         ],
     },
 
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
         siteName: "Sketch It!",
         images: [
             {
-                url: pen_icon.src,
+                url: brush_icon.src,
                 width: 512,
                 height: 512,
                 alt: "Sketch It! (logo)", // TODO: proper og images
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
         // siteId: "@site_account",
         // creator: "@creator_account",
         // creatorId: "@creator_account", // TODO: fill out? could also link to mastodon account
-        images: [pen_icon.src], // TODO: proper twitter card images
+        images: [brush_icon.src], // TODO: proper twitter card images
     },
 
     formatDetection: {

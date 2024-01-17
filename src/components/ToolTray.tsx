@@ -8,7 +8,7 @@ export interface ToolTrayProps {
 
     min_radius: number;
     max_radius: number;
-    pen_radius: number;
+    brush_radius: number;
     radius_step: number;
 
     min_tolerance?: number;
@@ -46,13 +46,13 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                 flexDirection: "row"
             }}
         >
-            <ToolTrayOption value="pen" keybind="b" size={tool_box_size} tool_change={setCurrentTool} current_tool={current_tool} />
+            <ToolTrayOption value="brush" keybind="b" size={tool_box_size} tool_change={setCurrentTool} current_tool={current_tool} />
             <ToolTrayOption value="fill" keybind="f" size={tool_box_size} tool_change={setCurrentTool} current_tool={current_tool} />
 
             <label
                 className="tool-tray-radius-label-container tray-label-container"
                 style={{
-                    display: current_tool === "pen" ? "flex" : "none",
+                    display: current_tool === "brush" ? "flex" : "none",
 
                     flexDirection: "column",
                     justifyContent: "center",
@@ -63,7 +63,7 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     // TODO: check calculation works at different viewport sizes
                 }}
             >
-                Pen Radius:
+                Brush Radius:
 
                 <input
                     className="tool-tray-radius"
@@ -78,7 +78,7 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     min={props.min_radius}
                     max={props.max_radius}
                     step={props.radius_step}
-                    value={props.pen_radius}
+                    value={props.brush_radius}
 
                     onChange={(e) => props.on_radius_change(e.target.valueAsNumber)}
                 />

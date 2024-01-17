@@ -32,7 +32,7 @@ class DynamicCursor {
         if (!props.max_radius) props.max_radius = 20;
 
         // TODO: should strokes be inverted. as in, should inner circle fit to radius then outer circle added on top.
-        // right now the extent of the outer circle is the radius of the pen, but would it make more sense for the inner circle to be the radius of the pen?
+        // right now the extent of the outer circle is the radius of the brush, but would it make more sense for the inner circle to be the radius of the brush?
         this.#inner_stroke_width = props.inner_stroke_width;
 
         // needs to fit the diameter of the circle and stroke

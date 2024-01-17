@@ -17,13 +17,13 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     const min_radius = props.min_radius ?? 1;
     const max_radius = props.max_radius ?? 10;
 
-    const [pen_radius, setPenRadius] = useState<number>(props.pen_radius);
+    const [brush_radius, setBrushRadius] = useState<number>(props.brush_radius);
     const [fg_color, setFgColor] = useState<HexColor>("#000000"); // TODO: possibly have configurable default color
     const [alpha, setAlpha] = useState<number>(1);
 
     const [fill_tolerance, setFillTolerance] = useState<number>(props.fill_tolerance);
 
-    const [current_tool, setCurrentTool] = useState<SketchTool>("pen");
+    const [current_tool, setCurrentTool] = useState<SketchTool>("brush");
 
     const sketch_canvas_ref = useRef<SketchCanvasRef>(null);
 
@@ -38,11 +38,11 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
         e.stopPropagation();
 
         const delta = -e.deltaY;
-        const new_radius = pen_radius + delta / 100 * scroll_step;
+        const new_radius = brush_radius + delta / 100 * scroll_step;
 
         if (new_radius < min_radius || new_radius > max_radius) return;
 
-        setPenRadius(new_radius);
+        setBrushRadius(new_radius);
     };
 
     // effect: register undo and redo enable check handlers
@@ -63,14 +63,14 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     const [radius_loaded, setRadiusLoaded] = useState<boolean>(false);
     const [tolerance_loaded, setToleranceLoaded] = useState<boolean>(false);
 
-    // effect: load pen radius from local storage if exists
+    // effect: load brush radius from local storage if exists
     useEffect(() => {
         if (radius_loaded) return;
 
-        const radius = localStorage.getItem("pen_radius");
+        const radius = localStorage.getItem("brush_radius");
         if (radius === null) return;
 
-        setPenRadius(Number(radius));
+        setBrushRadius(Number(radius));
         setRadiusLoaded(true);
     }, [radius_loaded]);
 
@@ -85,13 +85,13 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
         setToleranceLoaded(true);
     }, [tolerance_loaded]);
 
-    // effect: save pen radius to local storage on change
-    // TODO: would be better if it only ran on unmount, but don't know how to do that (since we must pass pen_radius)
+    // effect: save brush radius to local storage on change
+    // TODO: would be better if it only ran on unmount, but don't know how to do that (since we must pass brush_radius)
     useEffect(() => {
         if (!radius_loaded) return;
 
-        localStorage.setItem("pen_radius", pen_radius.toString());
-    }, [pen_radius, radius_loaded]);
+        localStorage.setItem("brush_radius", brush_radius.toString());
+    }, [brush_radius, radius_loaded]);
 
     // effect: save fill tolerance to local storage on change
     // TODO: would be better if it only ran on unmount, but don't know how to do that (since we must pass fill_tolerance)
@@ -118,7 +118,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
 
                 min_radius={min_radius}
                 max_radius={max_radius}
-                pen_radius={pen_radius}
+                brush_radius={brush_radius}
 
                 fill_tolerance={fill_tolerance}
 
@@ -148,14 +148,14 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
 
                     min_radius={min_radius}
                     max_radius={max_radius}
-                    pen_radius={pen_radius}
+                    brush_radius={brush_radius}
                     radius_step={props.scroll_step ?? 1}
 
                     fill_tolerance={fill_tolerance}
                     tolerance_step={props.tolerance_step ?? 1}
 
                     on_tool_change={setCurrentTool}
-                    on_radius_change={setPenRadius}
+                    on_radius_change={setBrushRadius}
                     on_tolerance_change={setFillTolerance}
                 />
                 <CommandTray
