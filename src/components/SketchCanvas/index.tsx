@@ -1,10 +1,11 @@
 import { forwardRef, useRef, useEffect, useState, useCallback, useImperativeHandle } from "react";
-import DynamicCursor from "../util/DynamicCursor";
-
-import type { HexColor } from "./ColorTrayOption";
 
 import FloodFill from "q-floodfill";
-import CanvasUndoRedoArray from "../util/CanvasUndoRedoArray";
+
+import type { HexColor } from "../ColorTrayOption";
+
+import DynamicCursor from "./DynamicCursor";
+import CanvasUndoRedoArray from "./CanvasUndoRedoArray";
 
 // TODO: move definitions into separate file
 
