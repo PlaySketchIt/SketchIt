@@ -86,7 +86,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     }, [tolerance_loaded]);
 
     // effect: save brush radius to local storage on change
-    // TODO: would be better if it only ran on unmount, but don't know how to do that (since we must pass brush_radius)
+    // TODO: would be more efficient if it only ran on unmount, but don't know how to do that (since we must pass brush_radius) could just call the method when the parent decides to unmount
     useEffect(() => {
         if (!radius_loaded) return;
 
@@ -94,7 +94,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     }, [brush_radius, radius_loaded]);
 
     // effect: save fill tolerance to local storage on change
-    // TODO: would be better if it only ran on unmount, but don't know how to do that (since we must pass fill_tolerance)
+    // TODO: would be more efficient if it only ran on unmount, but don't know how to do that (since we must pass fill_tolerance). could just call the method when the parent decides to unmount
     useEffect(() => {
         if (!tolerance_loaded) return;
 
