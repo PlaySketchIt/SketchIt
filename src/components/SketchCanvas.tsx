@@ -62,7 +62,6 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         init_radius: props.pen_radius, // TODO: option to resize based on calculated pressure
         outer_stroke: "#00000080",
         outer_stroke_width: 1.5 // TODO: option to make size consistent with radius (also consider viewport)
-        // TODO: adjust transparency based on alpha
     }));
 
     const [pen_down, setPenDown] = useState<boolean>(false);
@@ -79,15 +78,14 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
         // TODO: as additional tools added, migrate to switch statement
 
-        cursor.current.set_fill(props.fg_color ?? "black");
+        cursor.current.set_fill(props.fg_color);
+        cursor.current.set_fill_alpha(props.alpha);
         cursor.current.set_radius(props.pen_radius);
 
         if (draw_canvas_ref.current) {
             draw_canvas_ref.current.style.cursor = cursor.current.as_css_cursor("crosshair");
         }
-    }, [props.fg_color, props.pen_radius, props.current_tool]);
-
-    // TODO: unite methods for capturing and restoring canvas state
+    }, [props.fg_color, props.alpha, props.pen_radius, props.current_tool]);
 
     const do_floodfill = (x: number, y: number) => {
         const render_canvas = render_canvas_ref.current;
@@ -298,7 +296,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     }, [initialised, load_css_cursor, clear_draw_canvas, clear_render_canvas, props.fg_color]);
 
 
-    // effect: run when color/radius/tool changes to update cursor
+    // effect: run when color/radius/tool/alpha changes to update cursor
     useEffect(() => {
         load_css_cursor();
     }, [load_css_cursor]);
