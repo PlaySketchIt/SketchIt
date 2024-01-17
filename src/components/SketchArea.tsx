@@ -26,7 +26,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     const [current_tool, setCurrentTool] = useState<SketchTool>("pen");
 
     const sketch_canvas_ref = useRef<SketchCanvasRef>(null);
-    
+
     const [can_undo, setCanUndo] = useState<boolean>(false);
     const [can_redo, setCanRedo] = useState<boolean>(false);
 
@@ -57,6 +57,49 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
             setCanUndo(enabled);
         });
     }, [sketch_canvas_ref]);
+
+
+    // needed to avoid race condition where local storage is loaded after state is set
+    const [radius_loaded, setRadiusLoaded] = useState<boolean>(false);
+    const [tolerance_loaded, setToleranceLoaded] = useState<boolean>(false);
+
+    // effect: load pen radius from local storage if exists
+    useEffect(() => {
+        if (radius_loaded) return;
+
+        const radius = localStorage.getItem("pen_radius");
+        if (radius === null) return;
+
+        setPenRadius(Number(radius));
+        setRadiusLoaded(true);
+    }, [radius_loaded]);
+
+    // effect: load fill tolerance from local storage if exists
+    useEffect(() => {
+        if (tolerance_loaded) return;
+
+        const tolerance = localStorage.getItem("fill_tolerance");
+        if (tolerance === null) return;
+
+        setFillTolerance(Number(tolerance));
+        setToleranceLoaded(true);
+    }, [tolerance_loaded]);
+
+    // effect: save pen radius to local storage on change
+    // TODO: would be better if it only ran on unmount, but don't know how to do that (since we must pass pen_radius)
+    useEffect(() => {
+        if (!radius_loaded) return;
+
+        localStorage.setItem("pen_radius", pen_radius.toString());
+    }, [pen_radius, radius_loaded]);
+
+    // effect: save fill tolerance to local storage on change
+    // TODO: would be better if it only ran on unmount, but don't know how to do that (since we must pass fill_tolerance)
+    useEffect(() => {
+        if (!tolerance_loaded) return;
+
+        localStorage.setItem("fill_tolerance", fill_tolerance.toString());
+    }, [fill_tolerance, tolerance_loaded]);
 
 
     return (

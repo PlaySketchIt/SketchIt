@@ -69,7 +69,6 @@ class DynamicCursor {
     }
 
     set_fill_alpha(fill_alpha: number) {
-        console.log(fill_alpha);
         this.#inner_circle.setAttribute("fill-opacity", String(fill_alpha));
     }
 
