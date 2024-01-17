@@ -60,8 +60,8 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     const cursor = useRef(new DynamicCursor({
         max_radius: max_radius,
         init_radius: props.pen_radius, // TODO: option to resize based on calculated pressure
-        stroke: "#00000080",
-        stroke_width: 1.5 // TODO: option to make size consistent with radius (also consider viewport)
+        outer_stroke: "#00000080",
+        outer_stroke_width: 1.5 // TODO: option to make size consistent with radius (also consider viewport)
         // TODO: adjust transparency based on alpha
     }));
 
