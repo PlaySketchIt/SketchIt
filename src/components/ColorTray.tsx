@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import ColorTrayOption, { HexColor } from "./ColorTrayOption";
 import ColorTrayCustom from "./ColorTrayCustom";
+import useKeyHandler from "../hooks/useKeyHandler";
 
 
 export interface ColorTrayProps {
@@ -28,6 +29,9 @@ const ColorTrayRow: React.FC<{ children?: React.ReactNode }> = (props) => {
 
 
 const ColorTray: React.FC<ColorTrayProps> = (props) => {
+    useKeyHandler(() => { on_alpha_change(current_alpha - 0.05); }, "a"); // TODO: step and binds on props
+    useKeyHandler(() => { on_alpha_change(current_alpha + 0.05); }, "d");
+
     // effect: check value is in hex format without alpha
     useEffect(() => {
         if (!props.init_color.match(/^#[0-9a-fA-F]{6}$/)) {
@@ -134,3 +138,4 @@ export default ColorTray;
 
 // TODO: i18n
 // TODO: color keybinds? keybind to open picker?
+// TODO: ability to save custom colors. could also have alpha presets. could either replace existing tray options or be a separate tray. or perhaps show near picker

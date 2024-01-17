@@ -80,4 +80,4 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
 export default CommandTrayOption;
 
 // TODO: unify with color tray option, perhaps with a generic tray option component and extend it
-// TODO: hotkeys
+// TODO: consider moving <kbd> to side panel, if we decide to display scroll wheel keybinds there

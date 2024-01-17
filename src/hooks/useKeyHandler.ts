@@ -21,3 +21,4 @@ const useKeyHandler = (callback: () => void, key?: string) => {
 export default useKeyHandler;
 
 // TODO: handle key combinations?
+// TODO: proper handler for held down keys. specifiable interval? would be useful for alpha
