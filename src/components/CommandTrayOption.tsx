@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { SketchCommand } from "./SketchCanvas";
+import useKeyHandler from "../hooks/useKeyHandler";
 
 import undo_icon from "../assets/icons/undo.svg";
 import redo_icon from "../assets/icons/redo.svg";
@@ -19,9 +20,13 @@ export interface CommandTrayOptionProps {
     command_run: (command: SketchCommand) => void;
 
     disabled?: boolean;
+
+    keybind: string;
 }
 
 const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
+    useKeyHandler(() => { if (!props.disabled) props.command_run(props.value); }, props.keybind);
+
     return (
         <button
             className="tray-option command-tray-option"
@@ -34,7 +39,9 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
 
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "center"
+                alignItems: "center",
+
+                position: "relative"
             }}
 
             onClick={() => props.command_run(props.value)}
@@ -46,8 +53,8 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
             <Image
                 className="tray-option-icon command-tray-option-icon"
 
-                width={(props.size ?? 20) * 0.75}
-                height={(props.size ?? 20) * 0.75}
+                width={(props.size ?? 20) * 0.6}
+                height={(props.size ?? 20) * 0.6} // TODO: these values are made smaller than tools since the command icons are larger. revert once icons are consistent
 
                 aria-hidden="true"
                 alt=""
@@ -56,11 +63,21 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
 
                 src={command_icons[props.value]}
             />
+            <kbd
+                className="tray-option-keybind command-tray-option-keybind"
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 1 // TODO: better keyboard style
+                }}
+            >
+                {props.keybind}
+            </kbd>
         </button>
     );
 };
 
 export default CommandTrayOption;
 
-// TODO: unify with color tray option
+// TODO: unify with color tray option, perhaps with a generic tray option component and extend it
 // TODO: hotkeys

@@ -133,3 +133,4 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
 export default ColorTray;
 
 // TODO: i18n
+// TODO: color keybinds? keybind to open picker?

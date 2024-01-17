@@ -20,9 +20,9 @@ const CommandTray: React.FC<CommandTrayProps> = (props) => {
                 flexDirection: "row"
             }}
         >
-            <CommandTrayOption value="undo" size={tool_box_size} command_run={props.on_command_run} disabled={!props.can_undo} />
-            <CommandTrayOption value="redo" size={tool_box_size} command_run={props.on_command_run} disabled={!props.can_redo} />
-            <CommandTrayOption value="clear" size={tool_box_size} command_run={props.on_command_run} />
+            <CommandTrayOption value="undo" keybind="z" size={tool_box_size} command_run={props.on_command_run} disabled={!props.can_undo} />
+            <CommandTrayOption value="redo" keybind="x" size={tool_box_size} command_run={props.on_command_run} disabled={!props.can_redo} />
+            <CommandTrayOption value="clear" keybind="c" size={tool_box_size} command_run={props.on_command_run} />
         </div>
     );
 };
@@ -31,3 +31,4 @@ export default CommandTray;
 
 // TODO: unite labelled slider input into a single component
 // TODO: unite trays into a single component
+// TODO: configurable keybinds. support key combos?

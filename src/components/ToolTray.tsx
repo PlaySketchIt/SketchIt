@@ -43,8 +43,8 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                 flexDirection: "row"
             }}
         >
-            <ToolTrayOption value="pen" size={tool_box_size} tool_change={on_tool_change} current_tool={current_tool} />
-            <ToolTrayOption value="fill" size={tool_box_size} tool_change={on_tool_change} current_tool={current_tool} />
+            <ToolTrayOption value="pen" keybind="b" size={tool_box_size} tool_change={on_tool_change} current_tool={current_tool} />
+            <ToolTrayOption value="fill" keybind="f" size={tool_box_size} tool_change={on_tool_change} current_tool={current_tool} />
 
             <label
                 className="tool-tray-radius-label-container tray-label-container"
@@ -124,3 +124,5 @@ export default ToolTray;
 // TODO: unite labelled slider input into a single component
 // TODO: clearer input switch mechanism
 // TODO: double click to reset slider value (do same for alpha). need to save default values somewhere as prop will be overwritten.
+// TODO: configurable keybinds. support key combos?
+// TODO: bind for alpha slider
