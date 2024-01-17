@@ -250,9 +250,13 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
         if (!render_canvas || !render_ctx) return;
 
+        render_ctx.globalAlpha = 1;
+
         render_ctx.fillStyle = props.background;
         render_ctx.fillRect(0, 0, render_canvas.width, render_canvas.height);
-    }, [props.background]);
+
+        render_ctx.globalAlpha = props.alpha;
+    }, [props.background, props.alpha]);
 
     const clear_draw_canvas = useCallback(() => {
         const draw_canvas = draw_canvas_ref.current;
