@@ -45,15 +45,17 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
     const [current_color, setCurrentColor] = useState<HexColor>(props.init_color);
     const [current_alpha, setCurrentAlpha] = useState<number>(props.init_alpha ?? 1);
 
-    // effect: callback when value changes
-    useEffect(() => {
-        props.on_color_change(current_color);
-    }, [current_color, props.on_color_change]);
+    // have to destructure for effects. passing props.on_color_change isn't working and passing whole props is inefficient
+    const { on_color_change, on_alpha_change } = props;
 
-    // effect: callback when value changes
+    // effect: callback when values change
     useEffect(() => {
-        props.on_alpha_change(current_alpha);
-    }, [current_alpha, props.on_alpha_change]);
+        on_color_change(current_color);
+    }, [current_color, on_color_change]);
+
+    useEffect(() => {
+        on_alpha_change(current_alpha);
+    }, [current_alpha, on_alpha_change]);
 
     return (
         <div className="color-tray"

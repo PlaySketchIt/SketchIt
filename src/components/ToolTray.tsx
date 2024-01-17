@@ -31,10 +31,13 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
 
     const [current_tool, setCurrentTool] = useState<SketchTool>(props.init_tool);
 
+    // have to destructure for effects. passing props.on_tool_change isn't working and passing whole props is inefficient
+    const { on_tool_change } = props;
+
     // effect: callback when value changes
     useEffect(() => {
-        props.on_tool_change(current_tool);
-    }, [current_tool, props.on_tool_change]);
+        on_tool_change(current_tool);
+    }, [current_tool, on_tool_change]);
 
     return (
         <div className="tool-tray"
