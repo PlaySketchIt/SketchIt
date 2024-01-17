@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { SketchTool } from "./SketchCanvas";
 import ToolTrayOption from "./ToolTrayOption";
@@ -31,10 +31,10 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
 
     const [current_tool, setCurrentTool] = useState<SketchTool>(props.init_tool);
 
-    const on_tool_change = (tool: SketchTool) => {
-        setCurrentTool(tool);
-        props.on_tool_change(tool);
-    };
+    // effect: callback when value changes
+    useEffect(() => {
+        props.on_tool_change(current_tool);
+    }, [current_tool, props.on_tool_change]);
 
     return (
         <div className="tool-tray"
@@ -43,8 +43,8 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                 flexDirection: "row"
             }}
         >
-            <ToolTrayOption value="pen" keybind="b" size={tool_box_size} tool_change={on_tool_change} current_tool={current_tool} />
-            <ToolTrayOption value="fill" keybind="f" size={tool_box_size} tool_change={on_tool_change} current_tool={current_tool} />
+            <ToolTrayOption value="pen" keybind="b" size={tool_box_size} tool_change={setCurrentTool} current_tool={current_tool} />
+            <ToolTrayOption value="fill" keybind="f" size={tool_box_size} tool_change={setCurrentTool} current_tool={current_tool} />
 
             <label
                 className="tool-tray-radius-label-container tray-label-container"
