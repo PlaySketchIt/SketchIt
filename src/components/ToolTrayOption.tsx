@@ -44,7 +44,7 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
                 position: "relative"
             }}
 
-            aria-label={"select " + props.value + " tool"}
+            aria-label={`select ${props.value} tool${props.current_tool === props.value ? " (current)" : ""} [keybind: ${props.keybind}]`}
 
             onClick={() => props.tool_change(props.value)}
         >
@@ -68,6 +68,8 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
                     top: 0,
                     right: 1 // TODO: better keyboard style
                 }}
+
+                aria-hidden="true"
             >
                 {props.keybind}
             </kbd>

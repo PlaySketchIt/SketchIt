@@ -46,7 +46,7 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
 
             onClick={() => props.command_run(props.value)}
 
-            aria-label={"run " + props.value + " command"}
+            aria-label={`run ${props.value} command${props.disabled ? " (disabled)" : ""} [keybind: ${props.keybind}]`}
 
             disabled={props.disabled ?? false}
         >
@@ -70,6 +70,8 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
                     top: 0,
                     right: 1 // TODO: better keyboard style
                 }}
+
+                aria-hidden="true"
             >
                 {props.keybind}
             </kbd>
