@@ -58,9 +58,6 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
             // TODO:structure: clean up
             aria-label={t(props.value === props.current_color ? "aria label.select color current" : "aria label.select color", { color: t("color." + props.name_key) })}
 
-            data-color-name={props.name_key}
-            data-color-value={props.value}
-
             style={{
                 backgroundColor: props.value,
 
