@@ -1,6 +1,6 @@
 import resourcesToBackend from "i18next-resources-to-backend";
-import "./App.css";
-import "./App.media.css";
+import "./GameApp.css";
+import "./GameApp.media.css";
 import SketchArea from "./components/SketchArea";
 
 import i18n from "i18next";
@@ -14,7 +14,8 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    defaultNS: "app",
+    //ns: ["game", "common"],
+    ns: ["game"],
     fallbackLng: "en-GB",
     debug: process.env.NODE_ENV === "development",
     interpolation: {
@@ -27,7 +28,7 @@ i18n
 const WIDTH = 1280;
 const HEIGHT = 720;
 
-function App() {
+function GameApp() {
   return (
     <>
       <SketchArea
@@ -52,7 +53,7 @@ function App() {
   );
 }
 
-export default App;
+export default GameApp;
 
 // radius values are now with respect to the canvas size, so should be consistent across screen sizes
 
