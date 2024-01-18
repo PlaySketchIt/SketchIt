@@ -65,6 +65,8 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
         const rect = draw_canvas.getBoundingClientRect();
         return radius * rect.width / draw_canvas.width;
+        //return radius * rect.width / document.documentElement.clientWidth;
+        // TODO: which works best? i don't know how well either is working. we don't want to express radius in web px, but rather in terms of the canvas's pixels
     }, []);
 
     const cursor = useRef(new DynamicCursor({
@@ -319,7 +321,9 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
     // effect: if window width changes, reload cursor to recalculate adjusted radius
     useEffect(() => {
-        // TODO: why isn't this scaling properly? it is clearly proportional to the canvas size to an extent, but not exactly as is the case with pen size
+        // TODO: why isn't this scaling properly? it is clearly proportional to the canvas size to an extent,
+        // but not exactly as is the case with pen size. test shows its receiving the correct values
+        // it may be because the value of the radius in terms of the canvas is still different than the dom. needs additional adjustment to be used with cursor?
         window.addEventListener("resize", load_css_cursor);
 
         return () => {
