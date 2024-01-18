@@ -1,9 +1,17 @@
+"use client";
+
+import Link from "next/link";
+
 export const runtime = "edge";
 
-export const NotFound = async () => {
+const NotFound = () => {
     return (
         <div>
-            <h1>404 - Not Found</h1>
+            <h2>Not Found</h2>
+            <p>Could not find requested resource</p>
+            <Link href="/">Return Home</Link>
         </div>
     );
 };
+
+export default NotFound;
