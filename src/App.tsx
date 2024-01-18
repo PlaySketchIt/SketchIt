@@ -5,7 +5,6 @@ import SketchArea from "./components/SketchArea";
 const WIDTH = 1280;
 const HEIGHT = 720;
 
-// TODO: manage canvas vs viewport width. canvas width is image data size so should be consistent, but we can resize it to fit the viewport
 // TODO: mobile layout. i like the way skribbl does it compared to gartic's scrolling canvas (which nobody realises exists)
 
 function App() {
