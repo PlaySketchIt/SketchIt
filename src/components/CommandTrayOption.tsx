@@ -56,9 +56,16 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
                 className="tray-option-icon command-tray-option-icon"
 
                 // TODO: these values are made smaller than tools since the command icons are larger. revert once icons are consistent
+                // additionally, bin icon made even smaller since the icon is larger than the others
+
                 style={{
-                    width: `${box_size_vw * 0.6}vw`,
-                    height: `${box_size_vw * 0.6}vw`,
+                    position: "absolute",
+
+                    bottom: `${box_size_vw * 0.1}vw`,
+                    left: `${box_size_vw * 0.1}vw`,
+
+                    width: `${box_size_vw * (props.value === "clear" ? 0.45 : 0.5)}vw`,
+                    height: `${box_size_vw * (props.value === "clear" ? 0.45 : 0.5)}vw`,  // TODO: i'm not a huge fan of the reduced scale icons, but it makes the keybinds more visible. maybe make the keybinds part of the icon then this can be reverted. or perhaps toggleable?
                 }}
 
                 // rendered size. not the same as viewport size. //TODO: adjust reasonably, otherwise no point using svg
@@ -76,10 +83,11 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
                 className="tray-option-keybind command-tray-option-keybind"
                 style={{
                     position: "absolute",
-                    top: 0,
-                    right: `${box_size_vw / 20}vw`,
 
-                    fontSize: `${box_size_vw / 3}vw`,
+                    top: `${box_size_vw / 40}vw`,
+                    right: `${box_size_vw / 40}vw`,
+
+                    fontSize: `${box_size_vw / 3.5}vw`,
                     verticalAlign: "super"
                 }}
 
