@@ -28,5 +28,16 @@
     }
 }
 
+
+/* TODO: */
+
 /* mobile - small */
 @media only screen and (max-width : 320px) {}
+
+/* mobile - landscape large */
+@media only screen and (max-width : 812px) and (max-height: 768px) {}
+
+/* mobile - landscape small */
+@media only screen and (max-width : 667px) and (max-height: 480px) {}
+
+/* it would be cool if landscape on mobile enlarges the canvas, or something like that. might need additional js. could also be lazy and ban landscape mobile */
