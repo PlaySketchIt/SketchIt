@@ -319,6 +319,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
     // effect: if window width changes, reload cursor to recalculate adjusted radius
     useEffect(() => {
+        // TODO: why isn't this scaling properly? it is clearly proportional to the canvas size to an extent, but not exactly as is the case with pen size
         window.addEventListener("resize", load_css_cursor);
 
         return () => {
