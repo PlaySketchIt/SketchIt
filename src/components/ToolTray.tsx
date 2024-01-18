@@ -60,7 +60,7 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "flex-start",
-                    marginLeft: `${tool_box_size_vw / 10}vw`,
+                    marginLeft: `${tool_box_size_vw / 5}vw`,
                     fontSize: `${tool_box_size_vw / 3}vw`,
 
                     width: `${tool_box_size_vw * 2.5}vw`, // consistent with so no shift when changing tool
