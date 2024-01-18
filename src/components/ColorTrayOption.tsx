@@ -64,7 +64,7 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
                 backgroundColor: props.value,
 
                 width: `${box_size_vw}vw`,
-                height: `${box_size_vw}vw`,
+                aspectRatio: 1,
             }}
 
             onClick={() => props.color_change_handler(props.value)}

@@ -31,14 +31,17 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
             className={styles.container + " color-tray-custom-container"}
             style={{
                 marginLeft: `${props.box_size_vw / 4}vw`,
+                
+                width: `${props.box_size_vw}vw`,
+                height: `${props.box_size_vw}vw`,
             }}
         >
             <input
                 className={styles.input + " color-tray-custom-input color-tray-option tray-option"}
 
                 style={{
-                    width: `${props.box_size_vw}vw`,
-                    height: `${props.box_size_vw}vw`,
+                    width: "100%",
+                    height: "100%",
                 }}
 
                 type="color"
@@ -52,8 +55,10 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
             <Image
                 className={styles.overlay + " color-tray-custom-overlay"}
                 style={{
-                    width: `${props.box_size_vw / 2}vw`,
-                    height: `${props.box_size_vw / 2}vw`,
+                    width: "50%",
+                    height: "auto",
+
+                    objectFit: "contain",
 
                     top: `${props.box_size_vw / 4}vw`,
                     left: `${props.box_size_vw / 4}vw`,

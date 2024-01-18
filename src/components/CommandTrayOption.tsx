@@ -35,7 +35,7 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
 
             style={{
                 width: `${box_size_vw}vw`,
-                height: `${box_size_vw}vw`,
+                aspectRatio: 1,
 
                 padding: 0,
 
@@ -64,8 +64,8 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
                     bottom: `${box_size_vw * 0.1}vw`,
                     left: `${box_size_vw * 0.1}vw`,
 
-                    width: `${box_size_vw * (props.value === "clear" ? 0.45 : 0.5)}vw`,
-                    height: `${box_size_vw * (props.value === "clear" ? 0.45 : 0.5)}vw`,  // TODO: i'm not a huge fan of the reduced scale icons, but it makes the keybinds more visible. maybe make the keybinds part of the icon then this can be reverted. or perhaps toggleable?
+                    width: `${(props.value === "clear" ? 45 : 50)}%`,
+                    height: `${(props.value === "clear" ? 45 : 50)}%`,  // TODO: i'm not a huge fan of the reduced scale icons, but it makes the keybinds more visible. maybe make the keybinds part of the icon then this can be reverted. or perhaps toggleable?
                 }}
 
                 // rendered size. not the same as viewport size. //TODO: adjust reasonably, otherwise no point using svg
@@ -88,7 +88,6 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
                     right: `${box_size_vw / 40}vw`,
 
                     fontSize: `${box_size_vw / 3.5}vw`,
-                    verticalAlign: "super"
                 }}
 
                 aria-hidden="true"

@@ -35,7 +35,7 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
 
             style={{
                 width: `${box_size_vw}vw`,
-                height: `${box_size_vw}vw`,
+                aspectRatio: 1,
 
                 padding: 0,
 
@@ -59,8 +59,8 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
                     bottom: `${box_size_vw * 0.1}vw`,
                     left: `${box_size_vw * 0.1}vw`,
 
-                    width: `${box_size_vw * 0.55}vw`,
-                    height: `${box_size_vw * 0.55}vw`, // TODO: i'm not a huge fan of the reduced scale icons, but it makes the keybinds more visible. maybe make the keybinds part of the icon then this can be reverted. or perhaps toggleable?
+                    width: "55%",
+                    height: "55%", // TODO: i'm not a huge fan of the reduced scale icons, but it makes the keybinds more visible. maybe make the keybinds part of the icon then this can be reverted. or perhaps toggleable?
                 }}
 
                 // rendered size. not the same as viewport size. //TODO: adjust reasonably, otherwise no point using svg

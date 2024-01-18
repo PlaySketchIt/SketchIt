@@ -28,7 +28,7 @@
 }
 
 .sketch-area {
-  border: 3px solid var(--area-border-color);
+  border: 0.15vw solid var(--area-border-color);
   width: 60vw;
 }
 
@@ -44,17 +44,17 @@
 }
 
 .tray-option {
-  border: 1px solid var(--tray-option-border-color);
+  border: 0.05vw solid var(--tray-option-border-color);
   background-color: var(--tray-option-bg-color);
 }
 
 .color-tray-custom {
-  border: 2px solid var(--tray-option-border-color);
+  border: 0.1vw solid var(--tray-option-border-color);
   background-color: var(--color-custom-bg-color);
 }
 
 .tray-option:hover:not(:disabled):not(.tray-option-selected) {
-  border: 1px solid var(--tray-option-border-color-hover);
+  border: 0.05vw solid var(--tray-option-border-color-hover);
 }
 
 .tray-option-selected {
@@ -62,11 +62,11 @@
 }
 
 .color-tray-option-selected {
-  border: 2px dashed var(--color-option-border-color-selected);
+  border: 0.15vw dashed var(--color-option-border-color-selected);
 }
 
 .color-tray-option-selected.light-color {
-  border: 2px dashed var(--color-option-border-color-light-selected);
+  border: 0.15vw dashed var(--color-option-border-color-light-selected);
 }
 
 .command-tray-option:active {
@@ -86,25 +86,25 @@
 }
 
 
-/** stolen from mdn web docs :P (CC0) **/
+/** mdn web docs (CC0), adapted to use viewport units **/
 kbd {
   background-color: #eee;
-  border-radius: 3px;
-  border: 1px solid #b4b4b4;
+  border-radius: 0.15vw;
+  border: 0.05vw solid #b4b4b4;
   box-shadow:
-    0 1px 1px rgba(0, 0, 0, 0.2),
-    0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
+    0 0.05vw 0.05vw rgba(0, 0, 0, 0.2),
+    0 0.1vw 0 0 rgba(255, 255, 255, 0.7) inset;
   color: #333;
   display: inline-block;
   font-size: 0.85em;
   font-weight: 700;
   line-height: 1;
-  padding: 2px 4px;
+  padding: 0.1vw 0.2vw;
   white-space: nowrap;
 }
 
 
-/** generated with https://range-input-css.netlify.app/ modified to use vars **/
+/** generated with https://range-input-css.netlify.app/ modified to use vars and viewport units **/
 
 /*********** Baseline, reset styles ***********/
 input[type="range"] {
@@ -132,7 +132,7 @@ input[type="range"]::-webkit-slider-runnable-track {
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
   appearance: none;
-  margin-top: -4px; /* Centers thumb on the track */
+  margin-top: -0.2vw; /* Centers thumb on the track */
   background-color: var(--slider-thumb-color);
   border-radius: 50%;
   height: 1vw;
