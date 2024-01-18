@@ -38,6 +38,9 @@ export default App;
 // TODO: i18n integration
 // TODO: remove as much inline styling as possible so it can be overridden without !important, unless strictly necessary or dynamic.
 // TODO: remove keybind labels from buttons on mobile
+// TODO: should some effects dependent on prop/state changes be removed. seems more efficient to use them but perhaps that's not the case: https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+// TODO: input sizing and picker swatch shape not consistent on ios safari, because of course it isnt. border dashing is thinner on ios too
+// TODO: don't bother using dyncursor if device is touch screen
 
 // monetisation ideas:
 // - ad frames (blegh)
