@@ -1,7 +1,7 @@
 import resourcesToBackend from "i18next-resources-to-backend";
 import "./GameApp.css";
 import "./GameApp.media.css";
-import SketchArea from "./components/SketchArea";
+import SketchArea from "../../components/SketchArea";
 
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
@@ -10,7 +10,7 @@ import { initReactI18next } from "react-i18next";
 
 // setup i18n
 i18n
-  .use(resourcesToBackend((lng: string, ns: string) => import(`./i18n/${lng}/${ns}.json`)))
+  .use(resourcesToBackend((lng: string, ns: string) => import(`../../i18n/${lng}/${ns}.json`)))
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
