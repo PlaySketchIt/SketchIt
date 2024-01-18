@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start -p 3001 -H localhost",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "deploy": "git push origin main:deploy"
+    "deploy-prod": "git push origin main:deploy-prod",
+    "deploy-preview": "git push origin main:deploy-preview"
   },
   "dependencies": {
     "@fontsource-variable/open-sans": "^5.0.23",
@@ -18,6 +19,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.8.5",
     "@next/eslint-plugin-next": "^14.0.4",
     "@types/node": "20.11.2",
     "@types/react": "^18.2.43",
@@ -25,6 +27,7 @@
     "@typescript-eslint/eslint-plugin": "^6.14.0",
     "@typescript-eslint/parser": "^6.14.0",
     "eslint": "^8.55.0",
+    "eslint-plugin-next-on-pages": "^1.8.5",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "typescript": "^5.2.2"
