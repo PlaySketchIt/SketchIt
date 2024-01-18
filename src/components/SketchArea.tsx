@@ -109,7 +109,13 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
 
 
     return (
-        <div className="sketch-area" onWheel={on_scroll_wheel}>
+        <div
+            className="sketch-area"
+            style={{
+                display: "flex",
+                flexDirection: "column",
+            }}
+            onWheel={on_scroll_wheel}>
             <SketchCanvas
                 ref={sketch_canvas_ref}
                 background={props.background}

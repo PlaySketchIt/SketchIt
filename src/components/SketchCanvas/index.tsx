@@ -142,10 +142,11 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         const draw_ctx = draw_canvas?.getContext("2d", { willReadFrequently: true });
 
         if (draw_canvas && draw_ctx) {
+            // get x and y, adjusted for canvas viewport position AND SCALE
             const rect = draw_canvas.getBoundingClientRect();
 
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            const x = (e.clientX - rect.left) / rect.width * draw_canvas.width;
+            const y = (e.clientY - rect.top) / rect.height * draw_canvas.height;
 
             let effective_radius = props.brush_radius;
 
@@ -368,8 +369,10 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             style={{
                 position: "relative",
 
-                width: props.width,
-                height: props.height
+                objectFit: "contain",
+                width: "100%",
+                height: "100%",
+                aspectRatio: `${props.width} / ${props.height}`,
             }}
         >
             <canvas
@@ -384,7 +387,12 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
                 style={{
                     position: "absolute",
                     top: 0,
-                    left: 0
+                    left: 0,
+
+                    objectFit: "contain",
+                    width: "100%",
+                    height: "100%",
+                    aspectRatio: `${props.width} / ${props.height}`,
                 }}
             />
             <canvas
@@ -413,6 +421,11 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
                     position: "absolute",
                     top: 0,
                     left: 0,
+
+                    objectFit: "contain",
+                    width: "100%",
+                    height: "100%",
+                    aspectRatio: `${props.width} / ${props.height}`,
 
                     touchAction: "pinch-zoom"
                 }}
