@@ -36,6 +36,8 @@ export default App;
 // radius values are now with respect to the canvas size, so should be consistent across screen sizes
 
 // TODO: i18n integration
+// TODO: remove as much inline styling as possible so it can be overridden without !important, unless strictly necessary or dynamic.
+// TODO: remove keybind labels from buttons on mobile
 
 // monetisation ideas:
 // - ad frames (blegh)
@@ -46,4 +48,3 @@ export default App;
 // - sponsorship from drawing tablet companies (could work once popular enough) or some form of amazon affiliate link (not sure how successful this would be)
 // - dont monetise and just open source it (not ideal but im open to it, but i wouldnt host it myself)
 
-// TODO: remove as much inline styling as possible so it can be overridden without !important, unless strictly necessary or dynamic.
