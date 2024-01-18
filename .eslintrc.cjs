@@ -8,7 +8,7 @@ module.exports = {
     "plugin:@next/next/recommended",
     "plugin:next-on-pages/recommended"
   ],
-  ignorePatterns: ["dist", ".eslintrc.cjs"],
+  ignorePatterns: ["dist", ".next", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
   plugins: [
     "react-refresh",
