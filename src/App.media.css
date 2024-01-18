@@ -6,6 +6,12 @@
 
 /* mobile - large */
 @media only screen and (max-width : 480px) {
+    :root {
+        --tool-box-size: 10vw;
+        
+        --slider-thumb-size: 4vw;
+    }
+
     body {
         align-items: flex-start;
     }
@@ -16,7 +22,9 @@
     }
 
     .sketch-trays {
-        flex-direction: column;
+        flex-wrap: wrap;
+
+        gap: 1vh;
     }
 }
 

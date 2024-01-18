@@ -28,6 +28,8 @@
   --slider-track-color: #878787;
   --slider-thumb-color: #fff;
   --slider-thumb-outline-color: #ccc;
+
+  --slider-thumb-size: 1vw;
 }
 
 /* style rules - see App.media.css for screen size specific rules */
@@ -133,23 +135,23 @@ input[type="range"]:focus {
 input[type="range"]::-webkit-slider-runnable-track {
   background-color: var(--slider-track-color);
   border-radius: 0.5rem;
-  height: 0.5vw;
+  height: calc(var(--slider-thumb-size) / 2);
 }
 
 /* slider thumb */
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
   appearance: none;
-  margin-top: -0.2vw; /* Centers thumb on the track */
+  margin-top: calc(var(--slider-thumb-size) * -0.2); /* Centers thumb on the track */
   background-color: var(--slider-thumb-color);
   border-radius: 50%;
-  height: 1vw;
-  width: 1vw;
+  height: var(--slider-thumb-size);
+  width: var(--slider-thumb-size);
 }
 
 input[type="range"]:focus::-webkit-slider-thumb {
   outline: 0.2vw solid var(--slider-thumb-outline-color);
-  outline-offset: 0.125vw;
+  outline-offset: calc(0.125 * var(--slider-thumb-size));
 }
 
 /*********** Firefox styles ***********/
@@ -157,7 +159,7 @@ input[type="range"]:focus::-webkit-slider-thumb {
 input[type="range"]::-moz-range-track {
   background-color: var(--slider-track-color);
   border-radius: 0.5rem;
-  height: 0.5vw;
+  height: calc(var(--slider-thumb-size) / 2);
 }
 
 /* slider thumb */
@@ -165,11 +167,11 @@ input[type="range"]::-moz-range-thumb {
   background-color: var(--slider-thumb-color);
   border: none; /*Removes extra border that FF applies*/
   border-radius: 50%;
-  height: 1vw;
-  width: 1vw;
+  height: var(--slider-thumb-size);
+  width: var(--slider-thumb-size);
 }
 
 input[type="range"]:focus::-moz-range-thumb{
   outline: 0.2vw solid var(--slider-thumb-outline-color);
-  outline-offset: 0.125vw;
+  outline-offset: calc(0.125 * var(--slider-thumb-size));
 }

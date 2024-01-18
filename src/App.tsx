@@ -45,3 +45,5 @@ export default App;
 // - artist pay to promote their commissions on the sidebar (could be great, but needs demand and a good system in place)
 // - sponsorship from drawing tablet companies (could work once popular enough) or some form of amazon affiliate link (not sure how successful this would be)
 // - dont monetise and just open source it (not ideal but im open to it, but i wouldnt host it myself)
+
+// TODO: remove as much inline styling as possible so it can be overridden without !important, unless strictly necessary or dynamic.
