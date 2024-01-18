@@ -17,7 +17,7 @@ function App() {
           height={WIDTH / ASPECT_RATIO}
 
           min_radius={1.5}
-          max_radius={15}
+          max_radius={20}
           brush_radius={5}
 
           fill_tolerance={40}
