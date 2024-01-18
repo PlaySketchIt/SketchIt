@@ -14,13 +14,20 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    //ns: ["game", "common"],
-    ns: ["game"],
-    fallbackLng: "en-GB",
     debug: process.env.NODE_ENV === "development",
+
     interpolation: {
       escapeValue: false, // react already handles this
     },
+
+    //ns: ["game", "common"],
+    ns: ["game"],
+
+    lowerCaseLng: true,
+    nonExplicitSupportedLngs: true,
+    fallbackLng: {
+      default: ["en-GB"],
+    }
   });
 
 

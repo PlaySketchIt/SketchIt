@@ -1,0 +1,15 @@
+{
+    "$comment": "Extends en/game.json (en-GB is default en dialect)",
+
+    "aria label": {
+        "select custom color using picker": "Select custom color using picker",
+
+        "select color": "Select color: {{color}}",
+        "select color current": "Select color: {{color}} (current)"
+    },
+
+    "color": {
+        "dark gray": "dark gray",
+        "light gray": "light gray"
+    }
+}
