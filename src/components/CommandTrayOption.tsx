@@ -15,7 +15,7 @@ const command_icons = {
 
 export interface CommandTrayOptionProps {
     value: SketchCommand;
-    size?: number;
+    box_size_vw?: number;
 
     command_run: (command: SketchCommand) => void;
 
@@ -27,13 +27,15 @@ export interface CommandTrayOptionProps {
 const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
     useKeyHandler(() => { if (!props.disabled) props.command_run(props.value); }, props.keybind);
 
+    const box_size_vw = props.box_size_vw ?? 2.5;
+
     return (
         <button
             className="tray-option command-tray-option"
 
             style={{
-                width: props.size ?? 20,
-                height: props.size ?? 20,
+                width: `${box_size_vw}vw`,
+                height: `${box_size_vw}vw`,
 
                 padding: 0,
 
@@ -53,8 +55,15 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
             <Image
                 className="tray-option-icon command-tray-option-icon"
 
-                width={(props.size ?? 20) * 0.6}
-                height={(props.size ?? 20) * 0.6} // TODO: these values are made smaller than tools since the command icons are larger. revert once icons are consistent
+                // TODO: these values are made smaller than tools since the command icons are larger. revert once icons are consistent
+                style={{
+                    width: `${box_size_vw * 0.6}vw`,
+                    height: `${box_size_vw * 0.6}vw`,
+                }}
+
+                // rendered size. not the same as viewport size. //TODO: adjust reasonably, otherwise no point using svg
+                width={box_size_vw}
+                height={box_size_vw}
 
                 aria-hidden="true"
                 alt=""
@@ -68,7 +77,10 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
                 style={{
                     position: "absolute",
                     top: 0,
-                    right: 1 // TODO: better keyboard style
+                    right: `${box_size_vw / 20}vw`,
+
+                    fontSize: `${box_size_vw / 3}vw`,
+                    verticalAlign: "super"
                 }}
 
                 aria-hidden="true"
@@ -83,3 +95,4 @@ export default CommandTrayOption;
 
 // TODO: unify with color tray option, perhaps with a generic tray option component and extend it
 // TODO: consider moving <kbd> to side panel, if we decide to display scroll wheel keybinds there
+// TODO: at least unify similar elements in each option to their own components

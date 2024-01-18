@@ -7,7 +7,7 @@ export interface ColorTrayOptionProps {
     name: string;
     value: HexColor;
 
-    size?: number;
+    box_size_vw?: number;
 
     current_color: HexColor;
 
@@ -46,6 +46,10 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
         classes += " color-tray-option-selected tray-option-selected";
     }
 
+    // TODO: should class stuff be in effect?
+
+    const box_size_vw = props.box_size_vw ?? 2.5;
+
 
     return (
         <button
@@ -59,8 +63,8 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
             style={{
                 backgroundColor: props.value,
 
-                width: props.size ?? 20,
-                height: props.size ?? 20
+                width: `${box_size_vw}vw`,
+                height: `${box_size_vw}vw`,
             }}
 
             onClick={() => props.color_change_handler(props.value)}

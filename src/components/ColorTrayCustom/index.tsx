@@ -8,7 +8,7 @@ import { HexColor } from "../ColorTrayOption";
 
 export interface ColorTrayCustomProps {
     current_color: HexColor;
-    tool_box_size: number;
+    box_size_vw: number;
     on_color_change: (color: HexColor) => void;
 }
 
@@ -30,15 +30,15 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
         <div
             className={styles.container + " color-tray-custom-container"}
             style={{
-                marginLeft: props.tool_box_size / 10,
+                marginLeft: `${props.box_size_vw / 4}vw`,
             }}
         >
             <input
                 className={styles.input + " color-tray-custom-input color-tray-option tray-option"}
 
                 style={{
-                    width: props.tool_box_size,
-                    height: props.tool_box_size,
+                    width: `${props.box_size_vw}vw`,
+                    height: `${props.box_size_vw}vw`,
                 }}
 
                 type="color"
@@ -52,14 +52,18 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
             <Image
                 className={styles.overlay + " color-tray-custom-overlay"}
                 style={{
-                    width: props.tool_box_size / 2,
-                    height: props.tool_box_size / 2,
+                    width: `${props.box_size_vw / 2}vw`,
+                    height: `${props.box_size_vw / 2}vw`,
 
-                    top: props.tool_box_size / 4,
-                    left: props.tool_box_size / 4,
+                    top: `${props.box_size_vw / 4}vw`,
+                    left: `${props.box_size_vw / 4}vw`,
 
                     filter: `invert(${picker_invert_value}) drop-shadow(0px 0px 1px #222)`,
                 }}
+
+                // rendered size. not the same as viewport size. //TODO: adjust reasonably, otherwise no point using svg
+                width={props.box_size_vw}
+                height={props.box_size_vw}
 
                 aria-hidden="true"
                 alt=""

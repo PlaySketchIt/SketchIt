@@ -13,7 +13,7 @@ const tool_icons = {
 
 export interface ToolTrayOptionProps {
     value: SketchTool;
-    size?: number;
+    box_size_vw?: number;
 
     current_tool: SketchTool;
 
@@ -27,13 +27,15 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
 
     const classes = props.value === props.current_tool ? "tool-tray-option tool-tray-option-selected tray-option tray-option-selected" : "tool-tray-option tray-option";
 
+    const box_size_vw = props.box_size_vw ?? 2.5;
+
     return (
         <button
             className={classes}
 
             style={{
-                width: props.size ?? 20,
-                height: props.size ?? 20,
+                width: `${box_size_vw}vw`,
+                height: `${box_size_vw}vw`,
 
                 padding: 0,
 
@@ -51,8 +53,14 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
             <Image
                 className="tray-option-icon tool-tray-option-icon"
 
-                width={(props.size ?? 20) * 0.75}
-                height={(props.size ?? 20) * 0.75}
+                style ={{
+                    width: `${box_size_vw * 0.7}vw`,
+                    height: `${box_size_vw * 0.7}vw`,
+                }}
+
+                // rendered size. not the same as viewport size. //TODO: adjust reasonably, otherwise no point using svg
+                width={box_size_vw}
+                height={box_size_vw}
 
                 aria-hidden="true"
                 alt=""
@@ -66,7 +74,10 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
                 style={{
                     position: "absolute",
                     top: 0,
-                    right: 1 // TODO: better keyboard style
+                    right: `${box_size_vw / 20}vw`,
+                    
+                    fontSize: `${box_size_vw / 3}vw`,
+                    fontFamily: "monospace",
                 }}
 
                 aria-hidden="true"
