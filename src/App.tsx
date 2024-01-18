@@ -21,11 +21,11 @@ function App() {
 
           fill_tolerance={40}
 
-          scroll_step={1} // TODO: separate scroll wheel step from input knob step?
+          scroll_step={1} // TODO:lib: separate scroll wheel step from input knob step?
 
-          pressure_modifier={5} // TODO: could be user defined. perhaps by a nice curve editor?
+          pressure_modifier={5} // TODO:feat: could be user defined. perhaps by a nice curve editor?
 
-          undo_steps={50} // TODO: should this be limited? don't want to be using loads of memory in the background if the user does more than 50 things. each step is a full canvas image. profiling shows that 50 steps uses ~110MB of memory, so it's not too bad but still a bit
+          undo_steps={50} // TODO:ux: should this be limited? don't want to be using loads of memory in the background if the user does more than 50 things. each step is a full canvas image. profiling shows that 50 steps uses ~110MB of memory, so it's not too bad but still a bit
         />
     </>
   );
@@ -35,12 +35,12 @@ export default App;
 
 // radius values are now with respect to the canvas size, so should be consistent across screen sizes
 
-// TODO: i18n integration
-// TODO: remove as much inline styling as possible so it can be overridden without !important, unless strictly necessary or dynamic.
-// TODO: remove keybind labels from buttons on mobile
-// TODO: should some effects dependent on prop/state changes be removed. seems more efficient to use them but perhaps that's not the case: https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
-// TODO: input sizing and picker swatch shape not consistent on ios safari, because of course it isnt. border dashing is thinner on ios too
-// TODO: don't bother using dyncursor if device is touch screen
+// TODO:ux: i18n integration
+// TODO:structure: remove as much inline styling as possible so it can be overridden without !important, unless strictly necessary or dynamic.
+// TODO:ux: remove keybind labels from buttons on mobile
+// TODO:perf: should some effects dependent on prop/state changes be removed? seems more efficient to use them but perhaps that's not the case: https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+// TODO:ux: input sizing and picker swatch shape not consistent on ios safari, because of course it isnt. border dashing is thinner on ios too
+// TODO:ux: don't bother using dyncursor if device is touch screen
 
 // monetisation ideas:
 // - ad frames (blegh)

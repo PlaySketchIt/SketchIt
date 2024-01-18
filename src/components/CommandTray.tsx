@@ -28,6 +28,6 @@ const CommandTray: React.FC<CommandTrayProps> = (props) => {
 
 export default CommandTray;
 
-// TODO: unite labelled slider input into a single component
-// TODO: unite trays into a single component
-// TODO: configurable keybinds. support key combos?
+// TODO:structure: unite labelled slider input into a single component
+// TODO:structure: unite trays into a single component
+// TODO:feat: configurable keybinds. support key combos?

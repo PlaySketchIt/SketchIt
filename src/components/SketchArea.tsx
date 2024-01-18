@@ -9,7 +9,7 @@ import type { HexColor } from "./ColorTrayOption";
 
 export interface SketchAreaProps extends Omit<SketchCanvasProps, "alpha" | "fg_color" | "current_tool"> {
     scroll_step?: number;
-    tolerance_step?: number; // TODO: decide whether scroll should affect tolerance if fill selected. change props to reflect that
+    tolerance_step?: number; // TODO:ux: decide whether scroll should affect tolerance if fill selected. change props to reflect that
 }
 
 const SketchArea: React.FC<SketchAreaProps> = (props) => {
@@ -17,7 +17,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     const max_radius = props.max_radius ?? 10;
 
     const [brush_radius, setBrushRadius] = useState<number>(props.brush_radius);
-    const [fg_color, setFgColor] = useState<HexColor>("#000000"); // TODO: possibly have configurable default color
+    const [fg_color, setFgColor] = useState<HexColor>("#000000"); // TODO:lib: possibly have configurable default color
     const [alpha, setAlpha] = useState<number>(1);
 
     const [fill_tolerance, setFillTolerance] = useState<number>(props.fill_tolerance);
@@ -91,7 +91,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     }, [tolerance_loaded]);
 
     // effect: save brush radius to local storage on change
-    // TODO: would be more efficient if it only ran on unmount, but don't know how to do that (since we must pass brush_radius) could just call the method when the parent decides to unmount
+    // TODO:perf: would be more efficient if it only ran on unmount, but don't know how to do that (since we must pass brush_radius) could just call the method when the parent decides to unmount
     useEffect(() => {
         if (!radius_loaded) return;
 
@@ -99,7 +99,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     }, [brush_radius, radius_loaded]);
 
     // effect: save fill tolerance to local storage on change
-    // TODO: would be more efficient if it only ran on unmount, but don't know how to do that (since we must pass fill_tolerance). could just call the method when the parent decides to unmount
+    // TODO:perf: would be more efficient if it only ran on unmount, but don't know how to do that (since we must pass fill_tolerance). could just call the method when the parent decides to unmount
     useEffect(() => {
         if (!tolerance_loaded) return;
 

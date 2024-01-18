@@ -123,8 +123,8 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
 
 export default ToolTray;
 
-// TODO: unite labelled slider input into a single component
-// TODO: clearer input switch mechanism
-// TODO: double click to reset slider value (do same for alpha). need to save default values somewhere as prop will be overwritten.
-// TODO: configurable keybinds. support key combos?
-// TODO: bind for alpha slider
+// TODO:structure: unite labelled slider input into a single component
+// TODO:structure: clearer way to represent with components that the slider inputs switch between radius and tolerance
+// TODO:feat: double click to reset slider value (do same for alpha). need to save default values somewhere as prop will be overwritten.
+// TODO:feat: support key combos? key config?
+// TODO:ux: display binds for alpha slider

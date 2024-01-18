@@ -49,7 +49,7 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
             <Image
                 className="tray-option-icon command-tray-option-icon"
 
-                // TODO: these values are made smaller than tools since the command icons are larger. revert once icons are consistent
+                // TODO:other: these values are made smaller than tools since the command icons are larger. revert once icons are consistent
                 // additionally, bin icon made even smaller since the icon is larger than the others
 
                 style={{
@@ -59,10 +59,10 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
                     left: "calc(var(--tool-box-size) / 10)",
 
                     width: `${(props.value === "clear" ? 45 : 50)}%`,
-                    height: `${(props.value === "clear" ? 45 : 50)}%`,  // TODO: i'm not a huge fan of the reduced scale icons, but it makes the keybinds more visible. maybe make the keybinds part of the icon then this can be reverted. or perhaps toggleable?
+                    height: `${(props.value === "clear" ? 45 : 50)}%`,  // TODO:ux: i'm not a huge fan of the reduced scale icons, but it makes the keybinds more visible. maybe make the keybinds part of the icon then this can be reverted. or perhaps toggleable?
                 }}
 
-                // TODO: calculate good render size (width and height props directly on image). or see if it supports svg properly?
+                // TODO:ux: calculate good render size (width and height props directly on image). or see if it supports svg properly?
                 width={250}
                 height={250}
 
@@ -94,6 +94,6 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
 
 export default CommandTrayOption;
 
-// TODO: unify with color tray option, perhaps with a generic tray option component and extend it
-// TODO: consider moving <kbd> to side panel, if we decide to display scroll wheel keybinds there
-// TODO: at least unify similar elements in each option to their own components
+// TODO:structure: unify with color tray option, perhaps with a generic tray option component and extend it
+// TODO:ux: consider moving <kbd> to side panel, if we decide to display scroll wheel keybinds there
+// TODO:structure: at least unify similar elements in each option to their own components

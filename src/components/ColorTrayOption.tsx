@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 export type HexColor = `#${string}`;
-// TODO: put in common file
+// TODO:structure: put in common file
 
 export interface ColorTrayOptionProps {
     name: string;
@@ -21,7 +21,7 @@ const calculate_luminance = (color: HexColor) => {
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };
 
-// TODO: unite with method in ColorTrayCustom.tsx, cant export from either so must be in a separate file
+// TODO:structure: unite with method in ColorTrayCustom.tsx, cant export from either so must be in a separate file
 
 const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
     // effect: check value is in hex format without alpha
@@ -32,7 +32,7 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
     }, [props.value]);
 
     const is_light_color = calculate_luminance(props.value) > 0.5;
-    // TODO: sync with threshold in ColorTray.tsx
+    // TODO:perf: sync with threshold in ColorTray.tsx
 
     let classes = "color-tray-option tray-option";
 
@@ -44,7 +44,7 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
         classes += " color-tray-option-selected tray-option-selected";
     }
 
-    // TODO: should class stuff be in effect?
+    // TODO:perf: should class stuff be in effect?
 
     return (
         <button
@@ -70,4 +70,4 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
 
 export default ColorTrayOption;
 
-// TODO: tooltip using names
+// TODO:ux: tooltip using names

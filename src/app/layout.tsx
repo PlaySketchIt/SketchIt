@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     metadataBase: BASE_URL,
 
     title: {
-        template: "%s | Sketch It!", // TODO: use when required: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#title
+        template: "%s | Sketch It!", // TODO:ux: use when required: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#title
         default: "Sketch It!",
     },
     applicationName: "Sketch It!",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
                 url: brush_icon.src,
                 width: 512,
                 height: 512,
-                alt: "Sketch It! (logo)", // TODO: proper og images
+                alt: "Sketch It! (logo)", // TODO:ux: proper og images
             },
         ],
     },
@@ -70,8 +70,8 @@ export const metadata: Metadata = {
         // site: "@site_account",
         // siteId: "@site_account",
         // creator: "@creator_account",
-        // creatorId: "@creator_account", // TODO: fill out? could also link to mastodon account
-        images: [brush_icon.src], // TODO: proper twitter card images
+        // creatorId: "@creator_account", // TODO:other: fill out? could also link to mastodon account
+        images: [brush_icon.src], // TODO:ux: proper twitter card images
     },
 
     formatDetection: {

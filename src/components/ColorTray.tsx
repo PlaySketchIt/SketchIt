@@ -28,7 +28,7 @@ const ColorTrayRow: React.FC<{ children?: React.ReactNode }> = (props) => {
 
 
 const ColorTray: React.FC<ColorTrayProps> = (props) => {
-    useKeyHandler(() => { setCurrentAlpha(current_alpha - 0.05); }, "a"); // TODO: step and binds on props
+    useKeyHandler(() => { setCurrentAlpha(current_alpha - 0.05); }, "a"); // TODO:lib: step and binds on props
     useKeyHandler(() => { setCurrentAlpha(current_alpha + 0.05); }, "d");
 
     // effect: check value is in hex format without alpha
@@ -70,7 +70,7 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                     flexDirection: "column"
                 }}
             >
-                {/* TODO: more graceful way to do this. perhaps a simple dict that gets generated */}
+                {/* TODO:lib/structure: more graceful way to do this. perhaps a simple dict that gets generated */}
                 <ColorTrayRow>
                     <ColorTrayOption name="black" value="#000000" color_change_handler={setCurrentColor} current_color={current_color} />
                     <ColorTrayOption name="white" value="#ffffff" color_change_handler={setCurrentColor} current_color={current_color} />
@@ -138,6 +138,6 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
 
 export default ColorTray;
 
-// TODO: i18n
-// TODO: color keybinds? keybind to open picker?
-// TODO: ability to save custom colors. could also have alpha presets. could either replace existing tray options or be a separate tray. or perhaps show near picker
+// TODO:ux: i18n
+// TODO:feat: color keybinds? keybind to open picker?
+// TODO:feat: ability to save custom colors. could also have alpha presets. could either replace existing tray options or be a separate tray. or perhaps show near picker

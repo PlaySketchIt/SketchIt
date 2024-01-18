@@ -22,8 +22,8 @@ const calculate_luminance = (color: HexColor) => {
 };
 
 const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
-    // TODO: should color be validated? or do we just trust the parent component?
-    const picker_invert_value = calculate_luminance(props.current_color) > 0.5 ? "0%" : "100%"; // TODO: configurable threshold + shadow amount.
+    // TODO:safety: should color be validated? or do we just trust the parent component?
+    const picker_invert_value = calculate_luminance(props.current_color) > 0.5 ? "0%" : "100%"; // TODO:lib: configurable threshold + shadow amount.
 
     return (
         <div
@@ -65,7 +65,7 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
                     filter: `invert(${picker_invert_value}) drop-shadow(0px 0px 1px #222)`,
                 }}
 
-                // TODO: calculate good render size (width and height props directly on image). or see if it supports svg properly?
+                // TODO:ux: calculate good render size (width and height props directly on image). or see if it supports svg properly?
                 width={250}
                 height={250}
 
@@ -83,4 +83,4 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
 
 export default ColorTrayCustom;
 
-// TODO: convert other components to directories and replace inline styles with modules
+// TODO:structure: convert other components to directories and replace inline styles with modules

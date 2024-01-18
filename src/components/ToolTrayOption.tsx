@@ -54,10 +54,10 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
                     left: "calc(var(--tool-box-size) / 10)",
 
                     width: "55%",
-                    height: "55%", // TODO: i'm not a huge fan of the reduced scale icons, but it makes the keybinds more visible. maybe make the keybinds part of the icon then this can be reverted. or perhaps toggleable?
+                    height: "55%", // TODO:ux: i'm not a huge fan of the reduced scale icons, but it makes the keybinds more visible. maybe make the keybinds part of the icon then this can be reverted. or perhaps toggleable?
                 }}
 
-                // TODO: calculate good render size (width and height props directly on image). or see if it supports svg properly?
+                // TODO:ux: calculate good render size (width and height props directly on image). or see if it supports svg properly?
                 width={250}
                 height={250}
 
@@ -88,6 +88,5 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
 
 export default ToolTrayOption;
 
-// TODO: unify with color and command tray option
-// TODO: hotkeys
-// TODO: hotkeys for opacity control
+// TODO:structure: unify with color and command tray option
+
