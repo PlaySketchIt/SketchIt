@@ -1,0 +1,24 @@
+/* laptop */
+@media only screen and (max-width : 1200px) {}
+
+/* tablet */
+@media only screen and (max-width : 768px) {}
+
+/* mobile - large */
+@media only screen and (max-width : 480px) {
+    body {
+        align-items: flex-start;
+    }
+
+    .sketch-area {
+        margin-top: 1vh;
+        width: 95vw;
+    }
+
+    .sketch-trays {
+        flex-direction: column;
+    }
+}
+
+/* mobile - small */
+@media only screen and (max-width : 320px) {}

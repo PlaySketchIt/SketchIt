@@ -115,7 +115,6 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
             className="sketch-area"
             style={{
                 display: "flex",
-                flexDirection: "column",
             }}
             onWheel={on_scroll_wheel}>
             <SketchCanvas
@@ -144,10 +143,6 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
                 className="sketch-trays"
                 style={{
                     display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-
                     gap: `${tool_box_size_vw * 1.5}vw`,
                 }}
             >

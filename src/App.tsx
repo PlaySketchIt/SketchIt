@@ -1,11 +1,10 @@
 import "./App.css";
+import "./App.media.css";
 import SketchArea from "./components/SketchArea";
 
 // dimensions affect image size. viewport size should be applied to sketch area, and canvas will scale to fit it
 const WIDTH = 1280;
 const HEIGHT = 720;
-
-// TODO: mobile layout. i like the way skribbl does it compared to gartic's scrolling canvas (which nobody realises exists)
 
 function App() {
   return (
