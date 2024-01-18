@@ -1,5 +1,7 @@
 import { forwardRef, useRef, useEffect, useState, useCallback, useImperativeHandle } from "react";
 
+import { useTranslation } from "react-i18next";
+
 import FloodFill from "q-floodfill";
 
 import type { HexColor } from "../ColorTrayOption";
@@ -42,6 +44,8 @@ export interface SketchCanvasRef {
 }
 
 const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref) => {
+    const { t } = useTranslation();
+
     // effect: check color is in correct hex format
     useEffect(() => {
         if (!props.fg_color.match(/^#[0-9a-fA-F]{6}$/)) {
@@ -455,7 +459,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
                     touchAction: "pinch-zoom"
                 }}
 
-                aria-label="drawing canvas"
+                aria-label={t("aria label.canvas to draw on")}
             />
         </div>
     );

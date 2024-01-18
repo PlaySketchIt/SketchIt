@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 
+import { useTranslation } from "react-i18next";
+
 export type HexColor = `#${string}`;
 // TODO:structure: put in common file
 
 export interface ColorTrayOptionProps {
-    name: string;
+    name_key: string;
     value: HexColor;
 
     current_color: HexColor;
@@ -24,6 +26,8 @@ const calculate_luminance = (color: HexColor) => {
 // TODO:structure: unite with method in ColorTrayCustom.tsx, cant export from either so must be in a separate file
 
 const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
+    const { t } = useTranslation();
+
     // effect: check value is in hex format without alpha
     useEffect(() => {
         if (!props.value.match(/^#[0-9a-fA-F]{6}$/)) {
@@ -50,9 +54,11 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
         <button
             className={classes}
 
-            aria-label={"select " + props.name + " color"}
+            // TODO:ux: should these be fully self contained strings? will order change in some languages if color name is different?
+            // TODO:structure: clean up
+            aria-label={t(props.value === props.current_color ? "aria label.select color current" : "aria label.select color", { color: t("color." + props.name_key) })}
 
-            data-color-name={props.name}
+            data-color-name={props.name_key}
             data-color-value={props.value}
 
             style={{

@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { useTranslation } from "react-i18next";
+
 import { SketchCommand } from "./SketchCanvas";
 import useKeyHandler from "../hooks/useKeyHandler";
 
@@ -21,6 +23,8 @@ export interface CommandTrayOptionProps {
 }
 
 const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
+    const { t } = useTranslation();
+
     useKeyHandler(() => { if (!props.disabled) props.command_run(props.value); }, props.keybind);
 
     return (
@@ -42,7 +46,9 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
 
             onClick={() => props.command_run(props.value)}
 
-            aria-label={`run ${props.value} command${props.disabled ? " (disabled)" : ""} [keybind: ${props.keybind}]`}
+            // TODO:ux: should these be fully self contained strings? will order change in some languages if command name is different?
+            // TODO:structure: clean up
+            aria-label={t(props.disabled ? "aria label.run command disabled" : "aria label.run command", { cmd: t("command." + props.value), key: props.keybind })}
 
             disabled={props.disabled ?? false}
         >

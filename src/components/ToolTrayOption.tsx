@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { useTranslation } from "react-i18next";
+
 import { SketchTool } from "./SketchCanvas";
 import useKeyHandler from "../hooks/useKeyHandler";
 
@@ -19,6 +21,8 @@ export interface ToolTrayOptionProps {
 }
 
 const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
+    const { t } = useTranslation();
+
     useKeyHandler(() => { if (props.current_tool !== props.value) props.tool_change(props.value); }, props.keybind);
 
     const classes = props.value === props.current_tool ? "tool-tray-option tool-tray-option-selected tray-option tray-option-selected" : "tool-tray-option tray-option";
@@ -40,7 +44,9 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
                 position: "relative"
             }}
 
-            aria-label={`select ${props.value} tool${props.current_tool === props.value ? " (current)" : ""} [keybind: ${props.keybind}]`}
+            // TODO:ux: should these be fully self contained strings? will order change in some languages if tool name is different?
+            // TODO:structure: clean up
+            aria-label={t(props.current_tool === props.value ? "aria label.select tool current" : "aria label.select tool", { tool: t("tool." + props.value), key: props.keybind })}
 
             onClick={() => props.tool_change(props.value)}
         >

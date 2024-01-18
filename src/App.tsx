@@ -1,6 +1,27 @@
+import resourcesToBackend from "i18next-resources-to-backend";
 import "./App.css";
 import "./App.media.css";
 import SketchArea from "./components/SketchArea";
+
+import i18n from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import { initReactI18next } from "react-i18next";
+
+
+// setup i18n
+i18n
+  .use(resourcesToBackend((lng: string, ns: string) => import(`./i18n/${lng}/${ns}.json`)))
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    defaultNS: "app",
+    fallbackLng: "en-GB",
+    debug: process.env.NODE_ENV === "development",
+    interpolation: {
+      escapeValue: false, // react already handles this
+    },
+  });
+
 
 // dimensions affect image size. viewport size should be applied to sketch area, and canvas will scale to fit it
 const WIDTH = 1280;
@@ -9,24 +30,24 @@ const HEIGHT = 720;
 function App() {
   return (
     <>
-        <SketchArea
-          background="#fff"
+      <SketchArea
+        background="#fff"
 
-          width={WIDTH}
-          height={HEIGHT}
+        width={WIDTH}
+        height={HEIGHT}
 
-          min_radius={2}
-          max_radius={25}
-          brush_radius={5}
+        min_radius={2}
+        max_radius={25}
+        brush_radius={5}
 
-          fill_tolerance={40}
+        fill_tolerance={40}
 
-          scroll_step={1} // TODO:lib: separate scroll wheel step from input knob step?
+        scroll_step={1} // TODO:lib: separate scroll wheel step from input knob step?
 
-          pressure_modifier={5} // TODO:feat: could be user defined. perhaps by a nice curve editor?
+        pressure_modifier={5} // TODO:feat: could be user defined. perhaps by a nice curve editor?
 
-          undo_steps={50} // TODO:ux: should this be limited? don't want to be using loads of memory in the background if the user does more than 50 things. each step is a full canvas image. profiling shows that 50 steps uses ~110MB of memory, so it's not too bad but still a bit
-        />
+        undo_steps={50} // TODO:ux: should this be limited? don't want to be using loads of memory in the background if the user does more than 50 things. each step is a full canvas image. profiling shows that 50 steps uses ~110MB of memory, so it's not too bad but still a bit
+      />
     </>
   );
 }

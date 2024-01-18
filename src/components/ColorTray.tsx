@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 
+import { useTranslation } from "react-i18next";
+
 import ColorTrayOption, { HexColor } from "./ColorTrayOption";
 import ColorTrayCustom from "./ColorTrayCustom";
 import useKeyHandler from "../hooks/useKeyHandler";
-
 
 export interface ColorTrayProps {
     init_color: HexColor;
@@ -28,6 +29,8 @@ const ColorTrayRow: React.FC<{ children?: React.ReactNode }> = (props) => {
 
 
 const ColorTray: React.FC<ColorTrayProps> = (props) => {
+    const { t } = useTranslation();
+
     useKeyHandler(() => { setCurrentAlpha(current_alpha - 0.05); }, "a"); // TODO:lib: step and binds on props
     useKeyHandler(() => { setCurrentAlpha(current_alpha + 0.05); }, "d");
 
@@ -72,30 +75,30 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
             >
                 {/* TODO:lib/structure: more graceful way to do this. perhaps a simple dict that gets generated */}
                 <ColorTrayRow>
-                    <ColorTrayOption name="black" value="#000000" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="white" value="#ffffff" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="red" value="#ff2020" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="green" value="#10ff40" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="blue" value="#0096ff" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="orange" value="#ffa500" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="dark brown" value="#8b4513" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="lemon yellow" value="#fff44f" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="magenta" value="#f432ff" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="dark green" value="#006400" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="dust" value="#e5aa70" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="black" value="#000000" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="white" value="#ffffff" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="red" value="#ff2020" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="light green" value="#10ff40" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="blue" value="#0096ff" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="orange" value="#ffa500" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="dark brown" value="#8b4513" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="lemon yellow" value="#fff44f" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="magenta" value="#f432ff" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="dark green" value="#006400" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="dusty beige" value="#e5aa70" color_change_handler={setCurrentColor} current_color={current_color} />
                 </ColorTrayRow>
                 <ColorTrayRow>
-                    <ColorTrayOption name="dark gray" value="#444444" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="gray" value="#888888" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="salmon" value="#ff8c69" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="chartreuse" value="#7fff33" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="cyan" value="#00ffff" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="ochre" value="#d27d2d" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="coffee brown" value="#a0522d" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="mustard yellow" value="#f4c430" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="violet" value="#cf9fff" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="mint" value="#90ee90" color_change_handler={setCurrentColor} current_color={current_color} />
-                    <ColorTrayOption name="cream" value="#f2d2bd" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="dark gray" value="#444444" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="light gray" value="#888888" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="salmon" value="#ff8c69" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="chartreuse" value="#7fff33" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="cyan" value="#00ffff" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="ochre" value="#d27d2d" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="coffee brown" value="#a0522d" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="mustard yellow" value="#f4c430" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="violet" value="#cf9fff" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="mint green" value="#90ee90" color_change_handler={setCurrentColor} current_color={current_color} />
+                    <ColorTrayOption name_key="cream" value="#f2d2bd" color_change_handler={setCurrentColor} current_color={current_color} />
                 </ColorTrayRow>
             </div>
 
@@ -112,7 +115,7 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                     fontSize: "calc(var(--tool-box-size) / 3)",
                 }}
             >
-                Alpha:
+                {t("ui label.alpha slider")}
 
                 <input
                     className="color-tray-alpha"

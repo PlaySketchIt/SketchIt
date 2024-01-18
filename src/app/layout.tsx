@@ -19,6 +19,7 @@ export const viewport: Viewport = {
     themeColor: "#27496e",
 };
 
+// TODO:ux: use a metadata generation method to integrate with i18n
 export const metadata: Metadata = {
     metadataBase: BASE_URL,
 

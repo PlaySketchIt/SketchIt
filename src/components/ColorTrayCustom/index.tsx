@@ -1,6 +1,8 @@
 
 import Image from "next/image";
 
+import { useTranslation } from "react-i18next";
+
 import styles from "./ColorTrayCustom.module.css";
 import picker_icon from "../../assets/icons/picker.svg";
 
@@ -22,6 +24,8 @@ const calculate_luminance = (color: HexColor) => {
 };
 
 const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
+    const { t } = useTranslation();
+
     // TODO:safety: should color be validated? or do we just trust the parent component?
     const picker_invert_value = calculate_luminance(props.current_color) > 0.5 ? "0%" : "100%"; // TODO:lib: configurable threshold + shadow amount.
 
@@ -49,7 +53,7 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
                 // assumption made
                 onChange={(e) => props.on_color_change(e.target.value as HexColor)}
 
-                aria-label="select custom color"
+                aria-label={t("aria label.select custom color using picker")}
             />
             <Image
                 className={styles.overlay + " color-tray-custom-overlay"}

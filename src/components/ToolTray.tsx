@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { useTranslation } from "react-i18next";
+
 import { SketchTool } from "./SketchCanvas";
 import ToolTrayOption from "./ToolTrayOption";
 
@@ -22,6 +24,8 @@ export interface ToolTrayProps {
 }
 
 const ToolTray: React.FC<ToolTrayProps> = (props) => {
+    const { t } = useTranslation();
+
     const min_tolerance = props.min_tolerance ?? 0;
     const max_tolerance = props.max_tolerance ?? 254;
 
@@ -62,7 +66,7 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     width: "calc(var(--tool-box-size) * 2.5)",
                 }}
             >
-                Brush Radius:
+                {t("ui label.brush radius slider")}
 
                 <input
                     className="tool-tray-radius"
@@ -97,7 +101,7 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     width: "calc(var(--tool-box-size) * 2.5)",
                 }}
             >
-                Fill Tolerance:
+                {t("ui label.fill tolerance slider")}
 
                 <input
                     className="tool-tray-tolerance"
