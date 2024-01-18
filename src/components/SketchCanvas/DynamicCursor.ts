@@ -19,6 +19,7 @@ class DynamicCursor {
     #inner_circle: SVGCircleElement;
 
     #inner_stroke_width: number;
+    #outer_stroke_width: number;
 
     constructor(props?: DynamicCursorProps) {
         if (!props) props = {};
@@ -34,6 +35,7 @@ class DynamicCursor {
         // TODO: should strokes be inverted. as in, should inner circle fit to radius then outer circle added on top.
         // right now the extent of the outer circle is the radius of the brush, but would it make more sense for the inner circle to be the radius of the brush?
         this.#inner_stroke_width = props.inner_stroke_width;
+        this.#outer_stroke_width = props.outer_stroke_width;
 
         // needs to fit the diameter of the circle and stroke
         const svg_length = props.max_radius * 2 + props.outer_stroke_width * 2;
@@ -77,6 +79,19 @@ class DynamicCursor {
     }
 
     set_outer_stroke_width(stroke_width: number) {
+        // if size is too small to fit, expand the svg, adjusting center
+        if (stroke_width * 2 + this.#outer_stroke_width * 2 > Number(this.#svg.getAttribute("width"))) {
+            const svg_length = stroke_width * 2 + this.#outer_stroke_width * 2;
+            this.#svg.setAttribute("width", String(svg_length));
+            this.#svg.setAttribute("height", String(svg_length));
+
+            this.#outer_circle.setAttribute("cx", String(svg_length / 2));
+            this.#outer_circle.setAttribute("cy", String(svg_length / 2));
+
+            this.#inner_circle.setAttribute("cx", String(svg_length / 2));
+            this.#inner_circle.setAttribute("cy", String(svg_length / 2));
+        }
+
         this.#outer_circle.setAttribute("stroke-width", String(stroke_width));
     }
 
@@ -89,6 +104,19 @@ class DynamicCursor {
     }
 
     set_radius(radius: number) {
+        // if size is too small to fit, expand the svg, adjusting center
+        if (radius * 2 + this.#outer_stroke_width * 2 > Number(this.#svg.getAttribute("width"))) {
+            const svg_length = radius * 2 + this.#outer_stroke_width * 2;
+            this.#svg.setAttribute("width", String(svg_length));
+            this.#svg.setAttribute("height", String(svg_length));
+
+            this.#outer_circle.setAttribute("cx", String(svg_length / 2));
+            this.#outer_circle.setAttribute("cy", String(svg_length / 2));
+
+            this.#inner_circle.setAttribute("cx", String(svg_length / 2));
+            this.#inner_circle.setAttribute("cy", String(svg_length / 2));
+        }
+
         this.#outer_circle.setAttribute("r", String(radius));
         this.#inner_circle.setAttribute("r", String(radius - this.#inner_stroke_width));
     }
@@ -114,3 +142,5 @@ class DynamicCursor {
 }
 
 export default DynamicCursor;
+
+// expansion calculations now required as the canvas will pass in units scaled to the viewport, which may change. we can't simply use vw.

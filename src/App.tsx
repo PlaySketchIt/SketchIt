@@ -16,13 +16,13 @@ function App() {
           width={WIDTH}
           height={HEIGHT}
 
-          min_radius={1.5}
-          max_radius={20}
+          min_radius={2}
+          max_radius={25}
           brush_radius={5}
 
           fill_tolerance={40}
 
-          scroll_step={0.5}
+          scroll_step={1} // TODO: separate scroll wheel step from input knob step?
 
           pressure_modifier={5} // TODO: could be user defined. perhaps by a nice curve editor?
 
@@ -35,6 +35,8 @@ function App() {
 }
 
 export default App;
+
+// radius values are now with respect to the canvas size, so should be consistent across screen sizes
 
 // TODO: i18n integration
 

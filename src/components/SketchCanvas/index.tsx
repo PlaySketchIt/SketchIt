@@ -58,9 +58,18 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
     const undo_redo_array = useRef(new CanvasUndoRedoArray(props.undo_steps));
 
+    const get_adjusted_radius = useCallback((radius: number) => {
+        // adjust radius to account for canvas scaling
+        const draw_canvas = draw_canvas_ref.current;
+        if (!draw_canvas) return radius;
+
+        const rect = draw_canvas.getBoundingClientRect();
+        return radius * rect.width / draw_canvas.width;
+    }, []);
+
     const cursor = useRef(new DynamicCursor({
         max_radius: max_radius,
-        init_radius: props.brush_radius, // TODO: option to resize based on calculated pressure
+        init_radius: get_adjusted_radius(props.brush_radius), // TODO: option to resize based on calculated pressure
         inner_stroke: "#ffffffaa",
         inner_stroke_width: 1,
         outer_stroke: "#00000080",
@@ -83,12 +92,12 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
         cursor.current.set_fill(props.fg_color);
         cursor.current.set_fill_alpha(props.alpha);
-        cursor.current.set_radius(props.brush_radius);
+        cursor.current.set_radius(get_adjusted_radius(props.brush_radius));
 
         if (draw_canvas_ref.current) {
             draw_canvas_ref.current.style.cursor = cursor.current.as_css_cursor("crosshair");
         }
-    }, [props.fg_color, props.alpha, props.brush_radius, props.current_tool]);
+    }, [props.fg_color, props.alpha, props.brush_radius, props.current_tool, get_adjusted_radius]);
 
     const do_floodfill = (x: number, y: number) => {
         const render_canvas = render_canvas_ref.current;
@@ -160,6 +169,9 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
                 effective_radius = props.brush_radius + (props.pressure_modifier * adjusted_pressure);
             }
+
+            // adjust radius to account for canvas scaling
+            effective_radius = get_adjusted_radius(effective_radius);
 
             const draw = () => {
                 draw_ctx.beginPath();
@@ -303,6 +315,15 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     // effect: run when color/radius/tool/alpha changes to update cursor
     useEffect(() => {
         load_css_cursor();
+    }, [load_css_cursor]);
+
+    // effect: if window width changes, reload cursor to recalculate adjusted radius
+    useEffect(() => {
+        window.addEventListener("resize", load_css_cursor);
+
+        return () => {
+            window.removeEventListener("resize", load_css_cursor);
+        };
     }, [load_css_cursor]);
 
 
