@@ -68,7 +68,10 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
         if (radius_loaded) return;
 
         const radius = localStorage.getItem("brush_radius");
-        if (radius === null) return;
+        if (radius === null) {
+            setRadiusLoaded(true);
+            return;
+        }
 
         setBrushRadius(Number(radius));
         setRadiusLoaded(true);
@@ -79,7 +82,10 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
         if (tolerance_loaded) return;
 
         const tolerance = localStorage.getItem("fill_tolerance");
-        if (tolerance === null) return;
+        if (tolerance === null) {
+            setToleranceLoaded(true);
+            return;
+        }
 
         setFillTolerance(Number(tolerance));
         setToleranceLoaded(true);
