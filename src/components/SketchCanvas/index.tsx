@@ -58,20 +58,18 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
     const undo_redo_array = useRef(new CanvasUndoRedoArray(props.undo_steps));
 
-    const get_adjusted_radius = useCallback((radius: number) => {
-        // adjust radius to account for canvas scaling
+    const get_canvas_adjusted_pixel_value = useCallback((px: number) => {
+        // translate browser pixel size to canvas pixel size
         const draw_canvas = draw_canvas_ref.current;
-        if (!draw_canvas) return radius;
+        if (!draw_canvas) return px;
 
         const rect = draw_canvas.getBoundingClientRect();
-        return radius * rect.width / draw_canvas.width;
-        //return radius * rect.width / document.documentElement.clientWidth;
-        // TODO: which works best? i don't know how well either is working. we don't want to express radius in web px, but rather in terms of the canvas's pixels
+        return px * rect.width / draw_canvas.width;
     }, []);
 
     const cursor = useRef(new DynamicCursor({
         max_radius: max_radius,
-        init_radius: get_adjusted_radius(props.brush_radius), // TODO: option to resize based on calculated pressure
+        init_radius: get_canvas_adjusted_pixel_value(props.brush_radius), // TODO: option to resize based on calculated pressure
         inner_stroke: "#ffffffaa",
         inner_stroke_width: 1,
         outer_stroke: "#00000080",
@@ -94,12 +92,12 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
         cursor.current.set_fill(props.fg_color);
         cursor.current.set_fill_alpha(props.alpha);
-        cursor.current.set_radius(get_adjusted_radius(props.brush_radius));
+        cursor.current.set_radius(get_canvas_adjusted_pixel_value(props.brush_radius));
 
         if (draw_canvas_ref.current) {
             draw_canvas_ref.current.style.cursor = cursor.current.as_css_cursor("crosshair");
         }
-    }, [props.fg_color, props.alpha, props.brush_radius, props.current_tool, get_adjusted_radius]);
+    }, [props.fg_color, props.alpha, props.brush_radius, props.current_tool, get_canvas_adjusted_pixel_value]);
 
     const do_floodfill = (x: number, y: number) => {
         const render_canvas = render_canvas_ref.current;
@@ -173,7 +171,8 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             }
 
             // adjust radius to account for canvas scaling
-            effective_radius = get_adjusted_radius(effective_radius);
+            //effective_radius = get_canvas_adjusted_pixel_value(effective_radius);
+            // no! the radius is already in terms of the canvas! we only want to apply the adjustment to dom elements (i.e. dyncursor)
 
             const draw = () => {
                 draw_ctx.beginPath();
