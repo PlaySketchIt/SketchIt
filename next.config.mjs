@@ -8,6 +8,10 @@ const nextConfig = {
             source: "/privacy",
             destination: "/html/privacy.html",
         },
+        {
+            source: "/tos",
+            destination: "/html/tos.html",
+        },
     ],
 };
 
