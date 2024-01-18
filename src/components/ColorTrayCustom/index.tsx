@@ -8,7 +8,6 @@ import { HexColor } from "../ColorTrayOption";
 
 export interface ColorTrayCustomProps {
     current_color: HexColor;
-    box_size_vw: number;
     on_color_change: (color: HexColor) => void;
 }
 
@@ -30,10 +29,10 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
         <div
             className={styles.container + " color-tray-custom-container"}
             style={{
-                marginLeft: `${props.box_size_vw / 4}vw`,
+                marginLeft: "calc(var(--tool-box-size) / 4)",
                 
-                width: `${props.box_size_vw}vw`,
-                height: `${props.box_size_vw}vw`,
+                width: "var(--tool-box-size)",
+                height: "var(--tool-box-size)",
             }}
         >
             <input
@@ -60,15 +59,15 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
 
                     objectFit: "contain",
 
-                    top: `${props.box_size_vw / 4}vw`,
-                    left: `${props.box_size_vw / 4}vw`,
+                    top: "calc(var(--tool-box-size) / 4)",
+                    left: "calc(var(--tool-box-size) / 4)",
 
                     filter: `invert(${picker_invert_value}) drop-shadow(0px 0px 1px #222)`,
                 }}
 
-                // rendered size. not the same as viewport size. //TODO: adjust reasonably, otherwise no point using svg
-                width={props.box_size_vw}
-                height={props.box_size_vw}
+                // TODO: calculate good render size (width and height props directly on image). or see if it supports svg properly?
+                width={250}
+                height={250}
 
                 aria-hidden="true"
                 alt=""

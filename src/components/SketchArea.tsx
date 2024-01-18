@@ -10,7 +10,6 @@ import type { HexColor } from "./ColorTrayOption";
 export interface SketchAreaProps extends Omit<SketchCanvasProps, "alpha" | "fg_color" | "current_tool"> {
     scroll_step?: number;
     tolerance_step?: number; // TODO: decide whether scroll should affect tolerance if fill selected. change props to reflect that
-    tool_box_size_vw?: number;
 }
 
 const SketchArea: React.FC<SketchAreaProps> = (props) => {
@@ -31,7 +30,6 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     const [can_redo, setCanRedo] = useState<boolean>(false);
 
     const scroll_step = props.scroll_step ?? 1;
-    const tool_box_size_vw = props.tool_box_size_vw ?? 2.5;
 
     const on_scroll_wheel = (e: React.WheelEvent<HTMLDivElement>) => {
         if (current_tool === "fill") return;
@@ -109,7 +107,6 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
     }, [fill_tolerance, tolerance_loaded]);
 
 
-    // TODO: do we need fallback values in EVERY component that uses box_size_vw? or just enforce it is required in child components?
     return (
         <div
             className="sketch-area"
@@ -143,11 +140,9 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
                 className="sketch-trays"
                 style={{
                     display: "flex",
-                    gap: `${tool_box_size_vw * 1.5}vw`,
                 }}
             >
                 <ColorTray
-                    tool_box_size_vw={props.tool_box_size_vw}
                     init_color={fg_color}
                     init_alpha={alpha}
                     on_color_change={setFgColor}
@@ -155,7 +150,6 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
                 />
                 <ToolTray
                     init_tool={current_tool}
-                    tool_box_size_vw={props.tool_box_size_vw}
 
                     min_radius={min_radius}
                     max_radius={max_radius}
@@ -170,7 +164,6 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
                     on_tolerance_change={setFillTolerance}
                 />
                 <CommandTray
-                    tool_box_size_vw={props.tool_box_size_vw}
                     on_command_run={(cmd) => {
                         if (sketch_canvas_ref.current === null) return;
                         sketch_canvas_ref.current.handle_command(cmd);
@@ -185,5 +178,3 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
 };
 
 export default SketchArea;
-
-// TODO: use viewport units

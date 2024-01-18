@@ -2,8 +2,6 @@ import { SketchCommand } from "./SketchCanvas";
 import CommandTrayOption from "./CommandTrayOption";
 
 export interface CommandTrayProps {
-    tool_box_size_vw?: number;
-
     on_command_run: (command: SketchCommand) => void;
 
     can_undo: boolean;
@@ -11,8 +9,6 @@ export interface CommandTrayProps {
 }
 
 const CommandTray: React.FC<CommandTrayProps> = (props) => {
-    const tool_box_size_vw = props.tool_box_size_vw ?? 2.5;
-
     return (
         <div className="command-tray tray"
             style={{
@@ -23,9 +19,9 @@ const CommandTray: React.FC<CommandTrayProps> = (props) => {
                 alignItems: "center",
             }}
         >
-            <CommandTrayOption value="undo" keybind="z" box_size_vw={tool_box_size_vw} command_run={props.on_command_run} disabled={!props.can_undo} />
-            <CommandTrayOption value="redo" keybind="x" box_size_vw={tool_box_size_vw} command_run={props.on_command_run} disabled={!props.can_redo} />
-            <CommandTrayOption value="clear" keybind="c" box_size_vw={tool_box_size_vw} command_run={props.on_command_run} />
+            <CommandTrayOption value="undo" keybind="z" command_run={props.on_command_run} disabled={!props.can_undo} />
+            <CommandTrayOption value="redo" keybind="x" command_run={props.on_command_run} disabled={!props.can_redo} />
+            <CommandTrayOption value="clear" keybind="c" command_run={props.on_command_run} />
         </div>
     );
 };

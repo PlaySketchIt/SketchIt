@@ -1,5 +1,7 @@
 /* style variables */
 :root {
+  --tool-box-size: 2.5vw;
+
   --area-border-color: #222;
 
   --tray-bg-color: #333;
@@ -45,6 +47,8 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  gap: calc(var(--tool-box-size) * 1.5);
 }
 
 .tray-option {

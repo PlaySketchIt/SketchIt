@@ -16,16 +16,12 @@ export interface ToolTrayProps {
     fill_tolerance: number;
     tolerance_step: number;
 
-    tool_box_size_vw?: number;
-
     on_tool_change: (tool: SketchTool) => void;
     on_radius_change: (radius: number) => void;
     on_tolerance_change: (tolerance: number) => void;
 }
 
 const ToolTray: React.FC<ToolTrayProps> = (props) => {
-    const tool_box_size_vw = props.tool_box_size_vw ?? 2.5;
-
     const min_tolerance = props.min_tolerance ?? 0;
     const max_tolerance = props.max_tolerance ?? 254;
 
@@ -49,8 +45,8 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                 alignItems: "center",
             }}
         >
-            <ToolTrayOption value="brush" keybind="b" box_size_vw={tool_box_size_vw} tool_change={setCurrentTool} current_tool={current_tool} />
-            <ToolTrayOption value="fill" keybind="f" box_size_vw={tool_box_size_vw} tool_change={setCurrentTool} current_tool={current_tool} />
+            <ToolTrayOption value="brush" keybind="b" tool_change={setCurrentTool} current_tool={current_tool} />
+            <ToolTrayOption value="fill" keybind="f" tool_change={setCurrentTool} current_tool={current_tool} />
 
             <label
                 className="tool-tray-radius-label-container tray-label-container"
@@ -60,11 +56,10 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "flex-start",
-                    marginLeft: `${tool_box_size_vw / 5}vw`,
-                    fontSize: `${tool_box_size_vw / 3}vw`,
+                    marginLeft: "calc(var(--tool-box-size) / 5)",
+                    fontSize: "calc(var(--tool-box-size) / 3)",
 
-                    width: `${tool_box_size_vw * 2.5}vw`, // consistent with so no shift when changing tool
-                    // TODO: check calculation works at different viewport sizes
+                    width: "calc(var(--tool-box-size) * 2.5)",
                 }}
             >
                 Brush Radius:
@@ -73,8 +68,8 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     className="tool-tray-radius"
 
                     style={{
-                        width: `${tool_box_size_vw * 2}vw`,
-                        height: `${tool_box_size_vw / 2}vw`
+                        width: "calc(var(--tool-box-size) * 2)",
+                        height: "calc(var(--tool-box-size) / 2)",
                     }}
 
                     type="range"
@@ -96,11 +91,10 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "flex-start",
-                    marginLeft: `${tool_box_size_vw / 5}vw`,
-                    fontSize: `${tool_box_size_vw / 3}vw`,
+                    marginLeft: "calc(var(--tool-box-size) / 5)",
+                    fontSize: "calc(var(--tool-box-size) / 3)",
 
-                    width: `${tool_box_size_vw * 2.5}vw` // consistent with so no shift when changing tool
-                    // TODO: check calculation works at different viewport sizes
+                    width: "calc(var(--tool-box-size) * 2.5)",
                 }}
             >
                 Fill Tolerance:
@@ -109,8 +103,8 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     className="tool-tray-tolerance"
 
                     style={{
-                        width: `${tool_box_size_vw * 2}vw`,
-                        height: `${tool_box_size_vw / 2}vw`
+                        width: "calc(var(--tool-box-size) * 2)",
+                        height: "calc(var(--tool-box-size) / 2)",
                     }}
 
                     type="range"

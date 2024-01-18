@@ -13,12 +13,8 @@ const tool_icons = {
 
 export interface ToolTrayOptionProps {
     value: SketchTool;
-    box_size_vw?: number;
-
     current_tool: SketchTool;
-
     tool_change: (tool: SketchTool) => void;
-
     keybind: string;
 }
 
@@ -27,14 +23,12 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
 
     const classes = props.value === props.current_tool ? "tool-tray-option tool-tray-option-selected tray-option tray-option-selected" : "tool-tray-option tray-option";
 
-    const box_size_vw = props.box_size_vw ?? 2.5;
-
     return (
         <button
             className={classes}
 
             style={{
-                width: `${box_size_vw}vw`,
+                width: "var(--tool-box-size)",
                 aspectRatio: 1,
 
                 padding: 0,
@@ -56,16 +50,16 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
                 style ={{
                     position: "absolute",
 
-                    bottom: `${box_size_vw * 0.1}vw`,
-                    left: `${box_size_vw * 0.1}vw`,
+                    bottom: "calc(var(--tool-box-size) / 10)",
+                    left: "calc(var(--tool-box-size) / 10)",
 
                     width: "55%",
                     height: "55%", // TODO: i'm not a huge fan of the reduced scale icons, but it makes the keybinds more visible. maybe make the keybinds part of the icon then this can be reverted. or perhaps toggleable?
                 }}
 
-                // rendered size. not the same as viewport size. //TODO: adjust reasonably, otherwise no point using svg
-                width={box_size_vw}
-                height={box_size_vw}
+                // TODO: calculate good render size (width and height props directly on image). or see if it supports svg properly?
+                width={250}
+                height={250}
 
                 aria-hidden="true"
                 alt=""
@@ -78,11 +72,10 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
                 className="tray-option-keybind tool-tray-option-keybind"
                 style={{
                     position: "absolute",
-                    top: `${box_size_vw / 40}vw`,
-                    right: `${box_size_vw / 40}vw`,
+                    top: "calc(var(--tool-box-size) / 40)",
+                    right: "calc(var(--tool-box-size) / 40)",
 
-                    fontSize: `${box_size_vw / 3.5}vw`,
-                    fontFamily: "monospace",
+                    fontSize: "calc(var(--tool-box-size) / 3.5)",
                 }}
 
                 aria-hidden="true"

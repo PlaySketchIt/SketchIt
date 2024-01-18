@@ -7,8 +7,6 @@ export interface ColorTrayOptionProps {
     name: string;
     value: HexColor;
 
-    box_size_vw?: number;
-
     current_color: HexColor;
 
     color_change_handler: (color: HexColor) => void;
@@ -48,9 +46,6 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
 
     // TODO: should class stuff be in effect?
 
-    const box_size_vw = props.box_size_vw ?? 2.5;
-
-
     return (
         <button
             className={classes}
@@ -63,7 +58,7 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
             style={{
                 backgroundColor: props.value,
 
-                width: `${box_size_vw}vw`,
+                width: "calc(var(--tool-box-size) / 2)",
                 aspectRatio: 1,
             }}
 

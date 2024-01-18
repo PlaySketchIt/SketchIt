@@ -15,26 +15,20 @@ const command_icons = {
 
 export interface CommandTrayOptionProps {
     value: SketchCommand;
-    box_size_vw?: number;
-
     command_run: (command: SketchCommand) => void;
-
     disabled?: boolean;
-
     keybind: string;
 }
 
 const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
     useKeyHandler(() => { if (!props.disabled) props.command_run(props.value); }, props.keybind);
 
-    const box_size_vw = props.box_size_vw ?? 2.5;
-
     return (
         <button
             className="tray-option command-tray-option"
 
             style={{
-                width: `${box_size_vw}vw`,
+                width: "var(--tool-box-size)",
                 aspectRatio: 1,
 
                 padding: 0,
@@ -61,16 +55,16 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
                 style={{
                     position: "absolute",
 
-                    bottom: `${box_size_vw * 0.1}vw`,
-                    left: `${box_size_vw * 0.1}vw`,
+                    bottom: "calc(var(--tool-box-size) / 10)",
+                    left: "calc(var(--tool-box-size) / 10)",
 
                     width: `${(props.value === "clear" ? 45 : 50)}%`,
                     height: `${(props.value === "clear" ? 45 : 50)}%`,  // TODO: i'm not a huge fan of the reduced scale icons, but it makes the keybinds more visible. maybe make the keybinds part of the icon then this can be reverted. or perhaps toggleable?
                 }}
 
-                // rendered size. not the same as viewport size. //TODO: adjust reasonably, otherwise no point using svg
-                width={box_size_vw}
-                height={box_size_vw}
+                // TODO: calculate good render size (width and height props directly on image). or see if it supports svg properly?
+                width={250}
+                height={250}
 
                 aria-hidden="true"
                 alt=""
@@ -84,10 +78,10 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
                 style={{
                     position: "absolute",
 
-                    top: `${box_size_vw / 40}vw`,
-                    right: `${box_size_vw / 40}vw`,
+                    top: "calc(var(--tool-box-size) / 40)",
+                    right: "calc(var(--tool-box-size) / 40)",
 
-                    fontSize: `${box_size_vw / 3.5}vw`,
+                    fontSize: "calc(var(--tool-box-size) / 3.5)",
                 }}
 
                 aria-hidden="true"

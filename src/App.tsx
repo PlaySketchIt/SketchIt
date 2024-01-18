@@ -25,8 +25,6 @@ function App() {
 
           pressure_modifier={5} // TODO: could be user defined. perhaps by a nice curve editor?
 
-          tool_box_size_vw={2.5}
-
           undo_steps={50} // TODO: should this be limited? don't want to be using loads of memory in the background if the user does more than 50 things. each step is a full canvas image. profiling shows that 50 steps uses ~110MB of memory, so it's not too bad but still a bit
         />
     </>
