@@ -70,6 +70,8 @@ export default GameApp;
 // TODO:perf: should some effects dependent on prop/state changes be removed? seems more efficient to use them but perhaps that's not the case: https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
 // TODO:ux: input sizing and picker swatch shape not consistent on ios safari, because of course it isnt. border dashing is thinner on ios too
 // TODO:ux: don't bother using dyncursor if device is touch screen
+// TODO:ux: toggleable tooltips / mode to make them less verbose (i.e. "click to select color: red" -> "red")
+// TODO:structure: make i18n keys in en-gb so less confusing that the default en locale is en-gb
 
 // monetisation ideas:
 // - ad frames (blegh)

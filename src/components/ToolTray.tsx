@@ -61,7 +61,7 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     justifyContent: "center",
                     alignItems: "flex-start",
                     marginLeft: "calc(var(--tool-box-size) / 5)",
-                    fontSize: "calc(var(--tool-box-size) / 3)",
+                    fontSize: "calc(var(--tool-box-size) / 3)", // TODO:structure: css var --tray-label-font-size is redundant!
 
                     width: "calc(var(--tool-box-size) * 2.5)",
                 }}
@@ -96,7 +96,7 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     justifyContent: "center",
                     alignItems: "flex-start",
                     marginLeft: "calc(var(--tool-box-size) / 5)",
-                    fontSize: "calc(var(--tool-box-size) / 3)",
+                    fontSize: "calc(var(--tool-box-size) / 3)", // TODO:structure: css var --tray-label-font-size is redundant!
 
                     width: "calc(var(--tool-box-size) * 2.5)",
                 }}

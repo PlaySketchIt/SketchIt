@@ -47,6 +47,7 @@ const ToolTrayOption: React.FC<ToolTrayOptionProps> = (props) => {
             // TODO:ux: should these be fully self contained strings? will order change in some languages if tool name is different?
             // TODO:structure: clean up
             aria-label={t(props.current_tool === props.value ? "aria label.select tool current" : "aria label.select tool", { tool: t("tool." + props.value), key: props.keybind })}
+            data-tooltip={t("tooltip.click to select tool", { tool: t("tool." + props.value) })}
 
             onClick={() => props.tool_change(props.value)}
         >

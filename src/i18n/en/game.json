@@ -19,6 +19,15 @@
         "run command": "Run command: {{cmd}} [keybind: {{key}}]",
         "run command disabled": "Run command: {{cmd}} (disabled) [keybind: {{key}}]"
     },
+    "tooltip": {
+        "click to select custom color": "Click to select custom colour",
+
+        "click to select color": "Click to select colour:\n{{color}}",
+        "click to select tool": "Click to select tool:\n{{tool}}",
+
+        "click to run command": "Click to run command:\n{{cmd}}",
+        "click to run command disabled": "Click to run command:\n{{cmd}}\n(disabled)"
+    },
 
     "color": {
         "black": "black",

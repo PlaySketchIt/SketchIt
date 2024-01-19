@@ -54,6 +54,7 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
                 onChange={(e) => props.on_color_change(e.target.value as HexColor)}
 
                 aria-label={t("aria label.select custom color using picker")}
+                data-tooltip={t("tooltip.click to select custom color")}
             />
             <Image
                 className={styles.overlay + " color-tray-custom-overlay"}

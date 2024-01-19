@@ -49,6 +49,8 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
             // TODO:ux: should these be fully self contained strings? will order change in some languages if command name is different?
             // TODO:structure: clean up
             aria-label={t(props.disabled ? "aria label.run command disabled" : "aria label.run command", { cmd: t("command." + props.value), key: props.keybind })}
+            data-tooltip={t(props.disabled ? "tooltip.click to run command disabled" : "tooltip.click to run command", { cmd: t("command." + props.value) })}
+
 
             disabled={props.disabled ?? false}
         >

@@ -7,6 +7,10 @@
         "select color": "Select color: {{color}}",
         "select color current": "Select color: {{color}} (current)"
     },
+    "tooltip": {
+        "click to select custom color": "Click to select custom color",
+        "click to select color": "Click to select color:\n{{color}}"
+    },
 
     "color": {
         "dark gray": "dark gray",

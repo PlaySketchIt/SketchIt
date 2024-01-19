@@ -57,6 +57,7 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
             // TODO:ux: should these be fully self contained strings? will order change in some languages if color name is different?
             // TODO:structure: clean up
             aria-label={t(props.value === props.current_color ? "aria label.select color current" : "aria label.select color", { color: t("color." + props.name_key) })}
+            data-tooltip={t("tooltip.click to select color", { color: t("color." + props.name_key) })}
 
             style={{
                 backgroundColor: props.value,
