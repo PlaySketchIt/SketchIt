@@ -72,6 +72,8 @@ export default GameApp;
 // TODO:ux: don't bother using dyncursor if device is touch screen
 // TODO:ux: toggleable tooltips / mode to make them less verbose (i.e. "click to select color: red" -> "red")
 // TODO:structure: make i18n keys in en-gb so less confusing that the default en locale is en-gb
+// TODO:perf: should i18n values be precomputed and changed if language changes? would it make a difference?
+// TODO:feat: language changer
 
 // monetisation ideas:
 // - ad frames (blegh)

@@ -89,3 +89,4 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
 export default ColorTrayCustom;
 
 // TODO:structure: convert other components to directories and replace inline styles with modules
+// TODO:perf: very laggy if tooltip visible while dragging color picker. causes recursion overflow!

@@ -47,6 +47,8 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
     // have to destructure for effects. passing props.on_color_change isn't working and passing whole props is inefficient
     const { on_color_change, on_alpha_change } = props;
 
+    // TODO:perf: i think using an effect here has hurt the performance. revert back to the old way of defining a wrapper around the callback?
+
     // effect: callback when values change
     useEffect(() => {
         on_color_change(current_color);
