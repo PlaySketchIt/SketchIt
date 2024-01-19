@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import styles from "./ColorTrayCustom.module.css";
 import picker_icon from "../../assets/icons/picker.svg";
 
-import { HexColor } from "../ColorTrayOption";
+import type { HexColor } from "../ColorTrayOption";
 
 export interface ColorTrayCustomProps {
     current_color: HexColor;
@@ -89,4 +89,3 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
 export default ColorTrayCustom;
 
 // TODO:structure: convert other components to directories and replace inline styles with modules
-// TODO:perf: very laggy when dragging color picker!

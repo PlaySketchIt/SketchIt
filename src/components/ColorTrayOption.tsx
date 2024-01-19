@@ -36,7 +36,7 @@ const ColorTrayOption: React.FC<ColorTrayOptionProps> = (props) => {
     }, [props.value]);
 
     const is_light_color = calculate_luminance(props.value) > 0.5;
-    // TODO:perf: sync with threshold in ColorTray.tsx
+    // TODO:perf: sync with threshold in ColorTrayCustom.tsx
 
     let classes = "color-tray-option tray-option";
 
