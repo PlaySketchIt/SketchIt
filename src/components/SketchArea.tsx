@@ -143,8 +143,8 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
                 }}
             >
                 <ColorTray
-                    init_color={fg_color}
-                    init_alpha={alpha}
+                    current_color={fg_color}
+                    current_alpha={alpha}
                     on_color_change={setFgColor}
                     on_alpha_change={setAlpha}
                 />
