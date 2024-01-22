@@ -1,3 +1,4 @@
+import { useState } from "react";
 
 import Image from "next/image";
 
@@ -26,6 +27,9 @@ const calculate_luminance = (color: HexColor) => {
 const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
     const { t } = useTranslation();
 
+    // uses separate state so input value can be updated separately from parent component
+    const [internal_color, setInternalColor] = useState<HexColor>(props.current_color);
+
     // TODO:safety: should color be validated? or do we just trust the parent component?
     const picker_invert_value = calculate_luminance(props.current_color) > 0.5 ? "0%" : "100%"; // TODO:lib: configurable threshold + shadow amount.
 
@@ -34,7 +38,7 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
             className={styles.container + " color-tray-custom-container"}
             style={{
                 marginLeft: "calc(var(--tool-box-size) / 4)",
-                
+
                 width: "var(--tool-box-size)",
                 height: "var(--tool-box-size)",
             }}
@@ -48,10 +52,19 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
                 }}
 
                 type="color"
-                value={props.current_color}
+                value={internal_color}
 
-                // assumption made
-                onChange={(e) => props.on_color_change(e.target.value as HexColor)}
+                // update internal value every change so input updates properly
+                onChange={(e) => {
+                    const clr = e.target.value as HexColor; // assumption made
+
+                    if (clr !== internal_color) {
+                        setInternalColor(clr);
+                    }
+                }}
+
+                // update parent value on blur to prevent unnecessary updates / lag
+                onBlur={() => { props.on_color_change(internal_color); }}
 
                 aria-label={t("aria label.select custom color using picker")}
                 data-tooltip={t("tooltip.click to select custom color")}
@@ -89,4 +102,3 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
 export default ColorTrayCustom;
 
 // TODO:structure: convert other components to directories and replace inline styles with modules
-// TODO:perf: very laggy when dragging color picker!
