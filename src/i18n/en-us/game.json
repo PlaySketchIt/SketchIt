@@ -1,5 +1,5 @@
 {
-    "$comment": "Extends en/game.json (en-GB is default en dialect)",
+    "$comment": "Extends en/game.json (en-GB is default en dialect, US overrides only what's needed)",
 
     "aria label": {
         "select custom color using picker": "Select custom color using picker",

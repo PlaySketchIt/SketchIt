@@ -7,6 +7,7 @@ import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 
+import * as wordlist from "../../util/wordlist";
 
 // setup i18n
 i18n
@@ -20,14 +21,15 @@ i18n
       escapeValue: false, // react already handles this
     },
 
-    //ns: ["game", "common"],
-    ns: ["game"],
+    ns: ["game", "wordlist"],
 
     lowerCaseLng: true,
     nonExplicitSupportedLngs: true,
     fallbackLng: {
       default: ["en-GB"],
     }
+  }).then(() => {
+    wordlist.init();
   });
 
 
