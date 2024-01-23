@@ -2,7 +2,8 @@
     "$comment": "Extends en/wordlist.json (en-GB is default en dialect, US overrides only what's needed)",
 
     "words": {
-        "hello": "howdy",
-        "world": "planet"
+        "easy": {
+            "hello": "howdy"
+        }
     }
 }

@@ -1,6 +1,18 @@
 {
+    "$comment": "This file is treated as the root wordlist. This will be used as the fallback for each word key. Any key in another language's wordlist not in this file will be ignored.",
+
     "words": {
-        "hello": "hello",
-        "world": "world"
+        "easy": {
+            "hello": "hello",
+            "world": "world"
+        },
+        "medium": {
+            "hi": "hi",
+            "planet": "planet"
+        },
+        "hard": {
+            "hey": "hey",
+            "earth": "earth"
+        }
     }
 }
