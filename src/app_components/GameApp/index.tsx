@@ -7,8 +7,6 @@ import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 
-import * as wordlist from "../../util/wordlist";
-
 // setup i18n
 i18n
   .use(resourcesToBackend((lng: string, ns: string) => import(`../../i18n/${lng}/${ns}.json`)))
@@ -28,8 +26,6 @@ i18n
     fallbackLng: {
       default: ["en-GB"],
     }
-  }).then(() => {
-    wordlist.init();
   });
 
 

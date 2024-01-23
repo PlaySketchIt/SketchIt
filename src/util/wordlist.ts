@@ -23,7 +23,7 @@ export interface Wordlist {
 let wordlist: Wordlist;
 let translation_cache: { [key: string]: string } = {};
 
-export const init = () => {
+const init = () => {
     // load keys from root wordlist
     const easy_keys = Object.keys(root_wordlist.words.easy);
     const medium_keys = Object.keys(root_wordlist.words.medium);
@@ -110,3 +110,5 @@ export const build_untranslated_word = (key: string): UntranslatedWord => {
         difficulty,
     };
 };
+
+init();
