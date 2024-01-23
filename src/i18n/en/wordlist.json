@@ -1,5 +1,6 @@
 {
-    "$comment": "This file is treated as the root wordlist. This will be used as the fallback for each word key. Any key in another language's wordlist not in this file will be ignored.",
+    "$comment": "This file is treated as the root wordlist. This will be used as the fallback for each word key.",
+    "$comment2": "Any key in another language's wordlist not in this file will be ignored. Keys should not be repeated across difficulty levels.",
 
     "words": {
         "easy": {

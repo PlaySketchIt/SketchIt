@@ -2,13 +2,8 @@ import i18next from "i18next";
 
 import root_wordlist from "../i18n/en/wordlist.json";
 
-// TODO:structure: would it be cleaner if this was a union type?
-export enum Difficulty {
-    EASY,
-    MEDIUM,
-    HARD,
-}
-const N_DIFFICULTIES = 3;
+export type Difficulty = "easy" | "medium" | "hard";
+const diff_array: Difficulty[] = ["easy", "medium", "hard"];
 
 export interface UntranslatedWord {
     key: string;
@@ -48,20 +43,15 @@ export const init = () => {
 };
 
 export const get_keys = (difficulty?: Difficulty): string[] => {
-    switch (difficulty) {
-        case undefined:
-            return [
-                ...wordlist.easy_keys,
-                ...wordlist.medium_keys,
-                ...wordlist.hard_keys,
-            ];
-        case Difficulty.EASY:
-            return wordlist.easy_keys;
-        case Difficulty.MEDIUM:
-            return wordlist.medium_keys;
-        case Difficulty.HARD:
-            return wordlist.hard_keys;
+    if (!difficulty) {
+        return [
+            ...wordlist.easy_keys,
+            ...wordlist.medium_keys,
+            ...wordlist.hard_keys,
+        ];
     }
+
+    return wordlist[`${difficulty}_keys`];
 };
 
 export const get_translation = (word: UntranslatedWord): string => {
@@ -69,7 +59,7 @@ export const get_translation = (word: UntranslatedWord): string => {
         return translation_cache[word.key];
     }
 
-    const translation = i18next.t(`wordlist:words.${Difficulty[word.difficulty]}.${word.key}`);
+    const translation = i18next.t(`wordlist:words.${word.difficulty}.${word.key}`);
 
     translation_cache[word.key] = translation;
 
@@ -78,7 +68,7 @@ export const get_translation = (word: UntranslatedWord): string => {
 
 export const get_random_word = (difficulty?: Difficulty): Word => {
     if (!difficulty) {
-        difficulty = Math.floor(Math.random() * N_DIFFICULTIES);
+        difficulty = diff_array[Math.floor(Math.random() * diff_array.length)];
     }
 
     const keys = get_keys(difficulty);
@@ -92,6 +82,31 @@ export const get_random_word = (difficulty?: Difficulty): Word => {
     return {
         key,
         translation,
+        difficulty,
+    };
+};
+
+export const find_difficulty = (key: string): Difficulty => {
+    if (wordlist.easy_keys.includes(key)) {
+        return "easy";
+    }
+
+    if (wordlist.medium_keys.includes(key)) {
+        return "medium";
+    }
+
+    if (wordlist.hard_keys.includes(key)) {
+        return "hard";
+    }
+
+    throw new Error(`Could not find difficulty for key "${key}"`);
+};
+
+export const build_untranslated_word = (key: string): UntranslatedWord => {
+    const difficulty = find_difficulty(key);
+
+    return {
+        key,
         difficulty,
     };
 };
