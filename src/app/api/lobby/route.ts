@@ -25,7 +25,7 @@ export async function POST(_request: Request) {
         return NextResponse.json({ code });
     }).catch((error) => {
         console.error("Failed to create lobby:", error);
-        return NextResponse.json ({ error: "Failed to create lobby" });
+        return NextResponse.json({ error: "Failed to create lobby" }, { status: 500 });
     });
 }
 
