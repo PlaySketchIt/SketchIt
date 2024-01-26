@@ -5,7 +5,8 @@ export const runtime = "edge";
 
 const bearer_token = "Bearer " + process.env.SERVER_KEY;
 
-const create_lobby_url = new URL("/create", process.env.SERVER_URL);
+// TODO:ux: server picker
+const create_lobby_url = new URL("/create", process.env.NEXT_PUBLIC_SERVER_URL);
 
 // creates a new lobby
 export async function POST(_request: Request) {

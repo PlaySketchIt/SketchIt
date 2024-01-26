@@ -1,11 +1,16 @@
-import resourcesToBackend from "i18next-resources-to-backend";
 import "./GameApp.css";
 import "./GameApp.media.css";
-import SketchArea from "../../components/SketchArea";
 
 import i18n from "i18next";
+import resourcesToBackend from "i18next-resources-to-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
+
+import { io } from "socket.io-client";
+
+import ConnectionContext, { IConnectionCtx } from "./ConnectionContext";
+import SketchArea from "../../components/SketchArea";
+
 
 // setup i18n
 i18n
@@ -28,14 +33,89 @@ i18n
     }
   });
 
-
 // dimensions affect image size. viewport size should be applied to sketch area, and canvas will scale to fit it
 const WIDTH = 1280;
 const HEIGHT = 720;
 
+const setup_conn_ctx = (): IConnectionCtx => {
+  console.log("Setting up connection context");
+
+  // TODO:ux: server picker
+  if (!process.env.NEXT_PUBLIC_SERVER_URL) {
+    throw new Error("No server url configured");
+  }
+
+  // read name and code from query params
+  const url = new URL(window.location.href);
+
+  const username = url.searchParams.get("name");
+  const code = url.searchParams.get("code");
+
+  //// erase params from url in navbar
+  //url.searchParams.delete("name");
+  //url.searchParams.delete("code");
+  //window.history.replaceState({}, "", url.toString());
+  // TODO:other: removed so client may reload page and still be in the same lobby. is this important?
+
+  // TODO:structure: sync with server, or just remove this client side check?
+  // TODO:ux: better error, with proper modal
+  if (!username || !code || username.length < 1 || username.length > 16 || code.length !== 10) {
+    throw new Error("Invalid name or code");
+  }
+
+  // setup socket
+  const socket = io(process.env.NEXT_PUBLIC_SERVER_URL,
+    {
+      autoConnect: false,
+      query: {
+        username,
+        code,
+      }
+    }
+  );
+
+  // add error handlers
+  // TODO:ux: better error handling with proper modals
+  socket.on("connect_error", (err) => {
+    console.error("Connection error:", err);
+  });
+
+  socket.on("connect_timeout", (timeout) => {
+    console.error("Connection timeout:", timeout);
+  });
+
+  socket.on("error", (err) => {
+    console.error("Socket error:", err);
+  });
+
+  socket.on("disconnect", (reason) => {
+    console.error("Socket disconnected:", reason);
+  });
+
+  socket.on("reconnect_attempt", (attempt) => {
+    console.log("Attempting to reconnect:", attempt);
+  });
+
+  // attempt to connect
+  try {
+    socket.connect();
+    console.log("Connected to server");
+  } catch (err) {
+    throw new Error("Failed to connect to server");
+  }
+
+  return {
+    socket,
+    username,
+    code,
+  };
+};
+
+const conn_ctx = setup_conn_ctx();
+
 function GameApp() {
   return (
-    <>
+    <ConnectionContext.Provider value={conn_ctx}>
       <SketchArea
         background="#fff"
 
@@ -54,7 +134,7 @@ function GameApp() {
 
         undo_steps={50} // TODO:ux: should this be limited? don't want to be using loads of memory in the background if the user does more than 50 things. each step is a full canvas image. profiling shows that 50 steps uses ~110MB of memory, so it's not too bad but still a bit
       />
-    </>
+    </ConnectionContext.Provider>
   );
 }
 
