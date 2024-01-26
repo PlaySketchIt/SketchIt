@@ -63,5 +63,22 @@
         "undo": "undo",
         "redo": "redo",
         "clear": "clear"
+    },
+
+    "connection error": {
+        "title": "Failed to connect to server",
+        "unknown": "Failed to connect to server. Please try again later.",
+        "return home": "Return to home page",
+
+        "user": {
+            "missing code": "Missing lobby code.",
+            "invalid code": "Lobby does not exist.",
+
+            "missing username": "Missing username.",
+            "username too long": "Username is too long.",
+
+            "full": "Lobby is full.",
+            "banned": "You are banned from this lobby."
+        }
     }
 }

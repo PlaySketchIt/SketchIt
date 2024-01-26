@@ -6,6 +6,9 @@ import resourcesToBackend from "i18next-resources-to-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.css"; // TODO:ux: fix this!
+
 import { io } from "socket.io-client";
 
 import ConnectionContext, { IConnectionCtx } from "./ConnectionContext";
@@ -75,10 +78,31 @@ const setup_conn_ctx = (): IConnectionCtx => {
   );
 
   // add error handlers
-  // TODO:ux: better error handling with proper modals
   socket.on("connect_error", (err) => {
     console.error("Connection error:", err);
+
+    let err_msg = "connection error.unknown";
+    if (err.message.startsWith("user:")) {
+      err_msg = err.message.replace("user:", "connection error.user.");
+    }
+
+    Swal.fire({
+      title: i18n.t("connection error.title"),
+      text: i18n.t(err_msg),
+      icon: "error",
+
+      confirmButtonText: i18n.t("connection error.return home"),
+      allowEnterKey: false,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "/";
+      }
+    });
   });
+
+  // TODO:ux: better error handling with proper modals
 
   socket.on("connect_timeout", (timeout) => {
     console.error("Connection timeout:", timeout);
@@ -110,6 +134,9 @@ const setup_conn_ctx = (): IConnectionCtx => {
     code,
   };
 };
+// TODO:safety: this whole function is a bit janky, especially the error handling. should be cleaned up and handle reloads properly
+// TODO:ux: it might be better for the home page to be checking the validity so we don't redirect back and forth
+// TODO:ux: should we just unite it all into an spa? it probably makes more sense here. it's what skribbl does
 
 const conn_ctx = setup_conn_ctx();
 
