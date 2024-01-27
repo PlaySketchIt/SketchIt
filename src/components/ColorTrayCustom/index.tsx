@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Image from "next/image";
 
@@ -32,6 +32,11 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
 
     // TODO:safety: should color be validated? or do we just trust the parent component?
     const picker_invert_value = calculate_luminance(props.current_color) > 0.5 ? "0%" : "100%"; // TODO:lib: configurable threshold + shadow amount.
+
+    // effect: if parent color changes, update internal color
+    useEffect(() => {
+        setInternalColor(props.current_color);
+    }, [props.current_color]);
 
     return (
         <div
