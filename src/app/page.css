@@ -23,4 +23,5 @@ body {
 
 .swal2-container {
   font-family: var(--alert-font-family);
+  user-select: none;
 }
