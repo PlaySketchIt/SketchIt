@@ -1,10 +1,11 @@
+"use client";
+
 import "./GameApp.css";
 import "./GameApp.media.css";
 
+import "../../util/setup_i18n";
+
 import i18n from "i18next";
-import resourcesToBackend from "i18next-resources-to-backend";
-import LanguageDetector from "i18next-browser-languagedetector";
-import { initReactI18next } from "react-i18next";
 
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.css"; // TODO:ux: fix this!
@@ -15,44 +16,17 @@ import ConnectionContext, { IConnectionCtx } from "./ConnectionContext";
 import SketchArea from "../../components/SketchArea";
 
 
-// setup i18n
-i18n
-  .use(resourcesToBackend((lng: string, ns: string) => import(`../../i18n/${lng}/${ns}.json`)))
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    debug: process.env.NODE_ENV === "development",
-
-    interpolation: {
-      escapeValue: false, // react already handles this
-    },
-
-    ns: ["game", "wordlist"],
-
-    lowerCaseLng: true,
-    nonExplicitSupportedLngs: true,
-    fallbackLng: {
-      default: ["en-GB"],
-    }
-  });
-
 // dimensions affect image size. viewport size should be applied to sketch area, and canvas will scale to fit it
 const WIDTH = 1280;
 const HEIGHT = 720;
 
-const setup_conn_ctx = (): IConnectionCtx => {
+const setup_conn_ctx = (username: string, code: string): IConnectionCtx => {
   console.log("Setting up connection context");
 
   // TODO:ux: server picker
   if (!process.env.NEXT_PUBLIC_SERVER_URL) {
     throw new Error("No server url configured");
   }
-
-  // read name and code from query params
-  const url = new URL(window.location.href);
-
-  const username = url.searchParams.get("name");
-  const code = url.searchParams.get("code");
 
   //// erase params from url in navbar
   //url.searchParams.delete("name");
@@ -62,9 +36,6 @@ const setup_conn_ctx = (): IConnectionCtx => {
 
   // TODO:structure: sync with server, or just remove this client side check?
   // TODO:ux: better error, with proper modal
-  if (!username || !code || username.length < 1 || username.length > 16 || code.length !== 10) {
-    throw new Error("Invalid name or code");
-  }
 
   // setup socket
   const socket = io(process.env.NEXT_PUBLIC_SERVER_URL,
@@ -138,9 +109,14 @@ const setup_conn_ctx = (): IConnectionCtx => {
 // TODO:ux: it might be better for the home page to be checking the validity so we don't redirect back and forth
 // TODO:ux: should we just unite it all into an spa? it probably makes more sense here. it's what skribbl does
 
-const conn_ctx = setup_conn_ctx();
+export interface GameAppProps {
+  username: string;
+  code: string;
+}
 
-function GameApp() {
+const GameApp: React.FC<GameAppProps> = (props) => {
+  const conn_ctx = setup_conn_ctx(props.username, props.code);
+
   return (
     <ConnectionContext.Provider value={conn_ctx}>
       <SketchArea
@@ -163,7 +139,7 @@ function GameApp() {
       />
     </ConnectionContext.Provider>
   );
-}
+};
 
 export default GameApp;
 
