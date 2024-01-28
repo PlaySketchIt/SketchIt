@@ -2,6 +2,7 @@
 
 import "@fontsource/rock-salt";
 import "./IndexApp.css";
+import "./IndexApp.media.css";
 
 import dynamic from "next/dynamic";
 import DeferredTranslation from "../../components/common/DeferredTranslation";
