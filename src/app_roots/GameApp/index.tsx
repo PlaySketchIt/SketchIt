@@ -11,7 +11,6 @@ init_i18n();
 import i18n from "i18next";
 
 import Swal from "sweetalert2";
-import "sweetalert2/dist/sweetalert2.css"; // TODO:ux: fix this!
 
 import { io } from "socket.io-client";
 
