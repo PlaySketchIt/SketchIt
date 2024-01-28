@@ -49,6 +49,12 @@ export const init = () => {
       }).then(() => {
         ready = true;
         ready_callbacks.forEach(callback => callback());
+
+        document.documentElement.lang = i18n.language.split("-")[0];
+
+        i18n.on("languageChanged", (lng) => {
+          document.documentElement.lang = lng.split("-")[0];
+        });
       });
   }
 };
