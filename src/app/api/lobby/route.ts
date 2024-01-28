@@ -6,6 +6,7 @@ export const runtime = "edge";
 const bearer_token = "Bearer " + process.env.SERVER_KEY;
 
 // TODO:ux: server picker
+// TODO:safety: check defined
 const create_lobby_url = new URL("/create", process.env.NEXT_PUBLIC_SERVER_URL);
 
 // creates a new lobby
