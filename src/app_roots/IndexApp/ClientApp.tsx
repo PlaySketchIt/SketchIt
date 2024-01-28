@@ -38,23 +38,36 @@ const InputForm: React.FC<InputFormProps> = (props) => {
             return;
         }
 
+        // save username and code to localstorage
+        localStorage.setItem("username", username);
+        localStorage.setItem("code", code);
+
         props.on_submit(username, code);
     };
 
-    // effect: populate code field with url param
+    // effect: populate code field with url param OR localstorage value
     useEffect(() => {
         const url = new URL(window.location.href);
-        const code = url.searchParams.get("code");
+        const url_code = url.searchParams.get("code");
 
-        if (code) {
-            setCode(code);
+        if (url_code) {
+            setCode(url_code);
+        } else if (localStorage.getItem("code")) {
+            setCode(localStorage.getItem("code") as string);
+        }
+    }, []);
+
+    // effect: populate username field with localstorage value
+    useEffect(() => {
+        if (localStorage.getItem("username")) {
+            setUsername(localStorage.getItem("username") as string);
         }
     }, []);
 
     return (
         <div className="input-form">
             <label htmlFor="inp-username">Username</label>
-            <input id="inp-username" minLength={1} maxLength={16} onChange={(e) => setUsername(e.target.value)} />
+            <input id="inp-username" minLength={1} maxLength={16} defaultValue={username} onChange={(e) => setUsername(e.target.value)} />
 
             <label htmlFor="inp-code">Code</label>
             <input id="inp-code" minLength={10} maxLength={10} defaultValue={code} onChange={(e) => setCode(e.target.value)} />
