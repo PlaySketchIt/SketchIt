@@ -4,7 +4,7 @@
 
 h1 {
     font-family: var(--title-font-family);
-    text-shadow: 0.1vw 0.1vw 0.1vw #000;
+    text-shadow: 2px 2px 2px black;
 
     user-select: none;
 }
