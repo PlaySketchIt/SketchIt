@@ -3,24 +3,54 @@ import resourcesToBackend from "i18next-resources-to-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 
+let initting = false;
+let ready = false;
 
-i18n
-  .use(resourcesToBackend((lng: string, ns: string) => import(`../i18n/${lng}/${ns}.json`)))
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    debug: process.env.NODE_ENV === "development",
+const ready_callbacks: (() => void)[] = [];
 
-    interpolation: {
-      escapeValue: false, // react already handles this
-    },
+export const on_ready = (callback: () => void) => {
+  if (ready) {
+    callback();
+  } else {
+    ready_callbacks.push(callback);
+  }
+};
 
-    ns: ["game", "index", "wordlist"],
-    defaultNS: "game",
+export const off_ready = (callback: () => void) => {
+  const index = ready_callbacks.indexOf(callback);
+  if (index >= 0) {
+    ready_callbacks.splice(index, 1);
+  }
+};
 
-    lowerCaseLng: true,
-    nonExplicitSupportedLngs: true,
-    fallbackLng: {
-      default: ["en-GB"],
-    }
-  });
+export const init = () => {
+  if (!initting) {
+    initting = true;
+
+    i18n
+      .use(resourcesToBackend((lng: string, ns: string) => import(`../i18n/${lng}/${ns}.json`)))
+      .use(LanguageDetector)
+      .use(initReactI18next)
+      .init({
+        debug: process.env.NODE_ENV === "development",
+
+        interpolation: {
+          escapeValue: false, // react already handles this
+        },
+
+        ns: ["game", "wordlist"],
+        defaultNS: "game",
+
+        lowerCaseLng: true,
+        nonExplicitSupportedLngs: true,
+        fallbackLng: {
+          default: ["en-GB"],
+        }
+      }).then(() => {
+        ready = true;
+        ready_callbacks.forEach(callback => callback());
+      });
+  }
+};
+
+export const is_ready = () => ready;

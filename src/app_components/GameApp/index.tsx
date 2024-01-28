@@ -3,8 +3,9 @@
 import "./GameApp.css";
 import "./GameApp.media.css";
 
-import "../../util/setup_i18n";
+import { init as init_i18n } from "../../util/setup_i18n";
 
+init_i18n();
 import i18n from "i18next";
 
 import Swal from "sweetalert2";
@@ -14,7 +15,6 @@ import { io } from "socket.io-client";
 
 import ConnectionContext, { IConnectionCtx } from "./ConnectionContext";
 import SketchArea from "../../components/SketchArea";
-
 
 // dimensions affect image size. viewport size should be applied to sketch area, and canvas will scale to fit it
 const WIDTH = 1280;

@@ -29,8 +29,6 @@ const InputForm: React.FC<InputFormProps> = (props) => {
 // TODO:perf: dedupe state
 
 const ClientApp: React.FC = () => {
-    "use client";
-
     const [game, setGame] = useState(false);
 
     const [username, setUsername] = useState("");
