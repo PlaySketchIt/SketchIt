@@ -3,10 +3,10 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
 import { SketchTool } from "./SketchCanvas";
-import useKeyHandler from "../hooks/useKeyHandler";
+import useKeyHandler from "../../hooks/useKeyHandler";
 
-import brush_icon from "../assets/icons/brush.svg";
-import fill_icon from "../assets/icons/fill.svg";
+import brush_icon from "../../assets/icons/brush.svg";
+import fill_icon from "../../assets/icons/fill.svg";
 
 const tool_icons = {
     "brush": brush_icon.src,

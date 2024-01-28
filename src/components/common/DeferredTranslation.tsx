@@ -1,6 +1,6 @@
 "use client";
 
-import * as si18n from "../util/setup_i18n";
+import * as si18n from "../../util/setup_i18n";
 import i18n from "i18next";
 
 import { useState, useEffect, useRef } from "react";

@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 
 import ColorTrayOption, { HexColor } from "./ColorTrayOption";
 import ColorTrayCustom from "./ColorTrayCustom";
-import useKeyHandler from "../hooks/useKeyHandler";
+import useKeyHandler from "../../hooks/useKeyHandler";
 
 export interface ColorTrayProps {
     current_color: HexColor;

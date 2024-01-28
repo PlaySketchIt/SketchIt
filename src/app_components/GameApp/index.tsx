@@ -14,7 +14,7 @@ import "sweetalert2/dist/sweetalert2.css"; // TODO:ux: fix this!
 import { io } from "socket.io-client";
 
 import ConnectionContext, { IConnectionCtx } from "./ConnectionContext";
-import SketchArea from "../../components/SketchArea";
+import SketchArea from "../../components/game/SketchArea";
 
 // dimensions affect image size. viewport size should be applied to sketch area, and canvas will scale to fit it
 const WIDTH = 1280;

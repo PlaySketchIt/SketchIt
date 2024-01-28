@@ -3,11 +3,11 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
 import { SketchCommand } from "./SketchCanvas";
-import useKeyHandler from "../hooks/useKeyHandler";
+import useKeyHandler from "../../hooks/useKeyHandler";
 
-import undo_icon from "../assets/icons/undo.svg";
-import redo_icon from "../assets/icons/redo.svg";
-import clear_icon from "../assets/icons/clear.svg";
+import undo_icon from "../../assets/icons/undo.svg";
+import redo_icon from "../../assets/icons/redo.svg";
+import clear_icon from "../../assets/icons/clear.svg";
 
 const command_icons = {
     "undo": undo_icon.src,

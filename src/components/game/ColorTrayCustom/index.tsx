@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
 import styles from "./ColorTrayCustom.module.css";
-import picker_icon from "../../assets/icons/picker.svg";
+import picker_icon from "../../../assets/icons/picker.svg";
 
 import { HexColor } from "../ColorTrayOption";
 
