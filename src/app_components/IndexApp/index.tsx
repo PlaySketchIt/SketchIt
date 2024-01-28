@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import DeferredTranslation from "./DeferredTranslation";
+import DeferredTranslation from "../../components/DeferredTranslation";
 
 const ClientApp = dynamic(() => import("./ClientApp"), { ssr: false });
 
