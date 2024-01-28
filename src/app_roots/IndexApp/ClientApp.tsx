@@ -18,6 +18,8 @@ const InputForm: React.FC<InputFormProps> = (props) => {
     const submit = () => {
         // TODO:other: could ask server for valid lengths rather than having to keep them in sync here
 
+        // TODO:ux: i18n
+
         if (username.length < 1 || username.length > 16) {
             Swal.fire({
                 title: "Invalid username",
