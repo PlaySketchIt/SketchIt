@@ -1,0 +1,19 @@
+:root {
+    --title-font-family: "Rock Salt", cursive; /* should have glyph range defined, so will safely fall back to cursive for non latin */
+}
+
+h1 {
+    font-family: var(--title-font-family);
+    text-shadow: 0.1vw 0.1vw 0.1vw #000;
+
+    user-select: none;
+}
+
+.input-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 1vh;
+
+    /* TODO:ux: even better styling. should it be a css module? */
+}

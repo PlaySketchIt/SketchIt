@@ -1,5 +1,8 @@
 "use server";
 
+import "@fontsource/rock-salt";
+import "./IndexApp.css";
+
 import dynamic from "next/dynamic";
 import DeferredTranslation from "../../components/common/DeferredTranslation";
 

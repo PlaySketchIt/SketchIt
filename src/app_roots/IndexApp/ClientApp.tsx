@@ -1,9 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const GameApp = dynamic(() => import("../GameApp"), { ssr: false });
+
+import Swal from "sweetalert2";
 
 interface InputFormProps {
     on_submit: (name: string, code: string) => void;
@@ -13,16 +15,52 @@ const InputForm: React.FC<InputFormProps> = (props) => {
     const [username, setUsername] = useState("");
     const [code, setCode] = useState("");
 
+    const submit = () => {
+        // TODO:other: could ask server for valid lengths rather than having to keep them in sync here
+
+        if (username.length < 1 || username.length > 16) {
+            Swal.fire({
+                title: "Invalid username",
+                text: "Username must be between 1 and 16 characters",
+                icon: "error",
+            });
+
+            return;
+        }
+
+        if (code.length !== 10) {
+            Swal.fire({
+                title: "Invalid code",
+                text: "Code must be exactly 10 characters",
+                icon: "error",
+            });
+
+            return;
+        }
+
+        props.on_submit(username, code);
+    };
+
+    // effect: populate code field with url param
+    useEffect(() => {
+        const url = new URL(window.location.href);
+        const code = url.searchParams.get("code");
+
+        if (code) {
+            setCode(code);
+        }
+    }, []);
+
     return (
-        <>
-            <label htmlFor="inp-name">Name</label>
-            <input id="inp-name" onChange={(e) => setUsername(e.target.value)} />
+        <div className="input-form">
+            <label htmlFor="inp-username">Username</label>
+            <input id="inp-username" minLength={1} maxLength={16} onChange={(e) => setUsername(e.target.value)} />
 
             <label htmlFor="inp-code">Code</label>
-            <input id="inp-code" onChange={(e) => setCode(e.target.value)} />
+            <input id="inp-code" minLength={10} maxLength={10} defaultValue={code} onChange={(e) => setCode(e.target.value)} />
 
-            <button onClick={() => props.on_submit(username, code)}>Submit</button>
-        </>
+            <button onClick={submit}>Join</button>
+        </div>
     );
 };
 
