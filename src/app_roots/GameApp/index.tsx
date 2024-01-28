@@ -71,7 +71,7 @@ const setup_conn_ctx = (username: string, code: string): IConnectionCtx => {
     }).then((result) => {
       if (result.isConfirmed) {
         // TODO:ux: proper reset without reload
-        window.location.href = "/";
+        window.location.reload();
       }
     });
   });
