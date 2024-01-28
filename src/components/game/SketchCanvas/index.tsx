@@ -286,10 +286,13 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
         draw_ctx.clearRect(0, 0, draw_canvas.width, draw_canvas.height);
     }, []);
 
-
     // effect: run at mount time to initialise canvas and cursor
+    // must use ref to ensure only runs once, as it will be called again when props change
+    // TODO:structure: could resolve this by separating props into init and current color, but that's a bit messy. maybe this just shouldn't be an effect?
+    const has_init_ref = useRef(false);
     useEffect(() => {
-        const ur_array = undo_redo_array.current;
+        if (has_init_ref.current) return;
+        has_init_ref.current = true;
 
         const draw_canvas = draw_canvas_ref.current;
         if (!draw_canvas) return;
@@ -301,7 +304,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             clear_draw_canvas();
             clear_render_canvas();
 
-            ur_array.capture_from_canvas(render_canvas_ref.current!);
+            undo_redo_array.current.capture_from_canvas(render_canvas_ref.current!);
 
             draw_ctx.lineCap = "round";
             draw_ctx.lineJoin = "round";
@@ -311,12 +314,16 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
             load_css_cursor();
         }
+    }, [load_css_cursor, clear_draw_canvas, clear_render_canvas, props.fg_color]);
 
-        // cleanup: clear undo redo array
+    // effect: clear undo/redo array and reset has init on unmount
+    useEffect(() => {
+        const ur_array = undo_redo_array.current;
         return () => {
             ur_array.clear();
+            has_init_ref.current = false;
         };
-    }, [load_css_cursor, clear_draw_canvas, clear_render_canvas, props.fg_color]);
+    }, []);
 
 
     // effect: run when color/radius/tool/alpha changes to update cursor
