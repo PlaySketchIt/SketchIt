@@ -34,7 +34,8 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
     useKeyHandler(() => { props.on_alpha_change(props.current_alpha + 0.05); }, "d");
 
     return (
-        <div className="color-tray tray"
+        <section
+            className="color-tray tray"
             style={{
                 display: "flex",
                 flexDirection: "row",
@@ -42,6 +43,8 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                 justifyContent: "space-between",
                 alignItems: "center",
             }}
+
+            aria-label={t("aria label.color tray")}
         >
             <div
                 className="color-tray-rows"
@@ -112,7 +115,7 @@ const ColorTray: React.FC<ColorTrayProps> = (props) => {
                     onChange={(e) => props.on_alpha_change(e.target.valueAsNumber)}
                 />
             </label>
-        </div>
+        </section>
     );
 };
 

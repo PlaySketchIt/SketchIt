@@ -64,16 +64,18 @@ const InputForm: React.FC<InputFormProps> = (props) => {
         }
     }, []);
 
+    // it is necessary to mark the button as type="button" to prevent it from submitting the form
+    // we still want the semantic meaning of a form but without submission
     return (
-        <div className="input-form">
+        <form className="input-form">
             <label htmlFor="inp-username">Username</label>
             <input id="inp-username" minLength={1} maxLength={16} defaultValue={username} onChange={(e) => setUsername(e.target.value)} />
 
             <label htmlFor="inp-code">Code</label>
             <input id="inp-code" minLength={10} maxLength={10} defaultValue={code} onChange={(e) => setCode(e.target.value)} />
 
-            <button onClick={submit}>Join</button>
-        </div>
+            <button type="button" onClick={submit}>Join</button>
+        </form>
     );
 };
 

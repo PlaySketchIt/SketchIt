@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 
+import { useTranslation } from "react-i18next";
+
 import SketchCanvas, { SketchCanvasRef, SketchCanvasProps, SketchTool } from "./SketchCanvas";
 import ColorTray from "./ColorTray";
 import ToolTray from "./ToolTray";
@@ -13,6 +15,8 @@ export interface SketchAreaProps extends Omit<SketchCanvasProps, "alpha" | "fg_c
 }
 
 const SketchArea: React.FC<SketchAreaProps> = (props) => {
+    const { t } = useTranslation();
+
     const min_radius = props.min_radius ?? 1;
     const max_radius = props.max_radius ?? 10;
 
@@ -98,7 +102,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
         setToleranceLoaded(true);
     }, [tolerance_loaded]);
 
-    
+
     // TODO:other: investigate ways to have an unmount cleanup while still getting the required values
 
     // effect: save brush radius to local storage on change
@@ -119,12 +123,16 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
 
 
     return (
-        <div
+        <section
             className="sketch-area"
             style={{
                 display: "flex",
             }}
-            onWheel={on_scroll_wheel}>
+
+            aria-label={t("aria label.sketch area")}
+
+            onWheel={on_scroll_wheel}
+        >
             <SketchCanvas
                 ref={sketch_canvas_ref}
                 background={props.background}
@@ -152,6 +160,8 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
                 style={{
                     display: "flex",
                 }}
+
+                role="toolbar"
             >
                 <ColorTray
                     current_color={fg_color}
@@ -184,7 +194,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
                     can_redo={can_redo}
                 />
             </div>
-        </div>
+        </section>
     );
 };
 

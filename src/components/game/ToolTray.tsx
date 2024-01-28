@@ -40,7 +40,8 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
     }, [current_tool, on_tool_change]);
 
     return (
-        <div className="tool-tray tray"
+        <section
+            className="tool-tray tray"
             style={{
                 display: "flex",
                 flexDirection: "row",
@@ -48,6 +49,8 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                 justifyContent: "space-between",
                 alignItems: "center",
             }}
+
+            aria-label={t("aria label.tool tray")}
         >
             <ToolTrayOption value="brush" keybind="b" tool_change={setCurrentTool} current_tool={current_tool} />
             <ToolTrayOption value="fill" keybind="f" tool_change={setCurrentTool} current_tool={current_tool} />
@@ -121,7 +124,7 @@ const ToolTray: React.FC<ToolTrayProps> = (props) => {
                     onChange={(e) => props.on_tolerance_change(e.target.valueAsNumber)}
                 />
             </label>
-        </div>
+        </section>
     );
 };
 

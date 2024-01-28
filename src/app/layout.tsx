@@ -93,7 +93,7 @@ export default function RootLayout({
             </head>
             <body>
                 <noscript>You must enable JavaScript to run the app!</noscript>
-                <div id="root">{children}</div>
+                <main>{children}</main>
             </body>
         </html>
     );

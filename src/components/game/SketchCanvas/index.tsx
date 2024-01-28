@@ -458,7 +458,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
                     touchAction: "pinch-zoom"
                 }}
 
-                aria-label={t("aria label.canvas to draw on")}
+                aria-label={t("aria label.sketch drawing canvas")}
             />
         </div>
     );

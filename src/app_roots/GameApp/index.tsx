@@ -58,7 +58,7 @@ const setup_conn_ctx = (username: string, code: string): IConnectionCtx => {
     if (err.message.startsWith("user:")) {
       err_msg = err.message.replace("user:", "connection error.user.");
     }
-
+    return;
     Swal.fire({
       title: i18n.t("connection error.title"),
       text: i18n.t(err_msg),

@@ -7,8 +7,14 @@
         "fill tolerance slider": "Fill Tolerance:"
     },
     "aria label": {
+        "sketch area": "Sketch area, containing the drawing canvas and toolbar",
+        "sketch drawing canvas": "Canvas which can be drawn on",
+        
+        "color tray": "Colour tray",
+        "tool tray": "Tool tray",
+        "command tray": "Command tray",
+
         "select custom color using picker": "Select custom colour using picker",
-        "canvas to draw on": "Canvas to draw on",
 
         "select color": "Select colour: {{color}}",
         "select color current": "Select colour: {{color}} (current)",

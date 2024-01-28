@@ -1,6 +1,8 @@
 import { SketchCommand } from "./SketchCanvas";
 import CommandTrayOption from "./CommandTrayOption";
 
+import { useTranslation } from "react-i18next";
+
 export interface CommandTrayProps {
     on_command_run: (command: SketchCommand) => void;
 
@@ -9,8 +11,11 @@ export interface CommandTrayProps {
 }
 
 const CommandTray: React.FC<CommandTrayProps> = (props) => {
+    const { t } = useTranslation();
+
     return (
-        <div className="command-tray tray"
+        <section
+            className="command-tray tray"
             style={{
                 display: "flex",
                 flexDirection: "row",
@@ -18,11 +23,13 @@ const CommandTray: React.FC<CommandTrayProps> = (props) => {
                 justifyContent: "space-between",
                 alignItems: "center",
             }}
+
+            aria-label={t("aria label.command tray")}
         >
             <CommandTrayOption value="undo" keybind="z" command_run={props.on_command_run} disabled={!props.can_undo} />
             <CommandTrayOption value="redo" keybind="x" command_run={props.on_command_run} disabled={!props.can_redo} />
             <CommandTrayOption value="clear" keybind="c" command_run={props.on_command_run} />
-        </div>
+        </section>
     );
 };
 
