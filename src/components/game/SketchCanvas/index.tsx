@@ -486,3 +486,4 @@ export default SketchCanvas;
 // networking idea: use transparency of draw canvas in order to calculate differences, then only send that. differential updates.
 // fill will probably send whole frame unless we do the same fill on the client side, but might cause desync issues if some people's computers can do fills faster than others
 // ^^ might not be the end of the world but worth considering. i think syncing precise brush movements and replicating is bad though. just send updates every so often.
+// ^^^ !!! this is an awful idea and will be exploited (if sending image data over the wire). just send the inputs the client made and recreate them on the other side. with rate limiting of course.
