@@ -3,6 +3,8 @@
 import "./GameApp.css";
 import "./GameApp.media.css";
 
+import { useMemo } from "react";
+
 import { init as init_i18n } from "../../util/setup_i18n";
 
 init_i18n();
@@ -51,6 +53,7 @@ const setup_conn_ctx = (username: string, code: string): IConnectionCtx => {
   // add error handlers
   socket.on("connect_error", (err) => {
     console.error("Connection error:", err);
+    socket.disconnect();
 
     let err_msg = "connection error.unknown";
     if (err.message.startsWith("user:")) {
@@ -115,7 +118,8 @@ export interface GameAppProps {
 }
 
 const GameApp: React.FC<GameAppProps> = (props) => {
-  const conn_ctx = setup_conn_ctx(props.username, props.code);
+  // TODO:CRITICAL: fix this running twice
+  const conn_ctx = useMemo(() => setup_conn_ctx(props.username, props.code), [props.username, props.code]);
 
   return (
     <ConnectionContext.Provider value={conn_ctx}>
