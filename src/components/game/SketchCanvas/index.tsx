@@ -287,10 +287,9 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
     }, []);
 
 
-    // effect: run ONCE at mount time to initialise canvas and cursor
-    const initialised = useRef<boolean>(false);
+    // effect: run at mount time to initialise canvas and cursor
     useEffect(() => {
-        if (initialised.current) return;
+        const ur_array = undo_redo_array.current;
 
         const draw_canvas = draw_canvas_ref.current;
         if (!draw_canvas) return;
@@ -302,7 +301,7 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             clear_draw_canvas();
             clear_render_canvas();
 
-            undo_redo_array.current.capture_from_canvas(render_canvas_ref.current!);
+            ur_array.capture_from_canvas(render_canvas_ref.current!);
 
             draw_ctx.lineCap = "round";
             draw_ctx.lineJoin = "round";
@@ -313,8 +312,11 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
             load_css_cursor();
         }
 
-        initialised.current = true;
-    }, [initialised, load_css_cursor, clear_draw_canvas, clear_render_canvas, props.fg_color]);
+        // cleanup: clear undo redo array
+        return () => {
+            ur_array.clear();
+        };
+    }, [load_css_cursor, clear_draw_canvas, clear_render_canvas, props.fg_color]);
 
 
     // effect: run when color/radius/tool/alpha changes to update cursor
@@ -324,9 +326,6 @@ const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>((props, ref)
 
     // effect: if window width changes, reload cursor to recalculate adjusted radius
     useEffect(() => {
-        // TODO: why isn't this scaling properly? it is clearly proportional to the canvas size to an extent,
-        // but not exactly as is the case with pen size. test shows its receiving the correct values
-        // it may be because the value of the radius in terms of the canvas is still different than the dom. needs additional adjustment to be used with cursor?
         window.addEventListener("resize", load_css_cursor);
 
         return () => {

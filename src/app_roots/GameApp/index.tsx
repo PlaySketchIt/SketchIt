@@ -3,7 +3,7 @@
 import "./GameApp.css";
 import "./GameApp.media.css";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 import { init as init_i18n } from "../../util/setup_i18n";
 
@@ -97,7 +97,6 @@ const setup_conn_ctx = (username: string, code: string): IConnectionCtx => {
   // attempt to connect
   try {
     socket.connect();
-    console.log("Connected to server");
   } catch (err) {
     throw new Error("Failed to connect to server");
   }
@@ -118,8 +117,18 @@ export interface GameAppProps {
 }
 
 const GameApp: React.FC<GameAppProps> = (props) => {
-  // TODO:CRITICAL: fix this running twice
   const conn_ctx = useMemo(() => setup_conn_ctx(props.username, props.code), [props.username, props.code]);
+
+  // effect: disconnect on unmount
+  useEffect(() => {
+    // cleanup
+    return () => {
+      if (conn_ctx && conn_ctx.socket) { // not checking if connected since we also want to stop any pending connections
+        console.log("Disconnecting socket for cleanup");
+        conn_ctx.socket.disconnect();
+      }
+    };
+  }, [conn_ctx]);
 
   return (
     <ConnectionContext.Provider value={conn_ctx}>

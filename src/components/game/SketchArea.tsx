@@ -46,18 +46,26 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
 
     // effect: register undo and redo enable check handlers
     useEffect(() => {
-        if (sketch_canvas_ref.current === null) return;
+        const s_canvas = sketch_canvas_ref.current;
+        if (s_canvas === null) return;
 
-        sketch_canvas_ref.current.set_on_redo_enabled_change((enabled) => {
+        s_canvas.set_on_redo_enabled_change((enabled) => {
             setCanRedo(enabled);
         });
 
-        sketch_canvas_ref.current.set_on_undo_enabled_change((enabled) => {
+        s_canvas.set_on_undo_enabled_change((enabled) => {
             setCanUndo(enabled);
         });
+
+        // cleanup: clear handlers
+        return () => {
+            s_canvas.set_on_redo_enabled_change(() => { });
+            s_canvas.set_on_undo_enabled_change(() => { });
+        };
     }, [sketch_canvas_ref]);
 
 
+    // TODO:structure: could these be avoided with a cleanup?
     // needed to avoid race condition where local storage is loaded after state is set
     const [radius_loaded, setRadiusLoaded] = useState<boolean>(false);
     const [tolerance_loaded, setToleranceLoaded] = useState<boolean>(false);
@@ -89,6 +97,9 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
         setFillTolerance(Number(tolerance));
         setToleranceLoaded(true);
     }, [tolerance_loaded]);
+
+    
+    // TODO:other: investigate ways to have an unmount cleanup while still getting the required values
 
     // effect: save brush radius to local storage on change
     // TODO:perf: would be more efficient if it only ran on unmount, but don't know how to do that (since we must pass brush_radius) could just call the method when the parent decides to unmount
