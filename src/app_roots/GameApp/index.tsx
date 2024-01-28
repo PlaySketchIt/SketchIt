@@ -71,6 +71,7 @@ const setup_conn_ctx = (username: string, code: string): IConnectionCtx => {
       allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
+        // TODO:ux: proper reset without reload
         window.location.href = "/";
       }
     });
@@ -108,8 +109,6 @@ const setup_conn_ctx = (username: string, code: string): IConnectionCtx => {
   };
 };
 // TODO:safety: this whole function is a bit janky, especially the error handling. should be cleaned up and handle reloads properly
-// TODO:ux: it might be better for the home page to be checking the validity so we don't redirect back and forth
-// TODO:ux: should we just unite it all into an spa? it probably makes more sense here. it's what skribbl does
 
 export interface GameAppProps {
   username: string;
@@ -123,9 +122,10 @@ const GameApp: React.FC<GameAppProps> = (props) => {
   useEffect(() => {
     // cleanup
     return () => {
-      if (conn_ctx && conn_ctx.socket) { // not checking if connected since we also want to stop any pending connections
+      if (conn_ctx) { // not checking if connected since we also want to stop any pending connections
         console.log("Disconnecting socket for cleanup");
         conn_ctx.socket.disconnect();
+        // TODO:safety: do we need to signal to the game code that the socket is disconnected / conn_ctx changed?
       }
     };
   }, [conn_ctx]);
