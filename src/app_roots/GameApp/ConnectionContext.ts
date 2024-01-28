@@ -6,7 +6,7 @@ export interface IConnectionCtx {
     username: string;
     code: string;
 
-    socket: Socket;
+    socket?: Socket;
 }
 
 const ConnectionContext = createContext<IConnectionCtx | null>(null);

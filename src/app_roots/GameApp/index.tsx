@@ -29,6 +29,15 @@ const setup_conn_ctx = (username: string, code: string): IConnectionCtx => {
     throw new Error("No server url configured");
   }
 
+  if (code === "!TESTMODE!") {
+    console.warn("Running in test mode. Socket will not be defined.");
+    // TODO:other: better way to do this, or just remove it. we don't want to check if socket is defined everywhere.
+    return {
+      username,
+      code,
+    };
+  }
+
   //// erase params from url in navbar
   //url.searchParams.delete("name");
   //url.searchParams.delete("code");
@@ -121,7 +130,7 @@ const GameApp: React.FC<GameAppProps> = (props) => {
   useEffect(() => {
     // cleanup
     return () => {
-      if (conn_ctx) { // not checking if connected since we also want to stop any pending connections
+      if (conn_ctx && conn_ctx.socket) { // not checking if connected since we also want to stop any pending connections
         console.log("Disconnecting socket for cleanup");
         conn_ctx.socket.disconnect();
         // TODO:safety: do we need to signal to the game code that the socket is disconnected / conn_ctx changed?
