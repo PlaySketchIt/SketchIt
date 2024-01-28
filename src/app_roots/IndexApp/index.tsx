@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import DeferredTranslation from "../../components/common/DeferredTranslation";
 
-const ClientApp = dynamic(() => import("./ClientApp"), { ssr: false });
+const ClientApp = dynamic(() => import("./ClientApp"));
 
 const IndexApp: React.FC = () => {
     // could switch to using routed translations in next, but i think this looks cleaner than having separate pages
