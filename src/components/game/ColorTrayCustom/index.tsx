@@ -82,6 +82,8 @@ const ColorTrayCustom: React.FC<ColorTrayCustomProps> = (props) => {
 
                     objectFit: "contain",
 
+                    userSelect: "none",
+
                     top: "calc(var(--tool-box-size) / 4)",
                     left: "calc(var(--tool-box-size) / 4)",
 

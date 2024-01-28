@@ -63,6 +63,8 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
                 style={{
                     position: "absolute",
 
+                    userSelect: "none",
+
                     bottom: "calc(var(--tool-box-size) / 10)",
                     left: "calc(var(--tool-box-size) / 10)",
 
@@ -90,6 +92,8 @@ const CommandTrayOption: React.FC<CommandTrayOptionProps> = (props) => {
                     right: "calc(var(--tool-box-size) / 40)",
 
                     fontSize: "calc(var(--tool-box-size) / 3.5)",
+
+                    userSelect: "none",
                 }}
 
                 aria-hidden="true"
