@@ -29,8 +29,8 @@ export const metadata: Metadata = {
     },
     applicationName: "Sketch It!",
 
-    description: "alan please add details",
-    keywords: ["sketch", "drawing", "canvas", "web", "app", "game", "multiplayer", "pictionary", "scribble"],
+    description: "The online multiplayer drawing game!", // TODO:other: change
+    keywords: ["sketch", "drawing", "canvas", "web", "app", "game", "multiplayer", "pictionary", "scribble"], // TODO:other: are we allowed to use pictionary in keywords?
     category: "games",
 
     authors: [
