@@ -7,10 +7,13 @@
 
 .input {
     /* browser consistent borders: https://rebeccamdeprey.com/blog/styling-the-html-color-input */
+    -webkit-appearance: none;
+
     inline-size: 30px;
     block-size: 30px;
     border-width: 1px;
     border-style: solid;
+    border-radius: 0;
     
     background-color: #fff;
 
