@@ -6,14 +6,15 @@ import { useEffect, useState } from "react";
 const GameApp = dynamic(() => import("../GameApp"), { ssr: false });
 
 import Swal from "sweetalert2";
-import { auth } from "../../util/auth";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 interface InputFormProps {
     on_submit: (name: string, code: string) => void;
 }
 
 const InputForm: React.FC<InputFormProps> = (props) => {
+    const session = useSession();
+
     const [username, setUsername] = useState("");
     const [code, setCode] = useState("");
 
@@ -72,16 +73,20 @@ const InputForm: React.FC<InputFormProps> = (props) => {
     // we still want the semantic meaning of a form but without submission
     return (
         <>
-        <button type="button" onClick={() => signIn("discord")}>Sign in with Discord</button>
-        <form className="input-form">
-            <label htmlFor="inp-username">Username</label>
-            <input id="inp-username" minLength={1} maxLength={16} defaultValue={username} onChange={(e) => setUsername(e.target.value)} />
+            {
+                session.status === "authenticated" ?
+                    <button type="button" onClick={() => signOut()}>{session.data.user?.name} - Sign out</button> :
+                    <button type="button" onClick={() => signIn("discord")}>Sign in with Discord</button>
+            }
+            <form className="input-form">
+                <label htmlFor="inp-username">Username</label>
+                <input id="inp-username" minLength={1} maxLength={16} defaultValue={username} onChange={(e) => setUsername(e.target.value)} />
 
-            <label htmlFor="inp-code">Code</label>
-            <input id="inp-code" minLength={10} maxLength={10} defaultValue={code} onChange={(e) => setCode(e.target.value)} />
+                <label htmlFor="inp-code">Code</label>
+                <input id="inp-code" minLength={10} maxLength={10} defaultValue={code} onChange={(e) => setCode(e.target.value)} />
 
-            <button type="button" onClick={submit}>Join</button>
-        </form>
+                <button type="button" onClick={submit}>Join</button>
+            </form>
         </>
     );
 };
