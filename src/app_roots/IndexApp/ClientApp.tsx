@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 const GameApp = dynamic(() => import("../GameApp"), { ssr: false });
 
 import Swal from "sweetalert2";
+import { auth } from "../../util/auth";
+import { signIn, useSession } from "next-auth/react";
 
 interface InputFormProps {
     on_submit: (name: string, code: string) => void;
@@ -69,6 +71,8 @@ const InputForm: React.FC<InputFormProps> = (props) => {
     // it is necessary to mark the button as type="button" to prevent it from submitting the form
     // we still want the semantic meaning of a form but without submission
     return (
+        <>
+        <button type="button" onClick={() => signIn("discord")}>Sign in with Discord</button>
         <form className="input-form">
             <label htmlFor="inp-username">Username</label>
             <input id="inp-username" minLength={1} maxLength={16} defaultValue={username} onChange={(e) => setUsername(e.target.value)} />
@@ -78,6 +82,7 @@ const InputForm: React.FC<InputFormProps> = (props) => {
 
             <button type="button" onClick={submit}>Join</button>
         </form>
+        </>
     );
 };
 
